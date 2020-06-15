@@ -8,11 +8,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
 public class CertificateService {
-    private AnnotationConfigApplicationContext context ;
+    private AnnotationConfigApplicationContext context;
     JdbcTemplate tmpl;
     CertificateDaoImpl certificateDao;
 
@@ -25,6 +26,14 @@ public class CertificateService {
 
     public Optional<Certificate> getCertificateById(long id) {
         return certificateDao.getById(id);
+    }
+
+    public List<Certificate> getAllCertificates() {
+        return certificateDao.getAll();
+    }
+
+    public boolean createCertificate(Certificate certificate) {
+        return certificateDao.create(certificate);
 
     }
 }
