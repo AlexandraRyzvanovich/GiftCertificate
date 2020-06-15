@@ -1,6 +1,7 @@
 package com.epam.mjc.dao.dao.impl;
 
-import com.epam.mjc.dao.dao.Dao;
+import com.epam.mjc.dao.dao.CertificateDao;
+import com.epam.mjc.dao.dao.CertificateTaggedDao;
 import com.epam.mjc.dao.dao.mapper.CertificateTaggedDtoMapper;
 import com.epam.mjc.dao.dto.CertificatedTaggedDto;
 import com.epam.mjc.dao.exception.DaoException;
@@ -10,7 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.Optional;
 
-public class CertificateTaggedDtoDaoImpl implements Dao<CertificatedTaggedDto> {
+public class CertificateTaggedDtoDaoImpl implements CertificateTaggedDao {
     private JdbcTemplate jdbcTemplate;
 
     private final String SQL_FIND_GIFT_CERTIFICATE = "SELECT " +
@@ -66,12 +67,12 @@ public class CertificateTaggedDtoDaoImpl implements Dao<CertificatedTaggedDto> {
     }
 
     @Override
-    public boolean update(CertificatedTaggedDto item) throws DaoException {
+    public CertificatedTaggedDto update(CertificatedTaggedDto item) throws DaoException {
         throw new DaoException("Operation not supported");
     }
 
     @Override
-    public boolean create(CertificatedTaggedDto item) throws DaoException {
+    public CertificatedTaggedDto create(CertificatedTaggedDto item) throws DaoException {
         throw new DaoException("Operation not supported");
     }
 

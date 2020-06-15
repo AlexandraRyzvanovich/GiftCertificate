@@ -1,10 +1,10 @@
 package com.epam.mjc.dao.dto;
 
 import com.epam.mjc.dao.entity.Identifiable;
+import com.epam.mjc.dao.entity.Tag;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class CertificatedTaggedDto implements Identifiable {
@@ -15,12 +15,12 @@ public class CertificatedTaggedDto implements Identifiable {
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
     private Integer validDays;
-    String[] tags;
+    List<Tag> tags;
 
     public CertificatedTaggedDto() {
     }
 
-    public CertificatedTaggedDto(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, String[] tags) {
+    public CertificatedTaggedDto(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, List<Tag> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -87,11 +87,11 @@ public class CertificatedTaggedDto implements Identifiable {
         this.validDays = validDays;
     }
 
-    public String[] getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 }

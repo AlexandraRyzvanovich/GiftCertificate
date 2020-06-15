@@ -21,8 +21,6 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
     implementation  project(':service')
-    //можно так или констрейнт на транзитивную зависимость? как?
-    implementation  project(':dao')
-
+    compileOnly  project(':dao')
 
 }

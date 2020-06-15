@@ -1,27 +1,20 @@
 package com.epam.mjc.service;
 
-import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.dao.dao.impl.CertificateDaoImpl;
 import com.epam.mjc.dao.entity.Certificate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import com.epam.mjc.dao.exception.DaoException;
+import com.epam.mjc.service.exception.ServiceException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class CertificateService {
-    private AnnotationConfigApplicationContext context;
-    JdbcTemplate tmpl;
-    CertificateDaoImpl certificateDao;
+    private CertificateDaoImpl certificateDao;
 
-    @Autowired
-    public CertificateService() {
-        context = new AnnotationConfigApplicationContext(AppConfig.class);
-        tmpl = context.getBean("jdbcTemplate", JdbcTemplate.class);
-        certificateDao = new CertificateDaoImpl(tmpl);
+    public CertificateService(CertificateDaoImpl certificateDao) {
+        this.certificateDao = certificateDao;
     }
 
     public Optional<Certificate> getCertificateById(long id) {
@@ -32,9 +25,27 @@ public class CertificateService {
         return certificateDao.getAll();
     }
 
-    public boolean createCertificate(Certificate certificate) {
-        return certificateDao.create(certificate);
+    public Certificate createCertificate(Certificate certificate) throws ServiceException {
+        try {
+            return certificateDao.create(certificate);
+        } catch (DaoException e) {
+            throw new ServiceException("Exception occurred while creating certificate", e.getCause());
+        }
+    }
 
+    public boolean deleteCertificateById(long id) throws ServiceException {
+        try {
+            return certificateDao.deleteById(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Exception occurred while creating certificate", e.getCause());
+        }
+    }
+    public boolean deleteCertificate(Certificate certificate) throws ServiceException {
+        try {
+            return certificateDao.delete(certificate);
+        } catch (DaoException e) {
+            throw new ServiceException("Exception occurred while creating certificate", e.getCause());
+        }
     }
 }
 

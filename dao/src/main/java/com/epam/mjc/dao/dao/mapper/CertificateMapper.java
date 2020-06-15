@@ -21,8 +21,6 @@ public class CertificateMapper implements RowMapper<Certificate> {
         Timestamp modificationDate =  resultSet.getTimestamp("modification_date");
         if(modificationDate != null ) {
             certificate.setModificationDate(modificationDate.toLocalDateTime());
-        } else {
-            certificate.setModificationDate(null);
         }
         certificate.setValidDays(resultSet.getInt("valid_days"));
 

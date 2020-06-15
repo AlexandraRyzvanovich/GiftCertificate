@@ -2,29 +2,22 @@ package com.epam.mjc.service.config;
 
 import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.dao.dao.impl.CertificateDaoImpl;
+import com.epam.mjc.dao.dao.impl.TagDaoImpl;
 import com.epam.mjc.service.CertificateService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.epam.mjc.service.TagService;
+import org.springframework.context.annotation.*;
 
 @Configuration
-@ComponentScan("com.epam.mjc.service")
+@Import({AppConfig.class})
 public class ServiceConfig {
-    private ApplicationContext applicationContext;
 
-
-    @Autowired
-    public ServiceConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    @Bean
+    CertificateService certificateService(CertificateDaoImpl certificateDao) {
+        return new CertificateService(certificateDao);
     }
 
     @Bean
-    CertificateService certificateService() {
-        return new CertificateService();
+    TagService tagService(TagDaoImpl tagDao) {
+        return new TagService(tagDao);
     }
-
 }
