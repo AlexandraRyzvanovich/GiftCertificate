@@ -3,6 +3,7 @@ package com.epam.mjc.web.controller;
 import com.epam.mjc.dao.entity.Certificate;
 import com.epam.mjc.service.CertificateService;
 import com.epam.mjc.service.exception.ServiceException;
+import com.epam.mjc.web.exception.ControllerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/certificates")
@@ -64,16 +64,27 @@ public class CertificateController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
+
     @DeleteMapping()
-    public ResponseEntity deleteCertificate(@RequestBody Certificate certificate) {
+    public ResponseEntity deleteCertificate(@RequestBody Certificate certificate) throws ControllerException {
         try {
             boolean result = service.deleteCertificate(certificate);
             if (result != true) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
         } catch (ServiceException e) {
-            e.printStackTrace();
+            throw new ControllerException("Failed deleting certificate");
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping()
+    public ResponseEntity updateCertificate(@RequestBody Certificate certificate) throws ControllerException {
+        try {
+            service.updateCertificate(certificate);
+        } catch (ServiceException e) {
+            throw new ControllerException("Failed updating certificate");
+        }
+        return new ResponseEntity(certificate, HttpStatus.OK);
     }
 }

@@ -47,5 +47,12 @@ public class CertificateService {
             throw new ServiceException("Exception occurred while creating certificate", e.getCause());
         }
     }
+    public Certificate updateCertificate(Certificate certificate) throws ServiceException {
+        try {
+            return certificateDao.update(certificate);
+        } catch (DaoException e) {
+            throw new ServiceException("Exception occurred while updating certificate", e.getCause());
+        }
+    }
 }
 
