@@ -30,12 +30,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         this.tagDao = tagDao;
     }
     @Override
-    public Optional<GiftCertificate> getCertificateById(long id) {
-        Optional<GiftCertificate> certificate = certificateDao.getById(id);
-        if(certificate.isPresent()) {
-            List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.get().getId());
-            certificate.get().setTags(tags);
+    public GiftCertificate getCertificateById(long id) {
+        GiftCertificate certificate = null;
+        try {
+            certificate = certificateDao.getById(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Certificate not found");
         }
+        List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
+            certificate.setTags(tags);
+
         return certificate;
     }
     @Override
@@ -49,7 +53,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public Optional<GiftCertificate> createCertificate(GiftCertificate certificate)  {
+    public GiftCertificate createCertificate(GiftCertificate certificate)  {
         try {
             Validator.validateCertificateProperties(certificate);
             Long createdId = certificateDao.create(certificate);
@@ -83,11 +87,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) throws ServiceException {
         try {
-            Optional<GiftCertificate> persistedCertificate = certificateDao.getById(id);
-            if(! persistedCertificate.isPresent() || persistedCertificate.get().equals(updatedCertificate)) {
-                return persistedCertificate.get();
+            GiftCertificate persistedCertificate = certificateDao.getById(id);
+            if( persistedCertificate.equals(updatedCertificate)) {
+                return persistedCertificate;
             } else {
-                GiftCertificate certificateToUpdate = converter(persistedCertificate.get(), updatedCertificate);
+                GiftCertificate certificateToUpdate = converter(persistedCertificate, updatedCertificate);
                 return certificateDao.update(certificateToUpdate);
             }
         } catch (DaoException e) {

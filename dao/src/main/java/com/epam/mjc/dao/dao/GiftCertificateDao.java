@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GiftCertificateDao {
-    Optional<GiftCertificate> getById(long id);
+    GiftCertificate getById(long id) throws DaoException;
     Optional<GiftCertificate> getByName(String name);
 
     List<GiftCertificate> getAll(SearchParams searchParams);

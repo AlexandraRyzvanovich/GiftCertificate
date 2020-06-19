@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/certificates")
@@ -21,9 +20,9 @@ public class CertificateController {
 
     @GetMapping("/{id}")
     public GiftCertificate getCertificateById(@PathVariable("id") long id) {
-        Optional<GiftCertificate> certificate = service.getCertificateById(id);
+        GiftCertificate certificate = service.getCertificateById(id);
 
-        return certificate.get();
+        return certificate;
     }
 
     @GetMapping()
@@ -37,13 +36,13 @@ public class CertificateController {
 
     @PostMapping()
     public GiftCertificate createCertificate(@RequestBody GiftCertificate certificate) {
-        Optional<GiftCertificate> createdCertificate = Optional.empty();
+        GiftCertificate createdCertificate = null;
         try {
             createdCertificate = service.createCertificate(certificate);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        return createdCertificate.get();
+        return createdCertificate;
     }
 
     @DeleteMapping("/{id}")
@@ -66,11 +65,4 @@ public class CertificateController {
         }
         return certificate;
     }
-
-  /*  @GetMapping("/filter")
-    public List<GiftCertificate> search(@RequestParam(required = false, value = "sortParameters") SortParameter sortParameter) {
-
-        service.sortCertificates(sortParameter);
-
-    }*/
 }

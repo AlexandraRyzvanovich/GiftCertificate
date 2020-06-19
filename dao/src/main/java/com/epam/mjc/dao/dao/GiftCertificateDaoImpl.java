@@ -6,11 +6,9 @@ import com.epam.mjc.dao.mapper.GiftCertificateMapper;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.exception.DaoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -42,10 +40,15 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public Optional<GiftCertificate> getById(long id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_CERTIFICATE,
+    public GiftCertificate getById(long id) throws DaoException {
+        List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE,
                 new Object[]{id},
-                new GiftCertificateMapper()));
+                new GiftCertificateMapper());
+        GiftCertificate certificate = DataAccessUtils.uniqueResult(query);
+        if(certificate == null) {
+            throw  new DaoException("SerificateNotFound");
+        }
+        return certificate;
     }
     public Optional<GiftCertificate> getByName(String name) {
         return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_CERTIFICATE_BY_NAME,
