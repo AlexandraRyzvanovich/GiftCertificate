@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class TagDaoImpl implements TagDao {
@@ -33,11 +32,12 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Optional<Tag> getById(long id) {
-        Optional<Tag> tag = Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_TAG_BY_ID,
+    public Tag getById(long id) {
+        List<Tag> tag = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
                 new Object[]{id},
-                new TagMapper()));
-        return tag;
+                new TagMapper());
+
+        return DataAccessUtils.uniqueResult(tag);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Long create(Tag tag) throws DaoException {
-        Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getTagName()}, Long.class);
+        Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
         if(result == null) {
             throw new DaoException("Impossible to create Certificate with given parameters");
         }

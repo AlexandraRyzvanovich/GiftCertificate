@@ -1,6 +1,6 @@
 package com.epam.mjc.dao.dao;
 
-import com.epam.mjc.dao.SqlStringBuilder;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.mapper.GiftCertificateMapper;
 import com.epam.mjc.dao.entity.GiftCertificate;

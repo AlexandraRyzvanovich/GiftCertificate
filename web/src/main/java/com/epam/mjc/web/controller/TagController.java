@@ -20,44 +20,26 @@ public class TagController {
     private TagService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity getCertificateById(@PathVariable("id") long id) {
-        Optional<Tag> tag = service.getTagById(id);
+    public Tag getTagsById(@PathVariable("id") long id) {
 
-        return tag.map(value -> new ResponseEntity(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity("No Tag found for ID " + id, HttpStatus.NOT_FOUND));
+        return  service.getTagById(id);
     }
 
     @GetMapping()
-    public ResponseEntity getAllCertificates() {
-        List<Tag> tag = service.getAllTags();
+    public List<Tag> getAllTags() {
 
-        if (tag == null) {
-            return new ResponseEntity("Not found any tags", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity(tag, HttpStatus.OK);
+        return service.getAllTags();
     }
 
     @PostMapping()
-    public ResponseEntity createCertificate(@RequestBody Tag tag) {
-        Long createdTagId = null;
-        try {
-            createdTagId = service.createTag(tag);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-        return createdTagId!= null ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public Tag createTag(@RequestBody Tag tag) {
+
+        return service.createTag(tag);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCertificateById(@PathVariable("id") long id) throws ControllerException {
-        try {
-            boolean result = service.deleteTagById(id);
-            if (!result) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-        } catch (ServiceException e) {
-           throw new ControllerException("Failed deleting tag by id");
-        }
-        return new ResponseEntity(HttpStatus.OK);
+    public Boolean deleteTagById(@PathVariable("id") long id)  {
+
+        return service.deleteTagById(id);
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @EnableTransactionManagement
@@ -60,7 +59,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             List<Tag> tags = certificate.getTags();
             if(!CollectionUtils.isEmpty(tags)) {
                 for (Tag tag : tags) {
-                    Tag foundTag = (tagDao.getByName(tag.getTagName()));
+                    Tag foundTag = (tagDao.getByName(tag.getName()));
                     if ( foundTag == null) {
                         Long createdTagId = tagDao.create(tag);
                         certificateDao.createCertificateTag(createdId, createdTagId);

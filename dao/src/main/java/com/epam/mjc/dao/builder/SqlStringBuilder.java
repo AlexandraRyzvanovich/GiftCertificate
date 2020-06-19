@@ -1,10 +1,9 @@
-package com.epam.mjc.dao;
+package com.epam.mjc.dao.builder;
 
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortType;
 import com.epam.mjc.dao.entity.SorterParams;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;

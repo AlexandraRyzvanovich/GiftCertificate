@@ -2,7 +2,7 @@ package com.epam.mjc.dao.entity;
 
 public class Tag implements Identifiable{
     private Long id;
-    private String tagName;
+    private String name;
 
     public Tag() {
     }
@@ -15,11 +15,11 @@ public class Tag implements Identifiable{
         this.id = id;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getName() {
+        return name;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

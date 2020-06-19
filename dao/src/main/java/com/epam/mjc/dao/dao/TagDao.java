@@ -4,10 +4,9 @@ import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TagDao {
-    Optional<Tag> getById(long id);
+    Tag getById(long id);
     List<Tag> getAllTagsByCertificateId(long id);
     Tag getByName (String name);
     List<Tag> getAll();
