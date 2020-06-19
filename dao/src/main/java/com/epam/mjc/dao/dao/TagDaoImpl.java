@@ -4,8 +4,8 @@ import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,9 +34,10 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> getById(long id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_TAG_BY_ID,
+        Optional<Tag> tag = Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_TAG_BY_ID,
                 new Object[]{id},
                 new TagMapper()));
+        return tag;
     }
 
     @Override
@@ -47,11 +48,13 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Optional<Tag> getByName(String name) {
-        return  Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_TAG_BY_NAME,
-                new Object[]{name},
-                new TagMapper()));
-    }
+    public Tag getByName(String name) {
+
+    List<Tag> tag =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
+            new Object[]{name},
+            new TagMapper());
+    return DataAccessUtils.uniqueResult(tag);
+}
 
     @Override
     public List<Tag> getAll() {
@@ -61,7 +64,7 @@ public class TagDaoImpl implements TagDao {
     @Override
     public Long create(Tag tag) throws DaoException {
         Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getTagName()}, Long.class);
-        if(result != null) {
+        if(result == null) {
             throw new DaoException("Impossible to create Certificate with given parameters");
         }
         return result;

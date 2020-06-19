@@ -25,9 +25,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String SQL_DELETE_CERTIFICATE = "delete from certificate where id = ?";
     private static final String SQL_FIND_CERTIFICATE_BY_NAME = "select * from certificate where name = ?";
     private static final String SQL_UPDATE_CERTIFICATE = "update certificate set name = ?, description = ?, price  = ?, creation_date = ?, modification_date = ?, valid_days = ? where id = ?";
-    private static final String SQL_GET_ALL = "select * from certificate";
     private static final String SQL_INSERT_CERTIFICATE = "insert into certificate(name, description, price, creation_date, valid_days ) values(?,?,?,?,?) RETURNING id";
-    private static final String SQL_GET_ALL_CERTIFICATES_BY_TAG_NAME = "select tag_id from gift_certificate where certificate_id = ?";
     private static final String SQL_CREATE_CERTIFICATE_TAG = "insert into certificate_tag(certificate_id, tag_id) values(?,?)";
     private static final String SQL_SELECT_ALL = "SELECT\n" +
             "c.id, c.name, c.description,\n" +
@@ -83,7 +81,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             certificate.getPrice(),
             LocalDateTime.now(),
             certificate.getValidDays()} , Long.class );
-
         if(id == null) {
             throw new DaoException("Impossible to create Certificate with given parameters");
         }

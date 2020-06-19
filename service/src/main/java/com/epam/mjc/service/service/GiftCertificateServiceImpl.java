@@ -56,8 +56,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             List<Tag> tags = certificate.getTags();
             if(!CollectionUtils.isEmpty(tags)) {
                 for (Tag tag : tags) {
-                    Optional<Tag> foundTag = tagDao.getByName(tag.getTagName());
-                    if (! foundTag.isPresent()) {
+                    Tag foundTag = (tagDao.getByName(tag.getTagName()));
+                    if ( foundTag == null) {
                         Long createdTagId = tagDao.create(tag);
                         certificateDao.createCertificateTag(createdId, createdTagId);
                     } else {
