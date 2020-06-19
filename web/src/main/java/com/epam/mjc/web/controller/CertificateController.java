@@ -1,12 +1,12 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.Certificate;
-import com.epam.mjc.service.CertificateService;
+import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.SearchParams;
+import com.epam.mjc.dao.entity.SorterParams;
+import com.epam.mjc.service.service.GiftCertificateService;
 import com.epam.mjc.service.exception.ServiceException;
 import com.epam.mjc.web.exception.ControllerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,74 +17,60 @@ import java.util.Optional;
 public class CertificateController {
 
     @Autowired
-    private CertificateService service;
+    private GiftCertificateService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity getCertificateById(@PathVariable("id") long id) {
-        Optional<Certificate> certificate = service.getCertificateById(id);
+    public GiftCertificate getCertificateById(@PathVariable("id") long id) {
+        Optional<GiftCertificate> certificate = service.getCertificateById(id);
 
-        if (!certificate.isPresent()) {
-            return new ResponseEntity("No Certificate found for ID " + id, HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity(certificate.get(), HttpStatus.OK);
+        return certificate.get();
     }
 
     @GetMapping()
-    public ResponseEntity getAllCertificates() {
-        List<Certificate> certificate = service.getAllCertificates();
+    public List<GiftCertificate> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
+                                                    @RequestParam(required = false, name = "text") String text,
+                                                    @Sort SorterParams params) {
+        SearchParams searchParams = new SearchParams(tags, text, params);
 
-        if (certificate == null) {
-            return new ResponseEntity("Not found any certificates " + 1, HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity(certificate, HttpStatus.OK);
+        return service.getCertificates(searchParams);
     }
 
     @PostMapping()
-    public ResponseEntity createCertificate(@RequestBody Certificate certificate) {
-        Certificate createdCertificate = null;
+    public GiftCertificate createCertificate(@RequestBody GiftCertificate certificate) {
+        Optional<GiftCertificate> createdCertificate = Optional.empty();
         try {
             createdCertificate = service.createCertificate(certificate);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        return createdCertificate.getId() != null ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return createdCertificate.get();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCertificateById(@PathVariable("id") long id) {
+    public boolean deleteCertificateById(@PathVariable("id") long id) {
+        boolean result = false;
         try {
-            boolean result = service.deleteCertificateById(id);
-            if (result != true) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
+            result = service.deleteCertificateById(id);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return result;
     }
 
-    @DeleteMapping()
-    public ResponseEntity deleteCertificate(@RequestBody Certificate certificate) throws ControllerException {
+    @PutMapping("/{id}")
+    public GiftCertificate updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificate certificate) throws ControllerException {
         try {
-            boolean result = service.deleteCertificate(certificate);
-            if (result != true) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-        } catch (ServiceException e) {
-            throw new ControllerException("Failed deleting certificate");
-        }
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @PutMapping()
-    public ResponseEntity updateCertificate(@RequestBody Certificate certificate) throws ControllerException {
-        try {
-            service.updateCertificate(certificate);
+            service.updateCertificate(id, certificate);
         } catch (ServiceException e) {
             throw new ControllerException("Failed updating certificate");
         }
-        return new ResponseEntity(certificate, HttpStatus.OK);
+        return certificate;
     }
+
+  /*  @GetMapping("/filter")
+    public List<GiftCertificate> search(@RequestParam(required = false, value = "sortParameters") SortParameter sortParameter) {
+
+        service.sortCertificates(sortParameter);
+
+    }*/
 }

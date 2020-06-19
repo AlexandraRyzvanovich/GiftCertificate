@@ -1,4 +1,4 @@
-package com.epam.mjc.dao.dao.mapper;
+package com.epam.mjc.dao.mapper;
 
 import com.epam.mjc.dao.entity.Tag;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,8 +11,7 @@ public class TagMapper implements RowMapper<Tag> {
     public Tag mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Tag tag = new Tag();
         tag.setId(resultSet.getLong("id"));
-        tag.setTagName(resultSet.getString("tagName"));
-
+        tag.setTagName(resultSet.getString("name"));
         return tag;
     }
 }

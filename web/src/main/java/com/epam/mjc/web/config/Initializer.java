@@ -6,8 +6,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.ServletContext;
 
 public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
-    //из сервиса чтоб подтянуть бины
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;

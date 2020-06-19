@@ -1,23 +1,23 @@
-package com.epam.mjc.service;
+package com.epam.mjc.service.service;
 
-import com.epam.mjc.dao.dao.impl.CertificateDaoImpl;
-import com.epam.mjc.dao.dao.impl.TagDaoImpl;
-import com.epam.mjc.dao.entity.Certificate;
+import com.epam.mjc.dao.dao.TagDaoImpl;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoException;
 import com.epam.mjc.service.exception.ServiceException;
+import com.epam.mjc.service.service.TagService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TagService {
+public class TagServiceImpl implements TagService {
     private TagDaoImpl tagDao;
 
-    public TagService(TagDaoImpl tagDao) {
+    public TagServiceImpl(TagDaoImpl tagDao) {
         this.tagDao = tagDao;
     }
+
     public Optional<Tag> getTagById(long id) {
         return tagDao.getById(id);
     }
@@ -26,7 +26,7 @@ public class TagService {
         return tagDao.getAll();
     }
 
-    public Tag createTag(Tag tag ) throws ServiceException {
+    public Long createTag(Tag tag ) throws ServiceException {
         try {
             return tagDao.create(tag);
         } catch (DaoException e) {
@@ -37,14 +37,6 @@ public class TagService {
     public boolean deleteTagById(long id) throws ServiceException {
         try {
             return tagDao.deleteById(id);
-        } catch (DaoException e) {
-            throw new ServiceException("Exception occurred while creating tag", e.getCause());
-        }
-    }
-
-    public boolean deleteTag(Tag tag) throws ServiceException {
-        try {
-            return tagDao.delete(tag);
         } catch (DaoException e) {
             throw new ServiceException("Exception occurred while creating tag", e.getCause());
         }

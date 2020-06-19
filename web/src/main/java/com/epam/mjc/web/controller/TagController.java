@@ -1,8 +1,8 @@
 package com.epam.mjc.web.controller;
 
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.service.TagService;
 import com.epam.mjc.service.exception.ServiceException;
+import com.epam.mjc.service.service.TagService;
 import com.epam.mjc.web.exception.ControllerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +23,7 @@ public class TagController {
     public ResponseEntity getCertificateById(@PathVariable("id") long id) {
         Optional<Tag> tag = service.getTagById(id);
 
-        if (!tag.isPresent()) {
-            return new ResponseEntity("No Tag found for ID " + id, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(tag.get(), HttpStatus.OK);
+        return tag.map(value -> new ResponseEntity(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity("No Tag found for ID " + id, HttpStatus.NOT_FOUND));
     }
 
     @GetMapping()
@@ -42,37 +39,24 @@ public class TagController {
 
     @PostMapping()
     public ResponseEntity createCertificate(@RequestBody Tag tag) {
-        Tag createdTag = null;
+        Long createdTagId = null;
         try {
-            createdTag = service.createTag(tag);
+            createdTagId = service.createTag(tag);
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        return createdTag.getId() != null ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return createdTagId!= null ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteCertificateById(@PathVariable("id") long id) throws ControllerException {
         try {
             boolean result = service.deleteTagById(id);
-            if (result != true) {
+            if (!result) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
         } catch (ServiceException e) {
            throw new ControllerException("Failed deleting tag by id");
-        }
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @DeleteMapping()
-    public ResponseEntity deleteCertificate(@RequestBody Tag tag) throws ControllerException {
-        try {
-            boolean result = service.deleteTag(tag);
-            if (result != true) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-        } catch (ServiceException e) {
-            throw new ControllerException("Failed deleting tag");
         }
         return new ResponseEntity(HttpStatus.OK);
     }

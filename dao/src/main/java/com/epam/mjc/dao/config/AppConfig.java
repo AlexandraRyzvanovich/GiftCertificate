@@ -1,9 +1,6 @@
 package com.epam.mjc.dao.config;
 
-import com.epam.mjc.dao.dao.connection.DataSource;
-import com.epam.mjc.dao.dao.impl.CertificateDaoImpl;
-import com.epam.mjc.dao.dao.impl.CertificateTaggedDtoDaoImpl;
-import com.epam.mjc.dao.dao.impl.TagDaoImpl;
+import com.epam.mjc.dao.connection.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,18 +22,4 @@ public class AppConfig {
         return new JdbcTemplate(dataSource);
     }
 
-    @Bean
-    CertificateDaoImpl certificateDaoImpl(JdbcTemplate jdbcTemplate) {
-        return new CertificateDaoImpl(jdbcTemplate);
-    }
-
-    @Bean
-    TagDaoImpl tagDaoImpl(JdbcTemplate jdbcTemplate) {
-        return new TagDaoImpl(jdbcTemplate);
-    }
-
-    @Bean
-    CertificateTaggedDtoDaoImpl certificateTaggedDtoDaoImpl(JdbcTemplate jdbcTemplate) {
-        return new CertificateTaggedDtoDaoImpl(jdbcTemplate);
-    }
 }

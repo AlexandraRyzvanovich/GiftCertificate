@@ -1,29 +1,36 @@
 package com.epam.mjc.service.config;
 
 import com.epam.mjc.dao.config.AppConfig;
-import com.epam.mjc.dao.dao.impl.CertificateDaoImpl;
-import com.epam.mjc.dao.dao.impl.CertificateTaggedDtoDaoImpl;
-import com.epam.mjc.dao.dao.impl.TagDaoImpl;
-import com.epam.mjc.service.CertificateService;
-import com.epam.mjc.service.CertificateTaggedService;
-import com.epam.mjc.service.TagService;
+import com.epam.mjc.dao.dao.GiftCertificateDao;
+import com.epam.mjc.dao.dao.TagDao;
+import com.epam.mjc.dao.dao.TagDaoImpl;
+import com.epam.mjc.service.service.GiftCertificateServiceImpl;
+import com.epam.mjc.service.service.TagServiceImpl;
+import com.epam.mjc.service.service.GiftCertificateService;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableTransactionManagement
 @Import({AppConfig.class})
 public class ServiceConfig {
 
     @Bean
-    CertificateService certificateService(CertificateDaoImpl certificateDao) {
-        return new CertificateService(certificateDao);
-    }
-    @Bean
-    TagService tagService(TagDaoImpl tagDao) {
-        return new TagService(tagDao);
+    TagServiceImpl tagService(TagDaoImpl tagDao) {
+        return new TagServiceImpl(tagDao);
     }
 
     @Bean
-    CertificateTaggedService certificateTaggedService(CertificateTaggedDtoDaoImpl certificateTaggedDtoDao) {
-        return new CertificateTaggedService(certificateTaggedDtoDao);
+    GiftCertificateService giftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
+        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
+    }
+
+    @Bean
+    PlatformTransactionManager transactionManagementConfigurer(HikariDataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
     }
 }

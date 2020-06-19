@@ -7,11 +7,6 @@ public class Tag implements Identifiable{
     public Tag() {
     }
 
-    public Tag(Long id, String tagName) {
-        this.id = id;
-        this.tagName = tagName;
-    }
-
     public Long getId() {
         return id;
     }

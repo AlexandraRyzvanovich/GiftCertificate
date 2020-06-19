@@ -1,6 +1,6 @@
 package com.epam.mjc.service.exception;
 
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
     public ServiceException(String message) {
         super(message);
     }
