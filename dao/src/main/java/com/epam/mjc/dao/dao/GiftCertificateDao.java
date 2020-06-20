@@ -2,22 +2,22 @@ package com.epam.mjc.dao.dao;
 
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.exception.DaoException;
+import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
+import com.epam.mjc.dao.exception.DaoNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GiftCertificateDao {
-    GiftCertificate getById(long id) throws DaoException;
-    Optional<GiftCertificate> getByName(String name);
+    GiftCertificate getById(long id) throws DaoNotFoundException;
+    GiftCertificate getByName(String name) throws DaoNotFoundException;
 
     List<GiftCertificate> getAll(SearchParams searchParams);
 
-    GiftCertificate update(GiftCertificate item) throws DaoException;
+    GiftCertificate update(GiftCertificate item) throws DaoIncorrectParamsException;
 
-    Long create(GiftCertificate item) throws DaoException;
+    Long create(GiftCertificate item) throws DaoIncorrectParamsException;
 
-    boolean deleteById(long id) throws DaoException;
+    boolean deleteById(long id) throws DaoNotFoundException;
 
-    boolean createCertificateTag(long certificateId, long tagId) throws DaoException;
+    boolean createCertificateTag(long certificateId, long tagId) throws DaoIncorrectParamsException;
 }

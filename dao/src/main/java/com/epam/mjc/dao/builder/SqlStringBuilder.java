@@ -23,9 +23,9 @@ public class SqlStringBuilder {
 
         if(!CollectionUtils.isEmpty(tags)) {
             if(text!= null) {
-                tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + SqlStringBuilder.tagsBuilder(tags));
+                tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + tagsBuilder(tags));
             } else {
-                tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + SqlStringBuilder.tagsBuilder(tags));
+                tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
 

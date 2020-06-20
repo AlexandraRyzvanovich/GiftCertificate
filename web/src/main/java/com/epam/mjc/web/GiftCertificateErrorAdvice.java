@@ -1,33 +1,32 @@
 package com.epam.mjc.web;
 
-import com.epam.mjc.dao.exception.DaoException;
-import com.epam.mjc.service.exception.ServiceException;
-import com.epam.mjc.service.exception.ValidatorException;
-import com.epam.mjc.web.exception.ControllerException;
+import com.epam.mjc.service.exception.ServiceIncorrectParamsException;
+import com.epam.mjc.service.exception.ServiceNotFoundException;
+import com.epam.mjc.service.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 @ControllerAdvice
 public class GiftCertificateErrorAdvice {
 
-        @ResponseStatus(HttpStatus.NOT_FOUND)
-        @ExceptionHandler({DaoException.class})
-        public void handle(DaoException e) {
+        @ExceptionHandler({ServiceNotFoundException.class})
+        public ErrorMessage handleNotFoundException(ServiceNotFoundException e) {
+                return new ErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
 
         }
 
-        @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-        @ExceptionHandler({ServiceException.class, ValidatorException.class, NullPointerException.class})
-        public void handle() {
-
+        @ExceptionHandler({ValidationException.class})
+        public ErrorMessage handleValidationException(ValidationException exception) {
+                return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
 
-        @ResponseStatus(HttpStatus.BAD_REQUEST)
-        @ExceptionHandler({ControllerException.class})
-        public void handle(ControllerException e) {
-
+        @ExceptionHandler({ServiceIncorrectParamsException.class})
+        public ErrorMessage handleIncorrectParamsException(ServiceIncorrectParamsException exception) {
+                return new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
         }
+
 
 }

@@ -6,6 +6,7 @@ import com.epam.mjc.dao.dao.TagDao;
 import com.epam.mjc.service.service.GiftCertificateServiceImpl;
 import com.epam.mjc.service.service.TagServiceImpl;
 import com.epam.mjc.service.service.GiftCertificateService;
+import com.epam.mjc.service.validator.Validator;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -18,13 +19,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ServiceConfig {
 
     @Bean
-    TagServiceImpl tagService(TagDao tagDao) {
-        return new TagServiceImpl(tagDao);
+    Validator validator() {
+        return new Validator();
     }
 
     @Bean
-    GiftCertificateService giftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
-        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
+    TagServiceImpl tagService(TagDao tagDao, Validator validator) {
+        return new TagServiceImpl(tagDao, validator);
+    }
+
+    @Bean
+    GiftCertificateService giftCertificateService(GiftCertificateDao giftCertificateDao, TagDao tagDao, Validator validator) {
+        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao, validator);
     }
 
     @Bean

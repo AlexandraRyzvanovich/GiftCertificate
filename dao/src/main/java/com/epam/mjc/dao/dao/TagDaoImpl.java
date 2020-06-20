@@ -1,8 +1,9 @@
 package com.epam.mjc.dao.dao;
 
+import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
+import com.epam.mjc.dao.exception.DaoNotFoundException;
 import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.dao.exception.DaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,12 +33,16 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getById(long id) {
-        List<Tag> tag = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
+    public Tag getById(long id) throws DaoNotFoundException {
+        List<Tag> query = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
                 new Object[]{id},
                 new TagMapper());
+        Tag tag = DataAccessUtils.uniqueResult(query);
+        if(tag == null) {
+            throw new DaoNotFoundException("Tag with such if not found");
+        }
 
-        return DataAccessUtils.uniqueResult(tag);
+        return tag;
     }
 
     @Override
@@ -48,12 +53,16 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getByName(String name) {
+    public Tag getByName(String name) throws DaoNotFoundException {
 
-    List<Tag> tag =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
+    List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
             new Object[]{name},
             new TagMapper());
-    return DataAccessUtils.uniqueResult(tag);
+    Tag tag = DataAccessUtils.uniqueResult(query);
+    if(tag == null) {
+        throw new DaoNotFoundException("Tag with such name not found");
+    }
+    return tag;
 }
 
     @Override
@@ -62,19 +71,19 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Long create(Tag tag) throws DaoException {
+    public Long create(Tag tag) throws DaoIncorrectParamsException {
         Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
         if(result == null) {
-            throw new DaoException("Impossible to create Certificate with given parameters");
+            throw new DaoIncorrectParamsException("Impossible to create Tag with given parameters");
         }
         return result;
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoException {
+    public boolean deleteById(long id) throws DaoNotFoundException {
         boolean result = jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
         if(!result) {
-            throw new DaoException("Impossible to delete Certificate with given parameters");
+            throw new DaoNotFoundException("Impossible to delete Tag with given parameters");
         }
         return true;
     }

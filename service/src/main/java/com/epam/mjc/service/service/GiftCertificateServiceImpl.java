@@ -5,12 +5,11 @@ import com.epam.mjc.dao.dao.TagDao;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.dao.exception.DaoException;
-import com.epam.mjc.service.exception.ServiceException;
-import com.epam.mjc.service.exception.ValidatorException;
+import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
+import com.epam.mjc.dao.exception.DaoNotFoundException;
+import com.epam.mjc.service.exception.ServiceIncorrectParamsException;
+import com.epam.mjc.service.exception.ServiceNotFoundException;
 import com.epam.mjc.service.validator.Validator;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +25,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private TagDao tagDao;
     private Validator validator;
 
-    public GiftCertificateServiceImpl(@Qualifier("giftCertificateDaoImpl") GiftCertificateDao certificateDao, @Qualifier("tagDaoImpl") TagDao tagDao) {
+    public GiftCertificateServiceImpl( GiftCertificateDao certificateDao, TagDao tagDao, Validator validator) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
-        validator = new Validator();
+        this.validator = validator;
     }
 
     @Override
@@ -37,8 +36,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate certificate;
         try {
             certificate = certificateDao.getById(id);
-        } catch (DaoException e) {
-            throw new ServiceException("Certificate not found");
+        } catch (DaoNotFoundException e) {
+            throw new ServiceNotFoundException(e.getMessage());
         }
         List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
             certificate.setTags(tags);
@@ -73,28 +72,25 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 }
             }
             return getCertificateById(createdId);
-        } catch (DaoException | ValidatorException e) {
-           throw new ServiceException("Certificate creation failed");
+        } catch (DaoIncorrectParamsException e ) {
+            throw new ServiceIncorrectParamsException(e.getMessage());
+        } catch ( DaoNotFoundException e) {
+            throw new ServiceNotFoundException(e.getMessage());
         }
     }
 
     @Override
-    public boolean deleteCertificateById(long id) throws ServiceException {
+    public boolean deleteCertificateById(long id)  {
         try {
-
             boolean result =  certificateDao.deleteById(id);
-            if(!result) {
-                throw new ServiceException("No such ID");
-            } else {
-                return true;
-            }
-        } catch (DaoException e) {
-            throw new ServiceException("Exception occurred while creating certificate", e.getCause());
+        } catch ( DaoNotFoundException e) {
+            throw new ServiceNotFoundException(e.getMessage());
         }
+        return true;
     }
 
     @Override
-    public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) throws ServiceException {
+    public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
         try {
             GiftCertificate persistedCertificate = certificateDao.getById(id);
             if( persistedCertificate.equals(updatedCertificate)) {
@@ -103,8 +99,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 GiftCertificate certificateToUpdate = converter(persistedCertificate, updatedCertificate);
                 return certificateDao.update(certificateToUpdate);
             }
-        } catch (DaoException e) {
-            throw new ServiceException("Exception occurred while updating certificate", e.getCause());
+        } catch (DaoIncorrectParamsException e) {
+            throw new ServiceNotFoundException( e.getMessage());
+        } catch (DaoNotFoundException e) {
+            throw new ServiceNotFoundException(e.getMessage());
         }
     }
 
@@ -125,7 +123,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if(validDays != null) {
             persistedCertificate.setValidDays(validDays);
         }
-
         return updatedCertificate;
     }
 }
