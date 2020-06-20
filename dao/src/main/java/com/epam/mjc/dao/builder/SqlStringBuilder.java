@@ -62,11 +62,10 @@ public class SqlStringBuilder {
                 default: return queryForSorting;
             }
         }
-        switch (sortType) {
-            case DESC:
-                queryForSorting = queryForSorting.concat("DESC");
-                break;
-            default: queryForSorting = queryForSorting.concat("ASC");
+        if (sortType == SortType.DESC) {
+            queryForSorting = queryForSorting.concat("DESC");
+        } else {
+            queryForSorting = queryForSorting.concat("ASC");
         }
         return queryForSorting;
     }

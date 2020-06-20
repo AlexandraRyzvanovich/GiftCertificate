@@ -1,6 +1,5 @@
 package com.epam.mjc.dao.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SearchParams {

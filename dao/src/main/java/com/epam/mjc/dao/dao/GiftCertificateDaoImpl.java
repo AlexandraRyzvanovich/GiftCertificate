@@ -46,7 +46,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 new GiftCertificateMapper());
         GiftCertificate certificate = DataAccessUtils.uniqueResult(query);
         if(certificate == null) {
-            throw  new DaoException("SerificateNotFound");
+            throw  new DaoException("CerificateNotFound");
         }
         return certificate;
     }
@@ -98,7 +98,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         }
         return true;
     }
-
     @Override
     public boolean createCertificateTag(long certificateId, long tagId) throws DaoException {
         boolean result = jdbcTemplate.update(SQL_CREATE_CERTIFICATE_TAG, certificateId, tagId) > 0;

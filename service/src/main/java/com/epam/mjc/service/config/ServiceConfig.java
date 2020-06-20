@@ -3,12 +3,10 @@ package com.epam.mjc.service.config;
 import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.dao.dao.GiftCertificateDao;
 import com.epam.mjc.dao.dao.TagDao;
-import com.epam.mjc.dao.dao.TagDaoImpl;
 import com.epam.mjc.service.service.GiftCertificateServiceImpl;
 import com.epam.mjc.service.service.TagServiceImpl;
 import com.epam.mjc.service.service.GiftCertificateService;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ServiceConfig {
 
     @Bean
-    TagServiceImpl tagService(TagDaoImpl tagDao) {
+    TagServiceImpl tagService(TagDao tagDao) {
         return new TagServiceImpl(tagDao);
     }
 

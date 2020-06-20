@@ -18,9 +18,9 @@ public class SortResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public SorterParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public SorterParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String params = webRequest.getParameter("sortBy");
-        String fieldName = null;
+        String fieldName;
         if (params != null) {
             String[] fields = params.split(":");
             fieldName = fields[0];

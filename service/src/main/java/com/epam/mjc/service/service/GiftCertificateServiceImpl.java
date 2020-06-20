@@ -9,6 +9,7 @@ import com.epam.mjc.dao.exception.DaoException;
 import com.epam.mjc.service.exception.ServiceException;
 import com.epam.mjc.service.exception.ValidatorException;
 import com.epam.mjc.service.validator.Validator;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -23,14 +24,17 @@ import java.util.List;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao certificateDao;
     private TagDao tagDao;
+    private Validator validator;
 
     public GiftCertificateServiceImpl(@Qualifier("giftCertificateDaoImpl") GiftCertificateDao certificateDao, @Qualifier("tagDaoImpl") TagDao tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
+        validator = new Validator();
     }
+
     @Override
     public GiftCertificate getCertificateById(long id) {
-        GiftCertificate certificate = null;
+        GiftCertificate certificate;
         try {
             certificate = certificateDao.getById(id);
         } catch (DaoException e) {
@@ -54,7 +58,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate)  {
         try {
-            Validator.validateCertificateProperties(certificate);
+            validator.validate(certificate);
             Long createdId = certificateDao.create(certificate);
             List<Tag> tags = certificate.getTags();
             if(!CollectionUtils.isEmpty(tags)) {
@@ -77,7 +81,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public boolean deleteCertificateById(long id) throws ServiceException {
         try {
-            return certificateDao.deleteById(id);
+
+            boolean result =  certificateDao.deleteById(id);
+            if(!result) {
+                throw new ServiceException("No such ID");
+            } else {
+                return true;
+            }
         } catch (DaoException e) {
             throw new ServiceException("Exception occurred while creating certificate", e.getCause());
         }

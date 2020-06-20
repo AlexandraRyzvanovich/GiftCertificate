@@ -1,19 +1,23 @@
 package com.epam.mjc.service.service;
 
-import com.epam.mjc.dao.dao.TagDaoImpl;
+import com.epam.mjc.dao.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoException;
 import com.epam.mjc.service.exception.ServiceException;
+import com.epam.mjc.service.exception.ValidatorException;
+import com.epam.mjc.service.validator.Validator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
-    private TagDaoImpl tagDao;
+    private TagDao tagDao;
+    private Validator validator;
 
-    public TagServiceImpl(TagDaoImpl tagDao) {
+    public TagServiceImpl(TagDao tagDao) {
         this.tagDao = tagDao;
+        validator = new Validator();
     }
 
     public Tag getTagById(long id) {
@@ -30,9 +34,10 @@ public class TagServiceImpl implements TagService {
 
     public Tag createTag(Tag tag ) throws ServiceException {
         try {
+            validator.validate(tag);
             Long tagId = tagDao.create(tag);
             return tagDao.getById(tagId);
-        } catch (DaoException e) {
+        } catch (DaoException | ValidatorException e) {
             throw new ServiceException("Exception occurred while creating tag", e.getCause());
         }
     }

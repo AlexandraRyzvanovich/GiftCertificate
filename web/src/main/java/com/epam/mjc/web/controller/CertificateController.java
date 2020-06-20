@@ -20,9 +20,8 @@ public class CertificateController {
 
     @GetMapping("/{id}")
     public GiftCertificate getCertificateById(@PathVariable("id") long id) {
-        GiftCertificate certificate = service.getCertificateById(id);
 
-        return certificate;
+        return service.getCertificateById(id);
     }
 
     @GetMapping()
