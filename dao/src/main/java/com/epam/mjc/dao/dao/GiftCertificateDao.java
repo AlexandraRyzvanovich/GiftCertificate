@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface GiftCertificateDao {
     GiftCertificate getById(long id) throws DaoNotFoundException;
-    GiftCertificate getByName(String name) throws DaoNotFoundException;
 
     List<GiftCertificate> getAll(SearchParams searchParams);
 
