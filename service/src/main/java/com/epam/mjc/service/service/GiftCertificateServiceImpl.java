@@ -44,6 +44,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         return certificate;
     }
+
     @Override
     public List<GiftCertificate> getCertificates(SearchParams searchParams) {
         List<GiftCertificate> certificates = certificateDao.getAll(searchParams);

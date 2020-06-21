@@ -21,7 +21,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private static final String SQL_FIND_CERTIFICATE = "select * from CERTIFICATE where id = ?";
     private static final String SQL_DELETE_CERTIFICATE = "delete from certificate where id = ?";
-    private static final String SQL_FIND_CERTIFICATE_BY_NAME = "select * from certificate where name = ?";
     private static final String SQL_UPDATE_CERTIFICATE = "update certificate set name = ?, description = ?, price  = ?, creation_date = ?, modification_date = ?, valid_days = ? where id = ?";
     private static final String SQL_INSERT_CERTIFICATE = "insert into certificate(name, description, price, creation_date, valid_days ) values(?,?,?,?,?) RETURNING id";
     private static final String SQL_CREATE_CERTIFICATE_TAG = "insert into certificate_tag(certificate_id, tag_id) values(?,?)";
@@ -43,16 +42,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public GiftCertificate getById(long id) throws DaoNotFoundException {
         List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE,
                 new Object[]{id},
-                new GiftCertificateMapper());
-        GiftCertificate certificate = DataAccessUtils.uniqueResult(query);
-        if(certificate == null) {
-            throw  new DaoNotFoundException("Certificate Not Found");
-        }
-        return certificate;
-    }
-    public GiftCertificate getByName(String name) throws DaoNotFoundException {
-        List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE_BY_NAME,
-                new Object[]{name},
                 new GiftCertificateMapper());
         GiftCertificate certificate = DataAccessUtils.uniqueResult(query);
         if(certificate == null) {
