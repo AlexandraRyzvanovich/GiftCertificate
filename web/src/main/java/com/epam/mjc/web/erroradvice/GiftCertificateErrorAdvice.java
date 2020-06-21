@@ -1,4 +1,4 @@
-package com.epam.mjc.web;
+package com.epam.mjc.web.erroradvice;
 
 import com.epam.mjc.service.exception.ServiceIncorrectParamsException;
 import com.epam.mjc.service.exception.ServiceNotFoundException;
@@ -27,6 +27,8 @@ public class GiftCertificateErrorAdvice {
         public ErrorMessage handleIncorrectParamsException(ServiceIncorrectParamsException exception) {
                 return new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
         }
-
-
+        @ExceptionHandler({Exception.class})
+        public ErrorMessage handleException(Exception exception) {
+                return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        }
 }

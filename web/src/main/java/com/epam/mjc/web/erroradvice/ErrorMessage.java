@@ -1,4 +1,4 @@
-package com.epam.mjc.web;
+package com.epam.mjc.web.erroradvice;
 
 import org.springframework.http.HttpStatus;
 
