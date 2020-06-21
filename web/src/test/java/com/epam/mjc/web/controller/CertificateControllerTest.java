@@ -66,5 +66,4 @@ public class CertificateControllerTest {
                 .andExpect(ResultMatcher.matchAll())
                 .andReturn();
     }
-
 }
