@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GiftCertificateTestData {
     public static final long ID = 2;
-    public static final GiftCertificate CERTIFICATE = new GiftCertificate((long) 2,"Books",
+    public static final GiftCertificate CERTIFICATE = new GiftCertificate(2L,"Books",
             "Books,",
             new BigDecimal(10),
             LocalDateTime.now(),

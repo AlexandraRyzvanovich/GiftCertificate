@@ -18,7 +18,7 @@ public class Validator<T extends Identifiable> {
     private static final int VALID_DAYS_MAX_VALUE = 500;
 
     public void validate(T item) throws ValidationException {
-        if (GiftCertificate.class.equals(item.getClass())) {
+        if (GiftCertificate.class.equals(item.getClass())) { //instance of
             validateCertificate((GiftCertificate) item);
         } else if (Tag.class.equals(item.getClass())) {
             validateTag((Tag) item);

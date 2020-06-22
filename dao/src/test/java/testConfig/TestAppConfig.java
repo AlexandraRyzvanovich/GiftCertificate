@@ -1,6 +1,5 @@
 package testConfig;
 
-import com.epam.mjc.dao.connection.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

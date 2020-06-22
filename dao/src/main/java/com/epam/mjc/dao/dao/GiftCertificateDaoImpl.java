@@ -61,8 +61,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public GiftCertificate update(GiftCertificate certificate) throws DaoIncorrectParamsException {
-        boolean result = jdbcTemplate.update(SQL_UPDATE_CERTIFICATE, certificate.getName(), certificate.getDescription(), certificate.getPrice(), certificate.getCreationDate(),
-                certificate.getModificationDate(), certificate.getValidDays(),
+        boolean result = jdbcTemplate.update(SQL_UPDATE_CERTIFICATE, certificate.getName(), certificate.getDescription(), certificate.getPrice(),
+                LocalDateTime.now(), certificate.getValidDays(),
                 certificate.getId()) > 0;
         if(!result) {
             throw new DaoIncorrectParamsException("Impossible to update Certificate with given parameters");
