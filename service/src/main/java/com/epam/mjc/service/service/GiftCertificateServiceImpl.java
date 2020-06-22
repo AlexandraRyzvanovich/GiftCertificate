@@ -40,7 +40,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new ServiceNotFoundException(e.getMessage());
         }
         List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
+        if(!CollectionUtils.isEmpty(tags)) {
             certificate.setTags(tags);
+        }
+
 
         return certificate;
     }

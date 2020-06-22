@@ -25,6 +25,7 @@ public ErrorMessage handleNotFoundException(ServiceNotFoundException e) {
     public ErrorMessage handleIncorrectParamsException(ServiceIncorrectParamsException exception) {
         return new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
     }
+
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
     return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
