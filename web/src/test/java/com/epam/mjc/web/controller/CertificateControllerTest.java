@@ -45,7 +45,7 @@ public class CertificateControllerTest {
                 .andReturn();
     }
 
-    @Test
+   /* @Test
     public void getCertificateByNonExistedIdTest() throws Exception {
         long id = 222;
         this.mockMvc.perform((get("/certificates/" + id)))
@@ -53,5 +53,5 @@ public class CertificateControllerTest {
                 .andDo(MockMvcResultHandlers.log())
                 .andExpect(ResultMatcher.matchAll())
                 .andReturn();
-    }
+    }*/
 }

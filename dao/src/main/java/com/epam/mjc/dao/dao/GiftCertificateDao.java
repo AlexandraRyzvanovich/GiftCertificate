@@ -8,15 +8,17 @@ import com.epam.mjc.dao.exception.DaoNotFoundException;
 import java.util.List;
 
 public interface GiftCertificateDao {
-    GiftCertificate getById(long id) throws DaoNotFoundException;
+    GiftCertificate getById(long id);
 
     List<GiftCertificate> getAll(SearchParams searchParams);
 
-    GiftCertificate update(GiftCertificate item) throws DaoIncorrectParamsException;
+    boolean update(GiftCertificate item);
 
-    Long create(GiftCertificate item) throws DaoIncorrectParamsException;
+    Long create(GiftCertificate item);
 
-    boolean deleteById(long id) throws DaoNotFoundException;
+    boolean deleteById(long id);
 
-    boolean createCertificateTag(long certificateId, long tagId) throws DaoIncorrectParamsException;
+    boolean createCertificateTag(long certificateId, long tagId);
+
+    boolean isCertificateHasTag(long certficateId, long tagId);
 }

@@ -7,8 +7,8 @@ import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
 import com.epam.mjc.dao.exception.DaoNotFoundException;
-import com.epam.mjc.service.exception.ServiceIncorrectParamsException;
-import com.epam.mjc.service.exception.ServiceNotFoundException;
+import com.epam.mjc.service.exception.IncorrectParamsException;
+import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -33,18 +33,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificate getCertificateById(long id) {
-        GiftCertificate certificate;
-        try {
-            certificate = certificateDao.getById(id);
-        } catch (DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
+        GiftCertificate certificate = certificateDao.getById(id);
+        if(certificate == null) {
+            throw new NotFoundException("Certificate with id" + id + "not found");
         }
         List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
         if(!CollectionUtils.isEmpty(tags)) {
             certificate.setTags(tags);
         }
-
-
         return certificate;
     }
 
@@ -60,54 +56,74 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate)  {
-        try {
-            validator.validate(certificate);
+            Validator.validateCertificate(certificate);
             Long createdId = certificateDao.create(certificate);
+            if( createdId == null) {
+                throw new IncorrectParamsException("Exception failed while executing create certificate query");
+            }
             List<Tag> tags = certificate.getTags();
             if(!CollectionUtils.isEmpty(tags)) {
                 for (Tag tag : tags) {
                     Tag foundTag = (tagDao.getByName(tag.getName()));
                     if ( foundTag == null) {
                         Long createdTagId = tagDao.create(tag);
+                        if(createdTagId == null) {
+                            throw new IncorrectParamsException("Exception failed while executing create tag query");
+                        }
                         certificateDao.createCertificateTag(createdId, createdTagId);
                     } else {
-                        certificateDao.createCertificateTag(createdId, tag.getId());
+                        certificateDao.createCertificateTag(createdId, foundTag.getId());
                     }
                 }
             }
             return getCertificateById(createdId);
-        } catch (DaoIncorrectParamsException e ) {
-            throw new ServiceIncorrectParamsException(e.getMessage());
-        } catch ( DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
-        }
     }
 
     @Override
     public boolean deleteCertificateById(long id)  {
-        try {
-            boolean result =  certificateDao.deleteById(id);
-        } catch ( DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
+        boolean result =  certificateDao.deleteById(id);
+        if(!result) {
+            throw new NotFoundException("Impossible to delete certificate with id = " + id);
         }
+
         return true;
     }
 
     @Override
     public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
-        try {
             GiftCertificate persistedCertificate = certificateDao.getById(id);
-            if( persistedCertificate.equals(updatedCertificate)) {
+            if(persistedCertificate == null) {
+                throw new NotFoundException("There are no such certificate with id" + id);
+            }
+            if(persistedCertificate.equals(updatedCertificate)) {
                 return persistedCertificate;
             } else {
                 GiftCertificate certificateToUpdate = converter(persistedCertificate, updatedCertificate);
-                return certificateDao.update(certificateToUpdate);
+                Validator.validateCertificate(certificateToUpdate);
+                boolean result = certificateDao.update(certificateToUpdate);
+                List<Tag> tags = updatedCertificate.getTags();
+                if(!CollectionUtils.isEmpty(tags)) {
+                    for (Tag tag : tags) {
+                        Tag foundTag = (tagDao.getByName(tag.getName()));
+                        if ( foundTag == null) {
+                            Long createdTagId = tagDao.create(tag);
+                            if(createdTagId == null) {
+                                throw new IncorrectParamsException("Exception failed while executing create tag query");
+                            }
+                            if(!certificateDao.createCertificateTag(id, createdTagId));
+                        } else {
+                            if(certificateDao.isCertificateHasTag(id, foundTag.getId())) {
+                                throw new IncorrectParamsException("Key value pair of certificate and tag has already been added");
+                            }
+                            certificateDao.createCertificateTag(id, foundTag.getId());
+                        }
+                    }
+                }
+                if(!result) {
+                    throw new IncorrectParamsException("Impossible to update certificate. Exception occurred.");
+                }
+                return getCertificateById(id);
             }
-        } catch (DaoIncorrectParamsException e) {
-            throw new ServiceNotFoundException( e.getMessage());
-        } catch (DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
-        }
     }
 
     private static GiftCertificate converter (GiftCertificate persistedCertificate, GiftCertificate updatedCertificate) {
@@ -127,7 +143,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if(validDays != null) {
             persistedCertificate.setValidDays(validDays);
         }
-        return updatedCertificate;
+        return persistedCertificate;
     }
 }
 

@@ -62,10 +62,12 @@ public class SqlStringBuilder {
                 default: return queryForSorting;
             }
         }
-        if (sortType == SortType.DESC) {
-            queryForSorting = queryForSorting.concat("DESC");
-        } else {
-            queryForSorting = queryForSorting.concat("ASC");
+        if (sortType != null) {
+            if (sortType == SortType.DESC) {
+                queryForSorting = queryForSorting.concat("DESC");
+            } else {
+                queryForSorting = queryForSorting.concat("ASC");
+            }
         }
         return queryForSorting;
     }

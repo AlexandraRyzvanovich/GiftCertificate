@@ -20,7 +20,6 @@ import java.util.List;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.epam.mjc.web")
-// Указываем где искать контроллеры и остальные компоненты
 @Import(ServiceConfig.class)
 public class WebAppConfig extends DelegatingWebMvcConfiguration {
 

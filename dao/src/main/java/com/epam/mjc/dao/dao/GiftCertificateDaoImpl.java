@@ -2,8 +2,6 @@ package com.epam.mjc.dao.dao;
 
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 import com.epam.mjc.dao.mapper.GiftCertificateMapper;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private static final String SQL_FIND_CERTIFICATE = "select * from CERTIFICATE where id = ?";
     private static final String SQL_DELETE_CERTIFICATE = "delete from certificate where id = ?";
-    private static final String SQL_UPDATE_CERTIFICATE = "update certificate set name = ?, description = ?, price  = ?, creation_date = ?, modification_date = ?, valid_days = ? where id = ?";
+    private static final String SQL_UPDATE_CERTIFICATE = "update certificate set name = ?, description = ?, price  = ?, modification_date = ?, valid_days = ? where id = ?";
     private static final String SQL_INSERT_CERTIFICATE = "insert into certificate(name, description, price, creation_date, valid_days ) values(?,?,?,?,?) RETURNING id";
     private static final String SQL_CREATE_CERTIFICATE_TAG = "insert into certificate_tag(certificate_id, tag_id) values(?,?)";
+    private static final String SQL_FIND_CERTIFICATE_TAG = "select certificate_id from CERTIFICATE_TAG where certificate_id = ? AND tag_id = ?";
     private static final String SQL_SELECT_ALL = "SELECT\n" +
             "c.id, c.name, c.description,\n" +
             "c.price, c.creation_date, \n" +
@@ -39,14 +38,12 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public GiftCertificate getById(long id) throws DaoNotFoundException {
+    public GiftCertificate getById(long id) {
         List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE,
                 new Object[]{id},
                 new GiftCertificateMapper());
         GiftCertificate certificate = DataAccessUtils.uniqueResult(query);
-        if(certificate == null) {
-            throw  new DaoNotFoundException("Certificate Not Found");
-        }
+
         return certificate;
     }
 
@@ -60,45 +57,50 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public GiftCertificate update(GiftCertificate certificate) throws DaoIncorrectParamsException {
-        boolean result = jdbcTemplate.update(SQL_UPDATE_CERTIFICATE, certificate.getName(), certificate.getDescription(), certificate.getPrice(),
-                LocalDateTime.now(), certificate.getValidDays(),
+    public boolean update(GiftCertificate certificate) {
+        boolean result = jdbcTemplate.update(SQL_UPDATE_CERTIFICATE,
+                certificate.getName(),
+                certificate.getDescription(),
+                certificate.getPrice(),
+                LocalDateTime.now(),
+                certificate.getValidDays(),
                 certificate.getId()) > 0;
-        if(!result) {
-            throw new DaoIncorrectParamsException("Impossible to update Certificate with given parameters");
-        }
-        return certificate;
+
+        return result;
     }
 
     @Override
-    public Long create(GiftCertificate certificate) throws DaoIncorrectParamsException {
+    public Long create(GiftCertificate certificate) {
     Long id = jdbcTemplate.queryForObject(SQL_INSERT_CERTIFICATE, new Object[] {
             certificate.getName(),
             certificate.getDescription(),
             certificate.getPrice(),
             LocalDateTime.now(),
             certificate.getValidDays()} , Long.class );
-        if(id == null) {
-            throw new DaoIncorrectParamsException("Impossible to create Certificate with given parameters");
-        }
+
         return id;
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoNotFoundException {
+    public boolean deleteById(long id)  {
         boolean result = jdbcTemplate.update(SQL_DELETE_CERTIFICATE, id) > 0;
-        if(!result) {
-            throw new DaoNotFoundException("Impossible to delete Certificate with given parameters");
-        }
-        return true;
+
+        return result;
     }
 
     @Override
-    public boolean createCertificateTag(long certificateId, long tagId) throws DaoIncorrectParamsException {
+    public boolean createCertificateTag(long certificateId, long tagId) {
         boolean result = jdbcTemplate.update(SQL_CREATE_CERTIFICATE_TAG, certificateId, tagId) > 0;
-        if(!result) {
-            throw new DaoIncorrectParamsException("Impossible to create Certificate_tag with given parameters");
+
+        return result;
+    }
+    @Override
+    public boolean isCertificateHasTag(long certficateId, long tagId) {
+        Long certificateFound = jdbcTemplate.queryForObject(SQL_FIND_CERTIFICATE_TAG,
+                new Object[]{certficateId, tagId}, Long.class);
+        if(certificateFound != null) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

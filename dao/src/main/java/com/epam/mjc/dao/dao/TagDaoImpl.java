@@ -33,14 +33,12 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getById(long id) throws DaoNotFoundException {
+    public Tag getById(long id) {
         List<Tag> query = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
                 new Object[]{id},
                 new TagMapper());
         Tag tag = DataAccessUtils.uniqueResult(query);
-        if(tag == null) {
-            throw new DaoNotFoundException("Tag with such if not found");
-        }
+
 
         return tag;
     }
@@ -53,15 +51,13 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getByName(String name) throws DaoNotFoundException {
+    public Tag getByName(String name) {
 
     List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
             new Object[]{name},
             new TagMapper());
     Tag tag = DataAccessUtils.uniqueResult(query);
-    if(tag == null) {
-        throw new DaoNotFoundException("Tag with such name not found");
-    }
+
     return tag;
 }
 
@@ -71,20 +67,16 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Long create(Tag tag) throws DaoIncorrectParamsException {
+    public Long create(Tag tag) {
         Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
-        if(result == null) {
-            throw new DaoIncorrectParamsException("Impossible to create Tag with given parameters");
-        }
+
         return result;
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoNotFoundException {
+    public boolean deleteById(long id) {
         boolean result = jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
-        if(!result) {
-            throw new DaoNotFoundException("Impossible to delete Tag with given parameters");
-        }
-        return true;
+
+        return result;
     }
 }

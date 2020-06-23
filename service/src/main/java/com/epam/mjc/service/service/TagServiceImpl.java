@@ -2,11 +2,8 @@ package com.epam.mjc.service.service;
 
 import com.epam.mjc.dao.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
-import com.epam.mjc.service.exception.ServiceIncorrectParamsException;
-import com.epam.mjc.service.exception.ServiceNotFoundException;
-import com.epam.mjc.service.exception.ValidationException;
+import com.epam.mjc.service.exception.IncorrectParamsException;
+import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +20,11 @@ public class TagServiceImpl implements TagService {
     }
 
     public Tag getTagById(long id) {
-        Tag tag;
-        try {
-            tag = tagDao.getById(id);
-        } catch (DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
+        Tag tag = tagDao.getById(id);
+        if(tag == null) {
+            throw new NotFoundException("No tag found with id" + id);
         }
+
         return tag;
     }
 
@@ -37,22 +33,21 @@ public class TagServiceImpl implements TagService {
     }
 
     public Tag createTag(Tag tag ) {
-        try {
-            validator.validate(tag);
+            Validator.validateTag(tag);
             Long tagId = tagDao.create(tag);
+            if(tagId == null) {
+                throw new IncorrectParamsException("Impossible to create tag with given params");
+            }
             return tagDao.getById(tagId);
-        } catch (DaoIncorrectParamsException e) {
-            throw new ServiceIncorrectParamsException(e.getMessage());
-        } catch (DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
-        }
+
     }
 
-    public boolean deleteTagById(long id) throws ServiceNotFoundException {
-        try {
-            return tagDao.deleteById(id);
-        } catch (DaoNotFoundException e) {
-            throw new ServiceNotFoundException(e.getMessage());
+    public boolean deleteTagById(long id) throws NotFoundException {
+        boolean result = tagDao.deleteById(id);
+        if(!result) {
+            throw new NotFoundException("No tag found with id" + id + "Impossible to delete");
         }
+        return true;
+
     }
 }

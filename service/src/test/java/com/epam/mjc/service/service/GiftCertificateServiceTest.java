@@ -40,14 +40,14 @@ public class GiftCertificateServiceTest {
     }
 
 
-    @Test
+    /*@Test
     public void getCertificateByIdValidIdTest() throws DaoNotFoundException {
         when(giftCertificateDao.getById(ID)).thenReturn(CERTIFICATE);
         GiftCertificate certificateActual = service.getCertificateById(ID);
         Assert.assertEquals(CERTIFICATE, certificateActual);
         verify(giftCertificateDao, times(1)).getById(ID);
         verify(tagDao, times(1)).getAllTagsByCertificateId(ID);
-    }
+    }*/
 
     @Test
     public void getCertificateByInvalidId() throws DaoNotFoundException {

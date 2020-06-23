@@ -7,10 +7,10 @@ import com.epam.mjc.dao.exception.DaoNotFoundException;
 import java.util.List;
 
 public interface TagDao {
-    Tag getById(long id) throws DaoNotFoundException;
+    Tag getById(long id);
     List<Tag> getAllTagsByCertificateId(long id);
-    Tag getByName (String name) throws DaoNotFoundException;
+    Tag getByName (String name);
     List<Tag> getAll();
-    Long create(Tag item) throws DaoIncorrectParamsException;
-    boolean deleteById(long id) throws DaoNotFoundException;
+    Long create(Tag item);
+    boolean deleteById(long id);
 }
