@@ -18,17 +18,19 @@ public class ErrorAdvice {
     public ErrorMessage handleNotFoundException(NotFoundException e) {
         return new ErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
     }
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ValidationException.class})
     public ErrorMessage handleValidationException(ValidationException exception) {
         return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler({IncorrectParamsException.class})
     public ErrorMessage handleIncorrectParamsException(IncorrectParamsException exception) {
         return new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
         return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
