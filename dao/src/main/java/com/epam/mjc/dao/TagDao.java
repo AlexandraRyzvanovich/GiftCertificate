@@ -1,8 +1,6 @@
 package com.epam.mjc.dao;
 
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 
 import java.util.List;
 

@@ -16,7 +16,6 @@ public class DataSource {
     public static HikariDataSource getDataSource() {
         HikariConfig config = new HikariConfig(PATH);
         return new HikariDataSource(config);
-
     }
 
 }

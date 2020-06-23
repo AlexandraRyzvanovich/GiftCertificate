@@ -54,9 +54,8 @@ public class TagDaoImpl implements TagDao {
     List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
             new Object[]{name},
             new TagMapper());
-    Tag tag = DataAccessUtils.uniqueResult(query);
 
-    return tag;
+    return DataAccessUtils.uniqueResult(query);
 }
 
     @Override
