@@ -1,7 +1,6 @@
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.*;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class GiftCertificateDaoTest {
     private TagDao tagDao;
 
     @Test
-    public void getByIdValidTest() throws DaoNotFoundException {
+    public void getByIdValidTest() {
         GiftCertificate actual = giftCertificateDao.getById(2);
         assertThat(actual.getId(), is(2L));
         assertEquals(actual.getName(),"Computer");
@@ -48,5 +47,4 @@ public class GiftCertificateDaoTest {
     public void updateTest() {
 
     }
-
 }

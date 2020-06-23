@@ -1,25 +1,15 @@
 package com.epam.mjc.dao.entity;
 
 public class CertificateTag {
-    private long id;
     private long certificateId;
     private long tagId;
 
     public CertificateTag() {
     }
 
-    public CertificateTag(long id, long certificateId, long tagId) {
-        this.id = id;
+    public CertificateTag(long certificateId, long tagId) {
         this.certificateId = certificateId;
         this.tagId = tagId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public long getCertificateId() {
@@ -38,3 +28,5 @@ public class CertificateTag {
         this.tagId = tagId;
     }
 }
+
+

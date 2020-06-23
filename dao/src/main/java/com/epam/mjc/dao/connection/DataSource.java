@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataSource {
-    private static final String PATH = "C:/Users/Alexandra/IdeaProjects/GiftCertificate/dao/src/main/resources/db.properties";
+    private static final String PATH = "/connection/db.properties";
 
     @Autowired
     public DataSource() {
@@ -17,5 +17,4 @@ public class DataSource {
         HikariConfig config = new HikariConfig(PATH);
         return new HikariDataSource(config);
     }
-
 }
