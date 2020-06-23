@@ -1,5 +1,5 @@
-import com.epam.mjc.dao.dao.GiftCertificateDao;
-import com.epam.mjc.dao.dao.TagDao;
+import com.epam.mjc.dao.GiftCertificateDao;
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.*;
 import com.epam.mjc.dao.exception.DaoNotFoundException;
 import org.junit.Test;

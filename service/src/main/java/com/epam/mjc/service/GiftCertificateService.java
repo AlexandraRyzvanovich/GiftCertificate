@@ -1,4 +1,4 @@
-package com.epam.mjc.service.service;
+package com.epam.mjc.service;
 
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;

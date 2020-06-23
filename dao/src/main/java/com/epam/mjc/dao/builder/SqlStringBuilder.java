@@ -2,7 +2,7 @@ package com.epam.mjc.dao.builder;
 
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortType;
-import com.epam.mjc.dao.entity.SorterParams;
+import com.epam.mjc.dao.entity.SortParams;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class SqlStringBuilder {
     public static String buildQuery(SearchParams searchParams) {
         List<String> tags = searchParams.getTags();
         String text = searchParams.getText();
-        SorterParams sorterParams = searchParams.getSorterParams();
+        SortParams sortParams = searchParams.getSortParams();
         String tagQueryPattern = "";
         if(text != null) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + textBuilder(text));
@@ -29,8 +29,8 @@ public class SqlStringBuilder {
             }
         }
 
-        if(sorterParams != null) {
-            tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sorterParams));
+        if(sortParams != null) {
+            tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
         return tagQueryPattern;
     }
@@ -47,10 +47,10 @@ public class SqlStringBuilder {
         return "(c.name LIKE '%" + text + "%' OR c.description LIKE '%" + text + "%')";
     }
 
-    private static String sorterParamsBuilder(SorterParams sorterParams) {
+    private static String sorterParamsBuilder(SortParams sortParams) {
         String queryForSorting = "";
-        String fieldToSort = sorterParams.getFieldName();
-        SortType sortType = sorterParams.getSortType();
+        String fieldToSort = sortParams.getFieldName();
+        SortType sortType = sortParams.getSortType();
         if(fieldToSort != null) {
             switch (fieldToSort) {
                 case "date" :

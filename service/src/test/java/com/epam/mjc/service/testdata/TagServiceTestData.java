@@ -1,4 +1,4 @@
-package com.epam.mjc.service.service.testData;
+package com.epam.mjc.service.testdata;
 
 import com.epam.mjc.dao.entity.Tag;
 

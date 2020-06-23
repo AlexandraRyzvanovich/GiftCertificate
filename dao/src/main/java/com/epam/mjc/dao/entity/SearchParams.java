@@ -5,12 +5,12 @@ import java.util.List;
 public class SearchParams {
     private List<String> tags;
     private String text;
-    private SorterParams sorterParams;
+    private SortParams sortParams;
 
-    public SearchParams(List<String> tags, String text, SorterParams sortType) {
+    public SearchParams(List<String> tags, String text, SortParams sortType) {
         this.tags = tags;
         this.text = text;
-        this.sorterParams = sortType;
+        this.sortParams = sortType;
     }
 
     public List<String> getTags() {
@@ -29,11 +29,11 @@ public class SearchParams {
         this.text = text;
     }
 
-    public SorterParams getSorterParams() {
-        return sorterParams;
+    public SortParams getSortParams() {
+        return sortParams;
     }
 
-    public void setSorterParams(SorterParams sorterParams) {
-        this.sorterParams = sorterParams;
+    public void setSortParams(SortParams sortParams) {
+        this.sortParams = sortParams;
     }
 }

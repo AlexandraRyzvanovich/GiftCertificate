@@ -1,7 +1,7 @@
 package com.epam.mjc.web.controller;
 
 import com.epam.mjc.dao.entity.SortType;
-import com.epam.mjc.dao.entity.SorterParams;
+import com.epam.mjc.dao.entity.SortParams;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -18,7 +18,7 @@ public class SortResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public SorterParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public SortParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String params = webRequest.getParameter("sortBy");
         String fieldName;
         if (params != null) {
@@ -28,7 +28,7 @@ public class SortResolver implements HandlerMethodArgumentResolver {
             SortType sortTypeValue = null;
                 if (sortingType.equalsIgnoreCase(ASC_SORTING_TYPE) || sortingType.equalsIgnoreCase(DESC_SORTING_TYPE))
                     sortTypeValue = SortType.valueOf(fields[1].toUpperCase());
-                return new SorterParams(fieldName, sortTypeValue);
+                return new SortParams(fieldName, sortTypeValue);
         }
         return null;
     }

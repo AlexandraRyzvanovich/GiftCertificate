@@ -1,12 +1,11 @@
-package com.epam.mjc.service.service;
+package com.epam.mjc.service;
 
-import com.epam.mjc.dao.dao.GiftCertificateDao;
-import com.epam.mjc.dao.dao.GiftCertificateDaoImpl;
-import com.epam.mjc.dao.dao.TagDao;
-import com.epam.mjc.dao.dao.TagDaoImpl;
+import com.epam.mjc.dao.GiftCertificateDaoImpl;
+import com.epam.mjc.dao.TagDaoImpl;
 import com.epam.mjc.dao.entity.*;
 import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
 import com.epam.mjc.dao.exception.DaoNotFoundException;
+import com.epam.mjc.service.testdata.GiftCertificateTestData;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static com.epam.mjc.service.service.testData.GiftCertificateTestData.*;
 import static org.mockito.Mockito.*;
 
 
@@ -51,28 +49,28 @@ public class GiftCertificateServiceTest {
 
     @Test
     public void getCertificateByInvalidId() throws DaoNotFoundException {
-        when(giftCertificateDao.getById(ID)).thenReturn(CERTIFICATE);
-        GiftCertificate certificateActual = service.getCertificateById(ID);
-        Assert.assertEquals(CERTIFICATE, certificateActual);
+        when(giftCertificateDao.getById(GiftCertificateTestData.ID)).thenReturn(GiftCertificateTestData.CERTIFICATE);
+        GiftCertificate certificateActual = service.getCertificateById(GiftCertificateTestData.ID);
+        Assert.assertEquals(GiftCertificateTestData.CERTIFICATE, certificateActual);
     }
     @Test
     public void getCertificatesWithoutSearchParamsTest() {
-        GIFT_CERTIFICATE_LIST.add(CERTIFICATE);
-        when(giftCertificateDao.getAll(SEARCH_PARAMS)).thenReturn(GIFT_CERTIFICATE_LIST);
-        List<GiftCertificate> actualList = service.getCertificates(SEARCH_PARAMS);
-        Assert.assertEquals(GIFT_CERTIFICATE_LIST, actualList);
+        GiftCertificateTestData.GIFT_CERTIFICATE_LIST.add(GiftCertificateTestData.CERTIFICATE);
+        when(giftCertificateDao.getAll(GiftCertificateTestData.SEARCH_PARAMS)).thenReturn(GiftCertificateTestData.GIFT_CERTIFICATE_LIST);
+        List<GiftCertificate> actualList = service.getCertificates(GiftCertificateTestData.SEARCH_PARAMS);
+        Assert.assertEquals(GiftCertificateTestData.GIFT_CERTIFICATE_LIST, actualList);
     }
     @Test
     public void createCertificateTest() throws DaoIncorrectParamsException, DaoNotFoundException {
-        when(giftCertificateDao.create(CERTIFICATE)).thenReturn(ID);
-        when(giftCertificateDao.getById(ID)).thenReturn(CERTIFICATE);
-        GiftCertificate actualCertificate = service.createCertificate(CERTIFICATE);
-        Assert.assertEquals(CERTIFICATE, actualCertificate);
+        when(giftCertificateDao.create(GiftCertificateTestData.CERTIFICATE)).thenReturn(GiftCertificateTestData.ID);
+        when(giftCertificateDao.getById(GiftCertificateTestData.ID)).thenReturn(GiftCertificateTestData.CERTIFICATE);
+        GiftCertificate actualCertificate = service.createCertificate(GiftCertificateTestData.CERTIFICATE);
+        Assert.assertEquals(GiftCertificateTestData.CERTIFICATE, actualCertificate);
 
     }
     @Test
     public void deleteCertificateByIdTest() throws DaoNotFoundException {
-        when(giftCertificateDao.deleteById(ID)).thenReturn(true);
-        Assert.assertEquals(true, service.deleteCertificateById(ID));
+        when(giftCertificateDao.deleteById(GiftCertificateTestData.ID)).thenReturn(true);
+        Assert.assertEquals(true, service.deleteCertificateById(GiftCertificateTestData.ID));
     }
 }

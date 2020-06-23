@@ -1,4 +1,4 @@
-package com.epam.mjc.dao.dao;
+package com.epam.mjc.dao;
 
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.SearchParams;

@@ -1,7 +1,5 @@
-package com.epam.mjc.dao.dao;
+package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

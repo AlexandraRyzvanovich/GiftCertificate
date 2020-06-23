@@ -1,8 +1,9 @@
-package com.epam.mjc.service.service;
+package com.epam.mjc.service;
 
-import com.epam.mjc.dao.dao.TagDao;
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.exception.DaoNotFoundException;
+import com.epam.mjc.service.testdata.TagServiceTestData;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 
-import static com.epam.mjc.service.service.testData.TagServiceTestData.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,24 +34,24 @@ public class TagServiceTest {
 
     @Test
     public void getTagByIdTest() throws DaoNotFoundException {
-        when(dao.getById(ID)).thenReturn(TAG);
-        Tag actualTag = service.getTagById(ID);
-        Assert.assertEquals(TAG, actualTag);
-        verify(dao, times(1)).getById(ID);
+        when(dao.getById(TagServiceTestData.ID)).thenReturn(TagServiceTestData.TAG);
+        Tag actualTag = service.getTagById(TagServiceTestData.ID);
+        Assert.assertEquals(TagServiceTestData.TAG, actualTag);
+        verify(dao, times(1)).getById(TagServiceTestData.ID);
     }
 
     @Test
     public void getAllTagsTest() {
-        when(dao.getAll()).thenReturn(TAG_LIST);
+        when(dao.getAll()).thenReturn(TagServiceTestData.TAG_LIST);
         List<Tag> actualTagList = service.getAllTags();
-        Assert.assertNotEquals(TAG_LIST, actualTagList);
+        Assert.assertNotEquals(TagServiceTestData.TAG_LIST, actualTagList);
         verify(dao, times(1)).getAll();
     }
 
     @Test
     public void deleteTagByIdTest() throws DaoNotFoundException {
-        when(dao.deleteById(ID)).thenReturn(true);
-        Assert.assertTrue(service.deleteTagById(ID));
-        verify(dao, times(1)).deleteById(ID);
+        when(dao.deleteById(TagServiceTestData.ID)).thenReturn(true);
+        Assert.assertTrue(service.deleteTagById(TagServiceTestData.ID));
+        verify(dao, times(1)).deleteById(TagServiceTestData.ID);
     }
 }

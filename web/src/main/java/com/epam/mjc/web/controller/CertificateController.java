@@ -2,8 +2,8 @@ package com.epam.mjc.web.controller;
 
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.entity.SorterParams;
-import com.epam.mjc.service.service.GiftCertificateService;
+import com.epam.mjc.dao.entity.SortParams;
+import com.epam.mjc.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class CertificateController {
     @GetMapping()
     public List<GiftCertificate> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
                                                     @RequestParam(required = false, name = "text") String text,
-                                                    @Sort SorterParams params) {
+                                                    @Sort SortParams params) {
         SearchParams searchParams = new SearchParams(tags, text, params);
 
         return service.getCertificates(searchParams);

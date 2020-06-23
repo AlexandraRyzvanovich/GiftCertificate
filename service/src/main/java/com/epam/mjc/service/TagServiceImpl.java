@@ -1,6 +1,6 @@
-package com.epam.mjc.service.service;
+package com.epam.mjc.service;
 
-import com.epam.mjc.dao.dao.TagDao;
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;

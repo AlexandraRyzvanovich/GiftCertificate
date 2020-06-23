@@ -1,12 +1,10 @@
-package com.epam.mjc.service.service;
+package com.epam.mjc.service;
 
-import com.epam.mjc.dao.dao.GiftCertificateDao;
-import com.epam.mjc.dao.dao.TagDao;
+import com.epam.mjc.dao.GiftCertificateDao;
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
