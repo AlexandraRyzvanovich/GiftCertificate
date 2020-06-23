@@ -36,6 +36,7 @@ public class Validator {
             throw new ValidationException("Gift certificate valid days field" + validDays + "is incorrect");
         }
     }
+
     public static void validateTag(Tag tag) throws ValidationException {
         String name =  tag.getName();
         if(name == null || name.length() > NAME_MAX_LENGTH || name.isEmpty()) {
