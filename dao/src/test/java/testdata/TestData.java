@@ -1,4 +1,4 @@
-package testData;
+package testdata;
 
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortType;

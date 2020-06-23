@@ -7,14 +7,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import testConfig.TestAppConfig;
+import config.TestAppConfig;
 
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
-import static testData.TestData.SEARCH_PARAMS_EMPTY;
-import static testData.TestData.SEARCH_PARAMS_NOT_EMPTY;
+import static testdata.TestData.SEARCH_PARAMS_EMPTY;
+import static testdata.TestData.SEARCH_PARAMS_NOT_EMPTY;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestAppConfig.class})
