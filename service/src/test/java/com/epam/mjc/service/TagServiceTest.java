@@ -2,6 +2,7 @@ package com.epam.mjc.service;
 
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class TagServiceTest {
     private TagServiceImpl service;
 
     public static final long ID = 1;
+    public static final long INVALID_ID = 1111111;
     public static final Tag TAG = new Tag(Long.valueOf(1), "fun");
     public static final List<Tag> TAG_LIST = new ArrayList<>();
 
@@ -36,16 +38,21 @@ public class TagServiceTest {
     }
 
     @Test
-    public void getTagByIdTest()  {
+    public void getTagByValidIdShouldReturnTagObjectTest()  {
         when(dao.getById(ID)).thenReturn(TAG);
         Tag actualTag = service.getTagById(ID);
         Assert.assertEquals(TAG, actualTag);
         verify(dao, times(1)).getById(ID);
     }
+    @Test(expected = NotFoundException.class)
+    public void getTagByInValidIdShouldReturnNotFoundExceptionTest()  {
+        when(dao.getById(INVALID_ID)).thenReturn(null);
+        service.getTagById(INVALID_ID);
+        verify(dao, times(1)).getById(ID);
+    }
 
     @Test
     public void getAllTagsTest() {
-
         when(dao.getAll()).thenReturn(TAG_LIST);
         List<Tag> actualTagList = service.getAllTags();
         Assert.assertEquals(TAG_LIST, actualTagList);
