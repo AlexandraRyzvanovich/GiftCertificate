@@ -63,20 +63,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new IncorrectParamsException("Exception failed while executing create certificate query");
         }
         List<Tag> tags = certificate.getTags();
-        if (!CollectionUtils.isEmpty(tags)) {
-            for (Tag tag : tags) {
-                Tag foundTag = (tagDao.getByName(tag.getName()));
-                if (foundTag == null) {
-                    Long createdTagId = tagDao.create(tag);
-                    if (createdTagId == null) {
-                        throw new IncorrectParamsException("Exception failed while executing create tag query");
-                    }
-                    certificateDao.createCertificateTag(createdId, createdTagId);
-                } else {
-                    certificateDao.createCertificateTag(createdId, foundTag.getId());
-                }
-            }
-        }
+        saveTags(createdId, tags);
         return getCertificateById(createdId);
     }
 
