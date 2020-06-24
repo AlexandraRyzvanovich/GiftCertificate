@@ -96,6 +96,6 @@ public class GiftCertificateServiceTest {
     @Test
     public void deleteCertificateByIdTest() {
         when(giftCertificateDao.deleteById(ID)).thenReturn(true);
-        Assert.assertEquals(true, service.deleteCertificateById(ID));
+        Assert.assertTrue(service.deleteCertificateById(ID));
     }
 }

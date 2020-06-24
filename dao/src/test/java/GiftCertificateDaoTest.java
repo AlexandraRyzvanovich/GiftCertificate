@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import config.TestAppConfig;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -29,7 +30,7 @@ public class GiftCertificateDaoTest {
         assertThat(actual.getId(), is(2L));
         assertEquals(actual.getName(),"Computer");
         assertEquals(actual.getDescription(), "Discount for Computer");
-        assertEquals(actual.getPrice(), 10);
+        assertEquals(actual.getPrice(), new BigDecimal(10));
     }
 
     @Test

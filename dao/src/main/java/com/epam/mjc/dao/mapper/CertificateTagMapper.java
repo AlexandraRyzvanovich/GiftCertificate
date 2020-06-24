@@ -1,7 +1,6 @@
 package com.epam.mjc.dao.mapper;
 
 import com.epam.mjc.dao.entity.CertificateTag;
-import com.epam.mjc.dao.entity.GiftCertificate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

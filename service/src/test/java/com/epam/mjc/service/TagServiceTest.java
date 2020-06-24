@@ -28,7 +28,7 @@ public class TagServiceTest {
 
     public static final long ID = 1;
     public static final long INVALID_ID = 1111111;
-    public static final Tag TAG = new Tag(Long.valueOf(1), "fun");
+    public static final Tag TAG = new Tag(1L, "fun");
     public static final List<Tag> TAG_LIST = new ArrayList<>();
 
     @Before

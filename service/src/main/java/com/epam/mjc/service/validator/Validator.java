@@ -1,7 +1,6 @@
 package com.epam.mjc.service.validator;
 
 import com.epam.mjc.dao.entity.GiftCertificate;
-import com.epam.mjc.dao.entity.Identifiable;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.exception.ValidationException;
 import org.springframework.stereotype.Component;

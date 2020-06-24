@@ -36,7 +36,7 @@ public class ErrorAdvice {
         return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
 
-    class ErrorMessage {
+    static class ErrorMessage {
         private HttpStatus status;
         private String message;
 
