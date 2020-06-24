@@ -11,4 +11,5 @@ public interface TagDao {
     List<Tag> getAll();
     Long create(Tag item);
     boolean deleteById(long id);
+    boolean deleteFromCertificateTag(Long id, Long id1);
 }

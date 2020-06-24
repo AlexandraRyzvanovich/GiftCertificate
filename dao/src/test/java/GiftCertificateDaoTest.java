@@ -21,8 +21,6 @@ import static testdata.TestData.SEARCH_PARAMS_NOT_EMPTY;
 public class GiftCertificateDaoTest {
     @Autowired
     private GiftCertificateDao giftCertificateDao;
-    @Autowired
-    private TagDao tagDao;
 
     @Test
     public void getByIdValidTest() {

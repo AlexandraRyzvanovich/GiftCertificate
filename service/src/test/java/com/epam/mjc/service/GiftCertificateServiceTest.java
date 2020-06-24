@@ -23,7 +23,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class GiftCertificateServiceTest {
     @Mock

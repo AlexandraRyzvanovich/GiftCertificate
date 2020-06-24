@@ -37,8 +37,8 @@ public class ErrorAdvice {
     }
 
     static class ErrorMessage {
-        private HttpStatus status;
-        private String message;
+        private final HttpStatus status;
+        private final String message;
 
         public ErrorMessage(HttpStatus status, String message) {
             this.status = status;
