@@ -122,20 +122,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private List<Tag> tagsConverter(Long id, List<Tag> persistedTags, List<Tag> updatedTags) {
-        List<Tag> tagsToBeSaved = new ArrayList<>();
-        for (Tag persisted: persistedTags) {
-            for (Tag updated: updatedTags) {
-                if(!persisted.getName().equalsIgnoreCase(updated.getName())) {
-            tagDao.deleteFromCertificateTag(id, persisted.getId());
-                }
-            }
-        }
-        for (Tag updatedTag : updatedTags) {
-            if (!persistedTags.contains(updatedTag.getName())) {
-                tagsToBeSaved.add(updatedTag);
-            }
-        }
-        return tagsToBeSaved;
+
+        persistedTags.stream().filter(tag -> updatedTags.stream()
+                .noneMatch(tag1 -> tag.getName().equalsIgnoreCase(tag1.getName())))
+                .forEach(persisted->tagDao.deleteFromCertificateTag(id, persisted.getId()));
+
+        return updatedTags.stream()
+                .filter(tag -> persistedTags.stream()
+                .noneMatch(pers -> pers.getName().equalsIgnoreCase(tag.getName())))
+                .collect(Collectors.toList());
     }
 
     private void saveTags(Long certificateId, List<Tag> tags) {

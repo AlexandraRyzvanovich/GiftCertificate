@@ -1,10 +1,8 @@
 package com.epam.mjc.dao;
 
 import com.epam.mjc.dao.builder.SqlStringBuilder;
-import com.epam.mjc.dao.entity.CertificateTag;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.mapper.CertificateTagMapper;
 import com.epam.mjc.dao.mapper.GiftCertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
@@ -91,13 +89,5 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public boolean createCertificateTag(long certificateId, long tagId) {
 
         return jdbcTemplate.update(SQL_CREATE_CERTIFICATE_TAG, certificateId, tagId) > 0;
-    }
-
-    @Override
-    public boolean isCertificateHasTag(long certificateId, long tagId) {
-        List<CertificateTag> res = jdbcTemplate.query(SQL_FIND_CERTIFICATE_TAG,
-                new Object[]{certificateId, tagId},
-                new CertificateTagMapper());
-        return DataAccessUtils.uniqueResult(res) != null ;
     }
 }

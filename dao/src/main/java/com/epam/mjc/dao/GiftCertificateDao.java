@@ -17,6 +17,4 @@ public interface GiftCertificateDao {
     boolean deleteById(long id);
 
     boolean createCertificateTag(long certificateId, long tagId);
-
-    boolean isCertificateHasTag(long certficateId, long tagId);
 }
