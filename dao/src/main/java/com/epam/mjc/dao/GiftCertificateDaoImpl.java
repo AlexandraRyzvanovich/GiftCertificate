@@ -25,14 +25,15 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String SQL_INSERT_CERTIFICATE = "insert into certificate(name, description, price, creation_date, valid_days ) values(?,?,?,?,?) RETURNING id";
     private static final String SQL_CREATE_CERTIFICATE_TAG = "insert into certificate_tag(certificate_id, tag_id) values(?,?)";
     private static final String SQL_FIND_CERTIFICATE_TAG = "select * from CERTIFICATE_TAG where certificate_id = ? AND tag_id = ?";
-    private static final String SQL_SELECT_ALL = "SELECT\n" +
+    private static final String SQL_SELECT_ALL = "SELECT \n" +
             "c.id, c.name, c.description,\n" +
-            "c.price, c.creation_date, \n" +
-            "c.modification_date,\n" +
-            "c.valid_days \n" +
-            "FROM certificate_tag c_t\n" +
-            "JOIN tag t ON t.id = c_t.tag_id \n" +
-            "JOIN certificate c ON c.id = c_t.certificate_id ";
+            "            c.price, c.creation_date, \n" +
+            "            c.modification_date,\n" +
+            "            c.valid_days \n" +
+            "FROM certificate c\n" +
+            "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id \n" +
+            "LEFT  JOIN tag t ON t.id = c_t.tag_id \n" +
+            "GROUP BY c.id";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate) {
