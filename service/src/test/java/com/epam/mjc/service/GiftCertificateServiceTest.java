@@ -56,7 +56,7 @@ public class GiftCertificateServiceTest {
 
     @Before
     public void setUp() {
-        service = new GiftCertificateServiceImpl(giftCertificateDao, tagDao, validator);
+        service = new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
     }
 
     @Test

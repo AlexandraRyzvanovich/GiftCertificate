@@ -33,7 +33,7 @@ public class TagServiceTest {
 
     @Before
     public void setUp() {
-        service = new TagServiceImpl(dao, validator);
+        service = new TagServiceImpl(dao);
         System.out.println(validator.getClass());
     }
 

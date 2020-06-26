@@ -31,7 +31,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "FROM certificate c\n" +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id \n" +
             "LEFT  JOIN tag t ON t.id = c_t.tag_id \n";
-    private static final String SQL_GROUP_BY = "GROUP BY c.id";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -51,7 +50,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public List<GiftCertificate> getAll(SearchParams searchParams) {
         String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams);
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
-            return jdbcTemplate.query(SQL_SELECT_ALL.concat(sqlQueryPattern).concat(SQL_GROUP_BY), new GiftCertificateMapper());
+            return jdbcTemplate.query(SQL_SELECT_ALL.concat(sqlQueryPattern), new GiftCertificateMapper());
         }
         return jdbcTemplate.query(SQL_SELECT_ALL, new GiftCertificateMapper());
     }

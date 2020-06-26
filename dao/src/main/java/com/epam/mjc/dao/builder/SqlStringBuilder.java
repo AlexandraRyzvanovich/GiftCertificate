@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class SqlStringBuilder {
     private static final String QUERY_PART_WHERE = " WHERE ";
     private static final String QUERY_PART_AND = " AND ";
+    private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
 
     public static String buildQuery(SearchParams searchParams) {
         List<String> tags = searchParams.getTags();
@@ -28,7 +29,7 @@ public class SqlStringBuilder {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
-
+        tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         if(sortParams != null) {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }

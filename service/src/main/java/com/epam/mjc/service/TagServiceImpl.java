@@ -12,11 +12,9 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService {
     private TagDao tagDao;
-    private Validator validator;
 
-    public TagServiceImpl(TagDao tagDao, Validator validator) {
+    public TagServiceImpl(TagDao tagDao) {
         this.tagDao = tagDao;
-        this.validator = validator;
     }
 
     public Tag getTagById(long id) {

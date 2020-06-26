@@ -14,22 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @EnableTransactionManagement
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private GiftCertificateDao certificateDao;
     private TagDao tagDao;
-    private Validator validator;
 
-    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao, Validator validator) {
+    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
-        this.validator = validator;
     }
 
     @Override
