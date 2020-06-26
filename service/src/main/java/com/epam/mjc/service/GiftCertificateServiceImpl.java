@@ -77,8 +77,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return true;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
         GiftCertificate persistedCertificate = certificateDao.getById(id);
         if (persistedCertificate == null) {
@@ -138,6 +138,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             for (Tag tag : tags) {
                 Tag foundTag = (tagDao.getByName(tag.getName()));
                 if (foundTag == null) {
+                    Validator.validateTag(tag);
                     Long createdTagId = tagDao.create(tag);
                     if (createdTagId == null) {
                         throw new IncorrectParamsException("Exception failed while executing create tag query");
