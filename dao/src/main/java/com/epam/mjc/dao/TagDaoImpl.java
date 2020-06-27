@@ -1,7 +1,5 @@
-package com.epam.mjc.dao.dao;
+package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.exception.DaoIncorrectParamsException;
-import com.epam.mjc.dao.exception.DaoNotFoundException;
 import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ public class TagDaoImpl implements TagDao {
     private static final String SQL_DELETE_TAG = "delete from tag where id = ?";
     private static final String SQL_GET_ALL_TAGS = "select * from tag";
     private static final String SQL_CREATE_TAG = "insert into tag (name) values(?) RETURNING id";
+    private static final String SQL_DELETE_FROM_CERTIFICATE_TAG = "delete from certificate_tag where certificate_id = ? AND tag_id = ?";
     private static final String SQL_SELECT_TAGS_BY_CERTIFICATE_ID = "SELECT \n" +
             "tag.id,\n" +
             "tag.name\n" +
@@ -33,14 +32,12 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getById(long id) throws DaoNotFoundException {
+    public Tag getById(long id) {
         List<Tag> query = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
                 new Object[]{id},
                 new TagMapper());
         Tag tag = DataAccessUtils.uniqueResult(query);
-        if(tag == null) {
-            throw new DaoNotFoundException("Tag with such if not found");
-        }
+
 
         return tag;
     }
@@ -53,16 +50,13 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag getByName(String name) throws DaoNotFoundException {
+    public Tag getByName(String name) {
 
     List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
             new Object[]{name},
             new TagMapper());
-    Tag tag = DataAccessUtils.uniqueResult(query);
-    if(tag == null) {
-        throw new DaoNotFoundException("Tag with such name not found");
-    }
-    return tag;
+
+    return DataAccessUtils.uniqueResult(query);
 }
 
     @Override
@@ -71,20 +65,19 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Long create(Tag tag) throws DaoIncorrectParamsException {
-        Long result = jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
-        if(result == null) {
-            throw new DaoIncorrectParamsException("Impossible to create Tag with given parameters");
-        }
-        return result;
+    public Long create(Tag tag) {
+
+        return jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoNotFoundException {
-        boolean result = jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
-        if(!result) {
-            throw new DaoNotFoundException("Impossible to delete Tag with given parameters");
-        }
-        return true;
+    public boolean deleteById(long id) {
+
+        return jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
+    }
+
+    @Override
+    public boolean deleteFromCertificateTag(Long certificateId, Long tagId) {
+        return jdbcTemplate.update(SQL_DELETE_FROM_CERTIFICATE_TAG, certificateId, tagId) > 0;
     }
 }

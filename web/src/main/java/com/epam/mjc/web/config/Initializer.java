@@ -25,4 +25,5 @@ public class Initializer extends AbstractAnnotationConfigDispatcherServletInitia
     protected void registerDispatcherServlet(ServletContext servletContext) {
         super.registerDispatcherServlet(servletContext);
     }
+
 }

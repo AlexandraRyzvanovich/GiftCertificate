@@ -1,7 +1,7 @@
 package com.epam.mjc.web.controller;
 
 import com.epam.mjc.dao.entity.Tag;
-import com.epam.mjc.service.service.TagService;
+import com.epam.mjc.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

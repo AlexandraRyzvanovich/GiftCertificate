@@ -18,6 +18,13 @@ public class GiftCertificate implements Identifiable {
     public GiftCertificate() {
     }
 
+    public GiftCertificate(String name, String description, BigDecimal price, Integer validDays) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.validDays = validDays;
+    }
+
     public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, List<Tag> tags) {
         this.id = id;
         this.name = name;

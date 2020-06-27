@@ -1,14 +1,15 @@
 package com.epam.mjc.service.config;
 
+import com.epam.mjc.dao.GiftCertificateDao;
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.config.AppConfig;
-import com.epam.mjc.dao.dao.GiftCertificateDao;
-import com.epam.mjc.dao.dao.TagDao;
-import com.epam.mjc.service.service.GiftCertificateServiceImpl;
-import com.epam.mjc.service.service.TagServiceImpl;
-import com.epam.mjc.service.service.GiftCertificateService;
-import com.epam.mjc.service.validator.Validator;
+import com.epam.mjc.service.GiftCertificateService;
+import com.epam.mjc.service.GiftCertificateServiceImpl;
+import com.epam.mjc.service.TagServiceImpl;
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -18,19 +19,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({AppConfig.class})
 public class ServiceConfig {
 
+
     @Bean
-    Validator validator() {
-        return new Validator();
+    TagServiceImpl tagService(TagDao tagDao) {
+        return new TagServiceImpl(tagDao);
     }
 
     @Bean
-    TagServiceImpl tagService(TagDao tagDao, Validator validator) {
-        return new TagServiceImpl(tagDao, validator);
-    }
-
-    @Bean
-    GiftCertificateService giftCertificateService(GiftCertificateDao giftCertificateDao, TagDao tagDao, Validator validator) {
-        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao, validator);
+    GiftCertificateService giftCertificateService(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
+        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao);
     }
 
     @Bean
