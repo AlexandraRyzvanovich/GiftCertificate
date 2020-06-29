@@ -11,6 +11,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class SortResolver implements HandlerMethodArgumentResolver {
     private static final String ASC_SORTING_TYPE = SortType.ASC.name();
     private static final String DESC_SORTING_TYPE = SortType.DESC.name();
+    private static final String SORT_BY_PARAMETER = "sortBy";
+    private static final String SPLITERATOR = ":";
+    private static final String DATE_SORTING_TYPE = "date";
+    private static final String NAME_SORTING_TYPE = "name";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -19,12 +23,15 @@ public class SortResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public SortParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-        String params = webRequest.getParameter("sortBy");
+        String params = webRequest.getParameter(SORT_BY_PARAMETER);
         String fieldName;
-        if (params != null) {
-            String[] fields = params.split(":");
+        if (params == null) {
+            String[] fields = params.split(SPLITERATOR);
             fieldName = fields[0];
             String sortingType = fields[1];
+            if(!sortingType.equalsIgnoreCase(DATE_SORTING_TYPE) || !sortingType.equalsIgnoreCase(NAME_SORTING_TYPE)) {
+                return null;
+            }
             SortType sortTypeValue = null;
                 if (sortingType.equalsIgnoreCase(ASC_SORTING_TYPE) || sortingType.equalsIgnoreCase(DESC_SORTING_TYPE))
                     sortTypeValue = SortType.valueOf(fields[1].toUpperCase());
