@@ -31,6 +31,10 @@ public class TagServiceImpl implements TagService {
     }
 
     public Tag createTag(Tag tag ) {
+        Tag foundTag = tagDao.getByName(tag.getName());
+        if(foundTag != null) {
+            throw  new IncorrectParamsException("Tag with name " + tag.getName() + " already exists");
+        }
             Validator.validateTag(tag);
             Long tagId = tagDao.create(tag);
             if(tagId == null) {
