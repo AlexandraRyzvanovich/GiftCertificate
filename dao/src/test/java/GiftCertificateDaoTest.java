@@ -1,12 +1,11 @@
 import com.epam.mjc.dao.GiftCertificateDao;
-import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.entity.*;
+import com.epam.mjc.dao.entity.GiftCertificate;
+import config.TestAppConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import config.TestAppConfig;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,9 +40,5 @@ public class GiftCertificateDaoTest {
     public void getAllWithNonEmptySearchParamsTest() {
         List<GiftCertificate> actualList =  giftCertificateDao.getAll(SEARCH_PARAMS_NOT_EMPTY);
         assertTrue(actualList.size() >= 1);
-    }
-    @Test
-    public void updateTest() {
-
     }
 }

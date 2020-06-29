@@ -53,6 +53,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate) {
+       GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
+        if(giftCertificate != null) {
+            throw new IncorrectParamsException("Certificate with such name " + certificate.getName() + " already exists");
+
+        }
         Validator.validateCertificate(certificate);
         Long createdId = certificateDao.create(certificate);
         if (createdId == null) {
@@ -69,7 +74,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (!result) {
             throw new NotFoundException("Impossible to delete certificate with id = " + id);
         }
-
         return true;
     }
 

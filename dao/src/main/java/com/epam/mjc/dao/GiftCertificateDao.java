@@ -8,6 +8,8 @@ import java.util.List;
 public interface GiftCertificateDao {
     GiftCertificate getById(long id);
 
+    GiftCertificate getByName(String name);
+
     List<GiftCertificate> getAll(SearchParams searchParams);
 
     boolean update(GiftCertificate item);
