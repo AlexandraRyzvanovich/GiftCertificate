@@ -21,7 +21,6 @@ public class CertificateController {
 
         return service.getCertificateById(id);
     }
-
     @GetMapping()
     public List<GiftCertificate> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
                                                     @RequestParam(required = false, name = "text") String text,

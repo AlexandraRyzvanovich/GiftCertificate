@@ -1,5 +1,7 @@
 package com.epam.mjc.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +12,9 @@ public class GiftCertificate implements Identifiable {
     private String name;
     private String description;
     private BigDecimal price;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime creationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime modificationDate;
     private Integer validDays;
     List<Tag> tags;

@@ -5,6 +5,7 @@ import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
@@ -53,9 +54,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate) {
-       GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
+        GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
         if(giftCertificate != null) {
-            throw new IncorrectParamsException("Certificate with such name " + certificate.getName() + " already exists");
+            throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
 
         }
         Validator.validateCertificate(certificate);

@@ -1,5 +1,6 @@
 package com.epam.mjc.web.controller;
 
+import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.exception.ValidationException;
@@ -18,16 +19,21 @@ public class ErrorAdvice {
     public ErrorMessage handleNotFoundException(NotFoundException e) {
         return new ErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ValidationException.class})
     public ErrorMessage handleValidationException(ValidationException exception) {
         return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IncorrectParamsException.class})
     public ErrorMessage handleIncorrectParamsException(IncorrectParamsException exception) {
-        return new ErrorMessage(HttpStatus.UNPROCESSABLE_ENTITY, exception.getMessage());
+        return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler({EntityAlreadyExistsException.class})
+    public ErrorMessage handleEntityAlreadyExistsException(EntityAlreadyExistsException exception) {
+        return new ErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

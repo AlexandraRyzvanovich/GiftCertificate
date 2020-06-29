@@ -2,6 +2,7 @@ package com.epam.mjc.service;
 
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
@@ -33,7 +34,7 @@ public class TagServiceImpl implements TagService {
     public Tag createTag(Tag tag ) {
         Tag foundTag = tagDao.getByName(tag.getName());
         if(foundTag != null) {
-            throw  new IncorrectParamsException("Tag with name " + tag.getName() + " already exists");
+            throw  new EntityAlreadyExistsException("Tag with name " + tag.getName() + " already exists");
         }
             Validator.validateTag(tag);
             Long tagId = tagDao.create(tag);
