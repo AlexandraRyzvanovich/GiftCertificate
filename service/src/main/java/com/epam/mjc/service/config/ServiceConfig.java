@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({AppConfig.class})
 public class ServiceConfig {
 
-
     @Bean
     TagServiceImpl tagService(TagDao tagDao) {
         return new TagServiceImpl(tagDao);

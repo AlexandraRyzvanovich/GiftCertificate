@@ -8,6 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+
 public class SortResolver implements HandlerMethodArgumentResolver {
     private static final String ASC_SORTING_TYPE = SortType.ASC.name();
     private static final String DESC_SORTING_TYPE = SortType.DESC.name();
@@ -25,7 +26,9 @@ public class SortResolver implements HandlerMethodArgumentResolver {
     public SortParams resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String params = webRequest.getParameter(SORT_BY_PARAMETER);
         String fieldName;
-        if (params == null) {
+        if(params == null) {
+            return null;
+        }
             String[] fields = params.split(SPLITERATOR);
             fieldName = fields[0];
             String sortingType = fields[1];
@@ -36,7 +39,5 @@ public class SortResolver implements HandlerMethodArgumentResolver {
                 if (sortingType.equalsIgnoreCase(ASC_SORTING_TYPE) || sortingType.equalsIgnoreCase(DESC_SORTING_TYPE))
                     sortTypeValue = SortType.valueOf(fields[1].toUpperCase());
                 return new SortParams(fieldName, sortTypeValue);
-        }
-        return null;
     }
 }

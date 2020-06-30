@@ -1,7 +1,5 @@
 package com.epam.mjc.dao.entity;
 
-import com.epam.mjc.dao.entity.SortType;
-
 public class SortParams {
     String fieldName;
     SortType sortType;
