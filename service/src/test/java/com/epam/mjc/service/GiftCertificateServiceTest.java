@@ -34,8 +34,8 @@ public class GiftCertificateServiceTest {
     @InjectMocks
     private GiftCertificateServiceImpl service;
 
-    private static final long ID = 2;
-    private static final long INVALID_ID = 2222;
+    private static final String ID = "2";
+    private static final String INVALID_ID = "2222";
     private static final GiftCertificate CERTIFICATE = new GiftCertificate(2L, "Books",
             "Books,",
             new BigDecimal(10),
@@ -61,19 +61,21 @@ public class GiftCertificateServiceTest {
 
     @Test
     public void getCertificateByValidIdShouldReturnValidCertificateObjectTest() {
-        when(giftCertificateDao.getById(ID)).thenReturn(CERTIFICATE);
-        GiftCertificate certificateActual = service.getCertificateById(ID);
+        long longId = Long.parseLong(ID);
+        when(giftCertificateDao.getById(longId)).thenReturn(CERTIFICATE);
+        GiftCertificate certificateActual = service.getCertificateById(longId);
         Assert.assertEquals(CERTIFICATE, certificateActual);
-        verify(giftCertificateDao, times(1)).getById(ID);
-        verify(tagDao, times(1)).getAllTagsByCertificateId(ID);
+        verify(giftCertificateDao, times(1)).getById(longId);
+        verify(tagDao, times(1)).getAllTagsByCertificateId(longId);
     }
 
     @Test(expected = NotFoundException.class)
     public void getCertificateByInvalidIdShouldReturnNotFoundExceptionTest() {
-        when(giftCertificateDao.getById(INVALID_ID)).thenReturn(null);
-        service.getCertificateById(INVALID_ID);
-        verify(giftCertificateDao, times(1)).getById(INVALID_ID);
-        verify(service, times(1)).getCertificateById(INVALID_ID);
+        long longId = Long.parseLong(INVALID_ID);
+        when(giftCertificateDao.getById(longId)).thenReturn(null);
+        service.getCertificateById(longId);
+        verify(giftCertificateDao, times(1)).getById(longId);
+        verify(service, times(1)).getCertificateById(longId);
     }
 
     @Test
@@ -86,15 +88,17 @@ public class GiftCertificateServiceTest {
 
     @Test
     public void createCertificateTest() {
-        when(giftCertificateDao.create(CERTIFICATE)).thenReturn(ID);
-        when(giftCertificateDao.getById(ID)).thenReturn(CERTIFICATE);
+        long longId = Long.parseLong(ID);
+        when(giftCertificateDao.create(CERTIFICATE)).thenReturn(longId);
+        when(giftCertificateDao.getById(longId)).thenReturn(CERTIFICATE);
         GiftCertificate actualCertificate = service.createCertificate(CERTIFICATE);
         Assert.assertEquals(CERTIFICATE, actualCertificate);
     }
 
     @Test
     public void deleteCertificateByIdTest() {
-        when(giftCertificateDao.deleteById(ID)).thenReturn(true);
-        Assert.assertTrue(service.deleteCertificateById(ID));
+        long longId = Long.parseLong(ID);
+        when(giftCertificateDao.deleteById(longId)).thenReturn(true);
+        Assert.assertTrue(!service.deleteCertificateById(ID).isEmpty());
     }
 }

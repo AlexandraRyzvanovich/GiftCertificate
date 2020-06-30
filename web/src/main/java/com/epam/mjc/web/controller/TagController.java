@@ -33,7 +33,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteTagById(@PathVariable("id") long id)  {
+    public String deleteTagById(@PathVariable("id") String id)  {
 
         return service.deleteTagById(id);
     }

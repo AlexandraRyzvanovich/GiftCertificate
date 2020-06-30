@@ -58,11 +58,4 @@ public class TagServiceTest {
         Assert.assertEquals(TAG_LIST, actualTagList);
         verify(dao, times(1)).getAll();
     }
-
-    @Test
-    public void deleteTagByIdTest()  {
-        when(dao.deleteById(ID)).thenReturn(true);
-        Assert.assertTrue(service.deleteTagById(ID));
-        verify(dao, times(1)).deleteById(ID);
-    }
 }

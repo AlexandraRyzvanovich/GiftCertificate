@@ -8,5 +8,5 @@ public interface TagService {
     Tag getTagById(long id);
     List<Tag> getAllTags();
     Tag createTag(Tag tag );
-    boolean deleteTagById(long id);
+    String deleteTagById(String id);
 }

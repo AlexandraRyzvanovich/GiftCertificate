@@ -45,12 +45,18 @@ public class TagServiceImpl implements TagService {
 
     }
 
-    public boolean deleteTagById(long id) throws NotFoundException {
-        boolean result = tagDao.deleteById(id);
+    public String deleteTagById(String id) throws NotFoundException {
+        long tagId;
+        try {
+            tagId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NotFoundException("Certificate id " + id + " not found. Incorrect id format was provided.");
+        }
+        boolean result = tagDao.deleteById(tagId);
         if(!result) {
             throw new NotFoundException("No tag found with id" + id + "Impossible to delete");
         }
-        return true;
+        return "Tag has been successfully deleted";
 
     }
 }
