@@ -1,14 +1,16 @@
-package com.epam.mjc.service;
+package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,9 @@ import java.util.stream.Collectors;
 @Service
 @EnableTransactionManagement
 public class GiftCertificateServiceImpl implements GiftCertificateService {
+    @Autowired
     private GiftCertificateDao certificateDao;
+    @Autowired
     private TagDao tagDao;
 
     public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
@@ -30,10 +34,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate getCertificateById(long id) {
+    public GiftCertificate getCertificateById(Long id) {
         GiftCertificate certificate = certificateDao.getById(id);
         if (certificate == null) {
-            throw new NotFoundException("Certificate with id" + id + "not found");
+            throw new NotFoundException("Certificate with id " + id + " not found");
         }
         List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
         if (!CollectionUtils.isEmpty(tags)) {
@@ -62,7 +66,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         Validator.validateCertificate(certificate);
         Long createdId = certificateDao.create(certificate);
         if (createdId == null) {
-            throw new IncorrectParamsException("Exception failed while executing create certificate query");
+            throw new IncorrectParamsException("Exception occurred while executing create certificate query");
         }
         List<Tag> tags = certificate.getTags();
         saveTags(createdId, tags);
@@ -70,12 +74,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public boolean deleteCertificateById(long id) {
+    public String deleteCertificateById(Long id) {
         boolean result = certificateDao.deleteById(id);
         if (!result) {
-            throw new NotFoundException("Impossible to delete certificate with id = " + id);
+            throw new NotFoundException("Impossible to delete certificate with id = " + id + " Certificate doesn't exists.");
         }
-        return true;
+        return "Certificate has been successfully deleted";
     }
 
     @Override
@@ -83,7 +87,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
         GiftCertificate persistedCertificate = certificateDao.getById(id);
         if (persistedCertificate == null) {
-            throw new NotFoundException("There are no such certificate with id" + id);
+            throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
         }
         if (persistedCertificate.equals(updatedCertificate)) {
             return persistedCertificate;
@@ -92,11 +96,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             Validator.validateCertificate(certificateToUpdate);
             boolean result = certificateDao.update(certificateToUpdate);
             if (!result) {
-                throw new IncorrectParamsException("Impossible to update certificate. Exception occurred.");
+                throw new IncorrectParamsException("Impossible to update certificate.");
             }
             List<Tag> updatedTags = updatedCertificate.getTags();
             List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
-            List<Tag> finalTagList = tagsConverter(id,persistedTags, updatedTags);
+            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
             saveTags(id, finalTagList);
          }
             return getCertificateById(id);

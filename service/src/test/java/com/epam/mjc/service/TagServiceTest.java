@@ -3,6 +3,7 @@ package com.epam.mjc.service;
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.exception.NotFoundException;
+import com.epam.mjc.service.impl.TagServiceImpl;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,12 +58,5 @@ public class TagServiceTest {
         List<Tag> actualTagList = service.getAllTags();
         Assert.assertEquals(TAG_LIST, actualTagList);
         verify(dao, times(1)).getAll();
-    }
-
-    @Test
-    public void deleteTagByIdTest()  {
-        when(dao.deleteById(ID)).thenReturn(true);
-        Assert.assertTrue(service.deleteTagById(ID));
-        verify(dao, times(1)).deleteById(ID);
     }
 }

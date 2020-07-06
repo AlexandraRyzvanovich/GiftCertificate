@@ -1,13 +1,12 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.SortType;
 import com.epam.mjc.dao.entity.SortParams;
+import com.epam.mjc.dao.entity.SortType;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
 
 public class SortResolver implements HandlerMethodArgumentResolver {
     private static final String ASC_SORTING_TYPE = SortType.ASC.name();
@@ -32,7 +31,7 @@ public class SortResolver implements HandlerMethodArgumentResolver {
             String[] fields = params.split(SPLITERATOR);
             fieldName = fields[0];
             String sortingType = fields[1];
-            if(!sortingType.equalsIgnoreCase(DATE_SORTING_TYPE) || !sortingType.equalsIgnoreCase(NAME_SORTING_TYPE)) {
+            if(!fieldName.equalsIgnoreCase(DATE_SORTING_TYPE) && !fieldName.equalsIgnoreCase(NAME_SORTING_TYPE)) {
                 return null;
             }
             SortType sortTypeValue = null;

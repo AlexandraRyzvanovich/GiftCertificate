@@ -3,6 +3,7 @@ package com.epam.mjc.web.controller;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RequestMapping("/tags")
 public class TagController {
 
+    @Qualifier("tagServiceImpl")
     @Autowired
     private TagService service;
 
@@ -33,7 +35,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteTagById(@PathVariable("id") long id)  {
+    public String deleteTagById(@PathVariable("id") Long id)  {
 
         return service.deleteTagById(id);
     }

@@ -1,5 +1,6 @@
-package com.epam.mjc.dao;
+package com.epam.mjc.dao.impl;
 
+import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
@@ -72,6 +73,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 certificate.getPrice(),
                 LocalDateTime.now(),
                 certificate.getValidDays(),
+                certificate.getActive(),
                 certificate.getId()) > 0;
     }
 

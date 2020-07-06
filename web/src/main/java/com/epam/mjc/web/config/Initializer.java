@@ -1,29 +1,43 @@
 package com.epam.mjc.web.config;
 
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import com.epam.mjc.service.config.ServiceConfig;
+import com.epam.mjc.web.controller.SortResolver;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.ServletContext;
+import java.util.Arrays;
+import java.util.List;
 
-public class Initializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return null;
+@SpringBootApplication
+@ComponentScan("com.epam.mjc")
+@Import(ServiceConfig.class)
+public class Initializer implements WebMvcConfigurer {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Initializer.class, args);
     }
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{WebAppConfig.class};
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new SortResolver());
     }
 
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/"};
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                System.out.println(beanName);
+            }
+        };
     }
-
-    @Override
-    protected void registerDispatcherServlet(ServletContext servletContext) {
-        super.registerDispatcherServlet(servletContext);
-    }
-
 }

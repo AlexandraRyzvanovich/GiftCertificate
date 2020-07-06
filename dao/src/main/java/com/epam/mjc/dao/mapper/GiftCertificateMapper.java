@@ -22,6 +22,7 @@ public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
             giftCertificate.setModificationDate(date.toLocalDateTime());
         }
         giftCertificate.setValidDays(resultSet.getInt("valid_days"));
+        giftCertificate.setActive(resultSet.getBoolean("isActive"));
 
         return giftCertificate;
     }
