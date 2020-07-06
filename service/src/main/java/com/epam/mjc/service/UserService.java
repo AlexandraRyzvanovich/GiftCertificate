@@ -8,6 +8,6 @@ import java.util.List;
 public interface UserService {
     User createUser(User user);
     UserFullInfoModel getUserFullInfoModelById(Long id);
-    List<UserFullInfoModel> getAllUsers();
+    List<User> getAllUsers();
     User updateUser(User user);
 }
