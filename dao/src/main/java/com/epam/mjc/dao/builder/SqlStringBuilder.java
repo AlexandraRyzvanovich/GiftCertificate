@@ -1,8 +1,8 @@
 package com.epam.mjc.dao.builder;
 
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.entity.SortType;
 import com.epam.mjc.dao.entity.SortParams;
+import com.epam.mjc.dao.entity.SortType;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;

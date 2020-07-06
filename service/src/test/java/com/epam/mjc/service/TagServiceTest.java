@@ -3,6 +3,7 @@ package com.epam.mjc.service;
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.exception.NotFoundException;
+import com.epam.mjc.service.impl.TagServiceImpl;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;

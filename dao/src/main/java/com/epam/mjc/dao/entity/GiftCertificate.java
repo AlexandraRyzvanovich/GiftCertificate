@@ -17,6 +17,7 @@ public class GiftCertificate implements Identifiable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime modificationDate;
     private Integer validDays;
+    private Boolean isActive;
     List<Tag> tags;
 
     public GiftCertificate() {
@@ -29,7 +30,7 @@ public class GiftCertificate implements Identifiable {
         this.validDays = validDays;
     }
 
-    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, List<Tag> tags) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive, List<Tag> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,16 +38,18 @@ public class GiftCertificate implements Identifiable {
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.validDays = validDays;
+        this.isActive = isActive;
         this.tags = tags;
     }
 
-    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, Integer validDays) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, Integer validDays, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.creationDate = creationDate;
         this.validDays = validDays;
+        this.isActive = isActive;
     }
 
     public Long getId() {
@@ -103,6 +106,14 @@ public class GiftCertificate implements Identifiable {
 
     public void setValidDays(Integer validDays) {
         this.validDays = validDays;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public List<Tag> getTags() {

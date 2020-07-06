@@ -7,9 +7,9 @@ import com.epam.mjc.dao.entity.SearchParams;
 import java.util.List;
 
 public interface GiftCertificateService {
-    GiftCertificate getCertificateById(long id);
+    GiftCertificate getCertificateById(Long id);
     List<GiftCertificate> getCertificates(SearchParams searchParams);
     GiftCertificate createCertificate(GiftCertificate certificate);
-    GiftCertificate updateCertificate(String id, GiftCertificate updatedCertificate);
-    String deleteCertificateById(String id);
+    GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate);
+    String deleteCertificateById(Long id);
 }

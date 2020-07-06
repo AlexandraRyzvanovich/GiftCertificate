@@ -5,6 +5,7 @@ import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/certificates")
 public class CertificateController {
 
+    @Qualifier("giftCertificateServiceImpl")
     @Autowired
     private GiftCertificateService service;
 
@@ -37,13 +39,13 @@ public class CertificateController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCertificateById(@PathVariable("id") String id) {
+    public String deleteCertificateById(@PathVariable("id") Long id) {
 
         return service.deleteCertificateById(id);
     }
 
     @PutMapping("/{id}")
-    public GiftCertificate updateCertificate(@PathVariable("id") String id, @RequestBody GiftCertificate certificate)  {
+    public GiftCertificate updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificate certificate)  {
 
         return  service.updateCertificate(id, certificate);
     }

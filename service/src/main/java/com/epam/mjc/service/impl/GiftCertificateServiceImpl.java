@@ -1,14 +1,16 @@
-package com.epam.mjc.service;
+package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.validator.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,9 @@ import java.util.stream.Collectors;
 @Service
 @EnableTransactionManagement
 public class GiftCertificateServiceImpl implements GiftCertificateService {
+    @Autowired
     private GiftCertificateDao certificateDao;
+    @Autowired
     private TagDao tagDao;
 
     public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
@@ -30,7 +34,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate getCertificateById(long id) {
+    public GiftCertificate getCertificateById(Long id) {
         GiftCertificate certificate = certificateDao.getById(id);
         if (certificate == null) {
             throw new NotFoundException("Certificate with id " + id + " not found");
@@ -70,14 +74,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public String deleteCertificateById(String id) {
-        long certificateId;
-        try {
-            certificateId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new NotFoundException("Certificate id " + id + " not found. Incorrect id format was provided.");
-        }
-        boolean result = certificateDao.deleteById(certificateId);
+    public String deleteCertificateById(Long id) {
+        boolean result = certificateDao.deleteById(id);
         if (!result) {
             throw new NotFoundException("Impossible to delete certificate with id = " + id + " Certificate doesn't exists.");
         }
@@ -86,14 +84,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public GiftCertificate updateCertificate(String id, GiftCertificate updatedCertificate) {
-        long certificateId;
-        try {
-            certificateId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new NotFoundException("Certificate id " + id + " not found. Incorrect id format was provided.");
-        }
-        GiftCertificate persistedCertificate = certificateDao.getById(certificateId);
+    public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
+        GiftCertificate persistedCertificate = certificateDao.getById(id);
         if (persistedCertificate == null) {
             throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
         }
@@ -107,11 +99,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 throw new IncorrectParamsException("Impossible to update certificate.");
             }
             List<Tag> updatedTags = updatedCertificate.getTags();
-            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(certificateId);
-            List<Tag> finalTagList = tagsConverter(certificateId,persistedTags, updatedTags);
-            saveTags(certificateId, finalTagList);
+            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
+            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
+            saveTags(id, finalTagList);
          }
-            return getCertificateById(certificateId);
+            return getCertificateById(id);
     }
 
     private static GiftCertificate certificateConverter(GiftCertificate persistedCertificate, GiftCertificate updatedCertificate) {

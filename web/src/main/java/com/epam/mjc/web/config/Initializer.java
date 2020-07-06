@@ -17,13 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-@ComponentScan("com.epam.mjc.web")
+@ComponentScan("com.epam.mjc")
 @Import(ServiceConfig.class)
 public class Initializer implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(Initializer.class, args);
-
     }
 
     @Override
@@ -34,13 +33,11 @@ public class Initializer implements WebMvcConfigurer {
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
-
             String[] beanNames = ctx.getBeanDefinitionNames();
             Arrays.sort(beanNames);
             for (String beanName : beanNames) {
                 System.out.println(beanName);
             }
-
         };
     }
 }

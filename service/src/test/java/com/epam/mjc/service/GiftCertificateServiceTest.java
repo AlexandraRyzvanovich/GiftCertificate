@@ -1,12 +1,13 @@
 package com.epam.mjc.service;
 
-import com.epam.mjc.dao.GiftCertificateDaoImpl;
-import com.epam.mjc.dao.TagDaoImpl;
+import com.epam.mjc.dao.impl.GiftCertificateDaoImpl;
+import com.epam.mjc.dao.impl.TagDaoImpl;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.dao.entity.SortType;
 import com.epam.mjc.service.exception.NotFoundException;
+import com.epam.mjc.service.impl.GiftCertificateServiceImpl;
 import com.epam.mjc.service.validator.Validator;
 import org.junit.Assert;
 import org.junit.Before;

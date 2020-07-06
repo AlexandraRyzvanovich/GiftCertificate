@@ -1,5 +1,6 @@
-package com.epam.mjc.dao;
+package com.epam.mjc.dao.impl;
 
+import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

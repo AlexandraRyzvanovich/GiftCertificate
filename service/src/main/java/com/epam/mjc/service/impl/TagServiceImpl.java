@@ -1,7 +1,8 @@
-package com.epam.mjc.service;
+package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.service.TagService;
 import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
@@ -18,7 +19,8 @@ public class TagServiceImpl implements TagService {
         this.tagDao = tagDao;
     }
 
-    public Tag getTagById(long id) {
+    @Override
+    public Tag getTagById(Long id) {
         Tag tag = tagDao.getById(id);
         if(tag == null) {
             throw new NotFoundException("No tag found with id" + id);
@@ -27,10 +29,12 @@ public class TagServiceImpl implements TagService {
         return tag;
     }
 
+    @Override
     public List<Tag> getAllTags() {
         return tagDao.getAll();
     }
 
+    @Override
     public Tag createTag(Tag tag ) {
         Tag foundTag = tagDao.getByName(tag.getName());
         if(foundTag != null) {
@@ -45,14 +49,9 @@ public class TagServiceImpl implements TagService {
 
     }
 
-    public String deleteTagById(String id) throws NotFoundException {
-        long tagId;
-        try {
-            tagId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            throw new NotFoundException("Certificate id " + id + " not found. Incorrect id format was provided.");
-        }
-        boolean result = tagDao.deleteById(tagId);
+    @Override
+    public String deleteTagById(Long id) throws NotFoundException {
+        boolean result = tagDao.deleteById(id);
         if(!result) {
             throw new NotFoundException("No tag found with id" + id + "Impossible to delete");
         }
