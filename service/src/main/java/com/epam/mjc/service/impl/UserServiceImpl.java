@@ -1,6 +1,8 @@
 package com.epam.mjc.service.impl;
 
+import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
+import com.epam.mjc.dao.entity.Order;
 import com.epam.mjc.dao.entity.User;
 import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
@@ -11,6 +13,7 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private UserDao userDao;
+    private OrderDao orderDao;
 
     @Override
     public User createUser(User user) {
@@ -24,7 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserFullInfoModel getUserFullInfoModelById(Long id) {
-        return userDao.;
+        User user = userDao.getUserById(id);
+        List<Order> orders = orderDao.getAllByUserId(id);
+        UserFullInfoModel model = new UserFullInfoModel();
+        model.setUser(user);
+        model.setOrders(orders);
+        return model;
     }
 
     @Override
