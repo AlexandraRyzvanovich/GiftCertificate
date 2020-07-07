@@ -9,17 +9,17 @@ public class Order {
     private Long userId;
     private LocalDateTime date;
     private BigDecimal amount;
-    private GiftCertificate certificate;
+    private Long certificateId;
 
     public Order() {
     }
 
-    public Order(Long id, Long userId, LocalDateTime date, BigDecimal amount, GiftCertificate certificate) {
+    public Order(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.amount = amount;
-        this.certificate = certificate;
+        this.certificateId = certificateId;
     }
 
     public Long getId() {
@@ -54,12 +54,12 @@ public class Order {
         this.amount = amount;
     }
 
-    public GiftCertificate getCertificate() {
-        return certificate;
+    public Long getCertificateId() {
+        return certificateId;
     }
 
-    public void setCertificate(GiftCertificate certificate) {
-        this.certificate = certificate;
+    public void setCertificateId(Long certificateId) {
+        this.certificateId = certificateId;
     }
 
     @Override
@@ -71,12 +71,12 @@ public class Order {
                 Objects.equals(userId, order.userId) &&
                 Objects.equals(date, order.date) &&
                 Objects.equals(amount, order.amount) &&
-                Objects.equals(certificate, order.certificate);
+                Objects.equals(certificateId, order.certificateId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificate);
+        return Objects.hash(id, userId, date, amount, certificateId);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Order {
                 ", userId=" + userId +
                 ", date=" + date +
                 ", amount=" + amount +
-                ", certificate=" + certificate +
+                ", certificateId=" + certificateId +
                 '}';
     }
 }

@@ -8,14 +8,24 @@ import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.validator.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
 
 @Service
+@EnableTransactionManagement
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserDao userDao;
+    @Autowired
     private OrderDao orderDao;
+
+    public UserServiceImpl(UserDao userDao, OrderDao orderDao) {
+        this.userDao = userDao;
+        this.orderDao = orderDao;
+    }
 
     @Override
     public User createUser(User user) {

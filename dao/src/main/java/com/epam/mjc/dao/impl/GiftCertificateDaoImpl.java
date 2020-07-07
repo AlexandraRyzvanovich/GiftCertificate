@@ -28,7 +28,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "c.id, c.name, c.description,\n" +
             "            c.price, c.creation_date, \n" +
             "            c.modification_date,\n" +
-            "            c.valid_days \n" +
+            "            c.valid_days, \n" +
+            "            c.isActive \n" +
             "FROM certificate c\n" +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id \n" +
             "LEFT  JOIN tag t ON t.id = c_t.tag_id \n";

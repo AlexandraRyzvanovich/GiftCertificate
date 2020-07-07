@@ -45,7 +45,7 @@ public class OrderDaoImpl implements OrderDao {
                 order.getUserId(),
                 LocalDateTime.now(),
                 order.getAmount(),
-                order.getCertificate().getId()
+                order.getCertificateId()
         }, Long.class);
     }
 

@@ -59,7 +59,7 @@ public class Validator {
     }
     public static void validateOrder(Order order) {
         Long userId = order.getUserId();
-        Long certificateId = order.getCertificate().getId();
+        Long certificateId = order.getCertificateId();
         if (userId == null) {
             throw new ValidationException("UserId is required.");
         }

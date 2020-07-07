@@ -3,6 +3,8 @@ package com.epam.mjc.web.controller;
 import com.epam.mjc.dao.entity.User;
 import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @Qualifier("userServiceImpl")
+    @Autowired
     private UserService service;
 
     @GetMapping("/{id}")

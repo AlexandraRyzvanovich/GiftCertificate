@@ -14,6 +14,7 @@ public class OrderMapper implements RowMapper<Order> {
         order.setUserId(resultSet.getLong("user_id"));
         order.setDate(resultSet.getTimestamp("date").toLocalDateTime());
         order.setAmount(resultSet.getBigDecimal("amount"));
+        order.setCertificateId(resultSet.getLong("certificate_id"));
         return order;
     }
 }
