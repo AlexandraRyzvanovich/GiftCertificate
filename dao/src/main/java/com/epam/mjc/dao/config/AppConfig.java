@@ -2,6 +2,7 @@ package com.epam.mjc.dao.config;
 
 import com.epam.mjc.dao.connection.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 @Configuration
-@ComponentScan("com.epam.mjc.dao")
+@EnableAutoConfiguration
+@ComponentScan(basePackages = "com.epam.mjc.dao")
 public class AppConfig {
 
     @Bean

@@ -1,13 +1,15 @@
 package com.epam.mjc.service.config;
 
-import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
+import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.impl.GiftCertificateServiceImpl;
 import com.epam.mjc.service.impl.TagServiceImpl;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
+@EnableAutoConfiguration
+@ComponentScan(basePackages = "com.epam.mjc.service")
 @Import({AppConfig.class})
 public class ServiceConfig {
 
