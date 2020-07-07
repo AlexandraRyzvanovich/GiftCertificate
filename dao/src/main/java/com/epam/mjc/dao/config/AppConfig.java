@@ -1,4 +1,4 @@
-package com.epam.mjc.dao;
+package com.epam.mjc.dao.config;
 
 import com.epam.mjc.dao.connection.DataSource;
 import com.zaxxer.hikari.HikariDataSource;

@@ -1,8 +1,9 @@
-package com.epam.mjc.service;
+package com.epam.mjc.service.config;
 
-import com.epam.mjc.dao.AppConfig;
+import com.epam.mjc.dao.config.AppConfig;
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
+import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.impl.GiftCertificateServiceImpl;
 import com.epam.mjc.service.impl.TagServiceImpl;
 import com.zaxxer.hikari.HikariDataSource;
