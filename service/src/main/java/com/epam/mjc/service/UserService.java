@@ -9,5 +9,5 @@ public interface UserService {
     User createUser(User user);
     UserFullInfoModel getUserFullInfoModelById(Long id);
     List<User> getAllUsers();
-    User updateUser(User user);
+    User updateUser(Long id, User user);
 }

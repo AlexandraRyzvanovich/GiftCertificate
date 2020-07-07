@@ -8,9 +8,11 @@ import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.validator.Validator;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
     private UserDao userDao;
     private OrderDao orderDao;
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(Long id, User user) {
         return null;
     }
 }
