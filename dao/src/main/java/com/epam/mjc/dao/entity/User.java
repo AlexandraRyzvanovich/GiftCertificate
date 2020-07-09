@@ -1,10 +1,23 @@
 package com.epam.mjc.dao.entity;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
+@Entity
+@Table(name = "USERS")
+@NamedQueries({
+        @NamedQuery(name = "Users.findAll", query = "select u from User u"),
+        @NamedQuery(name = "Users.findById", query = "select distinct u from User u where u.id = :id")
+})
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
+    @NotEmpty
     private String surname;
 
     public User() {
