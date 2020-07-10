@@ -40,11 +40,12 @@ public class GiftCertificate  {
     public GiftCertificate() {
     }
 
-    public GiftCertificate(String name, String description, BigDecimal price, Integer validDays) {
+    public GiftCertificate(String name, String description, BigDecimal price, Integer validDays, Boolean isActive) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.validDays = validDays;
+        this.isActive = isActive;
     }
 
     public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive) {

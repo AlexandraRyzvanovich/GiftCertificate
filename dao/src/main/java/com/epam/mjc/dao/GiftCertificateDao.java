@@ -12,9 +12,9 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> getAll(SearchParams searchParams);
 
-    boolean update(GiftCertificate item);
+    GiftCertificate update(GiftCertificate item);
 
     Long create(GiftCertificate item);
 
-    boolean createCertificateTag(long certificateId, long tagId);
+//    boolean createCertificateTag(long certificateId, long tagId);
 }

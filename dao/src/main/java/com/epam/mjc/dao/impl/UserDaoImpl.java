@@ -2,6 +2,7 @@ package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,10 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    public UserDaoImpl() {
+    }
 
     @Override
     public List<User> getAllUsers() {

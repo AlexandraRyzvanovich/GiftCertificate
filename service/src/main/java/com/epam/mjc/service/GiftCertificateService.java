@@ -11,5 +11,4 @@ public interface GiftCertificateService {
     List<GiftCertificate> getCertificates(SearchParams searchParams);
     GiftCertificate createCertificate(GiftCertificate certificate);
     GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate);
-    String deleteCertificateById(Long id);
 }

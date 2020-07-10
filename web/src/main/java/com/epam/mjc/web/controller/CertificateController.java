@@ -38,12 +38,6 @@ public class CertificateController {
         return service.createCertificate(certificate);
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteCertificateById(@PathVariable("id") Long id) {
-
-        return service.deleteCertificateById(id);
-    }
-
     @PutMapping("/{id}")
     public GiftCertificate updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificate certificate)  {
 

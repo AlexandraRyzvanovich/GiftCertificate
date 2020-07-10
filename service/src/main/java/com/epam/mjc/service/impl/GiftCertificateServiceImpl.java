@@ -39,47 +39,28 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (certificate == null) {
             throw new NotFoundException("Certificate with id " + id + " not found");
         }
-        List<Tag> tags = tagDao.getAllTagsByCertificateId(certificate.getId());
-        if (!CollectionUtils.isEmpty(tags)) {
-            certificate.setTags(tags);
-        }
         return certificate;
     }
 
     @Override
     public List<GiftCertificate> getCertificates(SearchParams searchParams) {
-        List<GiftCertificate> certificates = certificateDao.getAll(searchParams);
-        for (GiftCertificate certificate : certificates) {
-            certificate.setTags(tagDao.getAllTagsByCertificateId(certificate.getId()));
-        }
-        return certificates;
+
+        return certificateDao.getAll(searchParams);
     }
 
     @Override
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate) {
         GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
-        if(giftCertificate != null) {
+        if (giftCertificate != null) {
             throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
-
         }
         Validator.validateCertificate(certificate);
         Long createdId = certificateDao.create(certificate);
         if (createdId == null) {
             throw new IncorrectParamsException("Exception occurred while executing create certificate query");
         }
-        List<Tag> tags = certificate.getTags();
-        saveTags(createdId, tags);
         return getCertificateById(createdId);
-    }
-
-    @Override
-    public String deleteCertificateById(Long id) {
-        boolean result = certificateDao.deleteById(id);
-        if (!result) {
-            throw new NotFoundException("Impossible to delete certificate with id = " + id + " Certificate doesn't exists.");
-        }
-        return "Certificate has been successfully deleted";
     }
 
     @Override
@@ -89,21 +70,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (persistedCertificate == null) {
             throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
         }
+        GiftCertificate certificate;
         if (persistedCertificate.equals(updatedCertificate)) {
             return persistedCertificate;
         } else {
             GiftCertificate certificateToUpdate = certificateConverter(persistedCertificate, updatedCertificate);
             Validator.validateCertificate(certificateToUpdate);
-            boolean result = certificateDao.update(certificateToUpdate);
-            if (!result) {
-                throw new IncorrectParamsException("Impossible to update certificate.");
-            }
-            List<Tag> updatedTags = updatedCertificate.getTags();
-            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
-            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
-            saveTags(id, finalTagList);
-         }
-            return getCertificateById(id);
+            certificate = certificateDao.update(certificateToUpdate);
+
+        }
+        return certificate;
     }
 
     private static GiftCertificate certificateConverter(GiftCertificate persistedCertificate, GiftCertificate updatedCertificate) {
@@ -130,11 +106,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         persistedTags.stream().filter(tag -> updatedTags.stream()
                 .noneMatch(tag1 -> tag.getName().equalsIgnoreCase(tag1.getName())))
-                .forEach(persisted->tagDao.deleteFromCertificateTag(id, persisted.getId()));
+                .forEach(persisted -> tagDao.deleteFromCertificateTag(id, persisted.getId()));
 
         return updatedTags.stream()
                 .filter(tag -> persistedTags.stream()
-                .noneMatch(pers -> pers.getName().equalsIgnoreCase(tag.getName())))
+                        .noneMatch(pers -> pers.getName().equalsIgnoreCase(tag.getName())))
                 .collect(Collectors.toList());
     }
 
@@ -148,9 +124,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                     if (createdTagId == null) {
                         throw new IncorrectParamsException("Exception failed while executing create tag query");
                     }
-                    certificateDao.createCertificateTag(certificateId, createdTagId);
+                    //certificateDao.createCertificateTag(certificateId, createdTagId);
                 } else {
-                    certificateDao.createCertificateTag(certificateId, foundTag.getId());
+                    //certificateDao.createCertificateTag(certificateId, foundTag.getId());
                 }
             }
         }

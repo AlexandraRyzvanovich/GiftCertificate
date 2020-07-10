@@ -7,8 +7,8 @@ import java.util.Set;
 @Entity
 @Table(name = "tag")
 @NamedQueries({
-        @NamedQuery(name = "Users.findAll", query = "select u from User u"),
-        @NamedQuery(name = "Users.findById", query = "select distinct u from User u where u.id = :id")
+        @NamedQuery(name = "Tags.findAll", query = "select u from User u"),
+        @NamedQuery(name = "Tags.findById", query = "select distinct u from User u where u.id = :id")
 })
 public class Tag implements Identifiable{
     @Id
