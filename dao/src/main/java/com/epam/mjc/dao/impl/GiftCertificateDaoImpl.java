@@ -4,22 +4,22 @@ import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.GiftCertificate;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.mapper.GiftCertificateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
+    @PersistenceContext
+    private EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
 
-    private static final String SQL_FIND_CERTIFICATE_BY_ID = "select * from CERTIFICATE where id = ?";
-    private static final String SQL_FIND_CERTIFICATE_BY_NAME = "select * from CERTIFICATE where name = ?";
     private static final String SQL_DELETE_CERTIFICATE = "delete from certificate where id = ?";
     private static final String SQL_UPDATE_CERTIFICATE = "update certificate set name = ?, description = ?, price  = ?, modification_date = ?, valid_days = ? where id = ?";
     private static final String SQL_INSERT_CERTIFICATE = "insert into certificate(name, description, price, creation_date, valid_days ) values(?,?,?,?,?) RETURNING id";
@@ -41,28 +41,29 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public GiftCertificate getById(long id) {
-        List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE_BY_ID,
-                new Object[]{id},
-                new GiftCertificateMapper());
 
-        return DataAccessUtils.uniqueResult(query);
+        return entityManager.createNamedQuery("Certificate.findById", GiftCertificate.class)
+                .setParameter("id", id)
+                .getSingleResult();
+
     }
+
     @Override
     public GiftCertificate getByName(String name) {
-        List<GiftCertificate> query = jdbcTemplate.query(SQL_FIND_CERTIFICATE_BY_NAME,
-                new Object[]{name},
-                new GiftCertificateMapper());
 
-        return DataAccessUtils.uniqueResult(query);
+        return entityManager.createNamedQuery("Certificate.findByName", GiftCertificate.class)
+                .setParameter("name", name)
+                .getSingleResult();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<GiftCertificate> getAll(SearchParams searchParams) {
         String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams);
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
-            return jdbcTemplate.query(SQL_SELECT_ALL.concat(sqlQueryPattern), new GiftCertificateMapper());
+            return entityManager.createNativeQuery(SQL_SELECT_ALL.concat(sqlQueryPattern), GiftCertificate.class).getResultList();
         }
-        return jdbcTemplate.query(SQL_SELECT_ALL, new GiftCertificateMapper());
+        return entityManager.createNativeQuery(SQL_SELECT_ALL, GiftCertificate.class).getResultList();
     }
 
     @Override
@@ -87,12 +88,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 certificate.getPrice(),
                 LocalDateTime.now(),
                 certificate.getValidDays()}, Long.class);
-    }
-
-    @Override
-    public boolean deleteById(long id) {
-
-        return jdbcTemplate.update(SQL_DELETE_CERTIFICATE, id) > 0;
     }
 
     @Override

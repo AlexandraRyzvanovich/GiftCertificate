@@ -2,12 +2,22 @@ package com.epam.mjc.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
+@Table(name = "certificate")
+@NamedQueries({
+        @NamedQuery(name = "Certificate.findById", query = "select c from GiftCertificate c where c.id = :id"),
+        @NamedQuery(name = "Certificate.findByName", query = "select distinct c from GiftCertificate c where c.name = :name")
+})
 public class GiftCertificate  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -19,7 +29,13 @@ public class GiftCertificate  {
     private Integer validDays;
     private Boolean isActive;
 
-    List<Tag> tags;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "certificate_tag",
+            joinColumns = {@JoinColumn(name = "certificate_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+    )
+    private Set<Tag> tags = new HashSet<>();
 
     public GiftCertificate() {
     }
@@ -31,7 +47,7 @@ public class GiftCertificate  {
         this.validDays = validDays;
     }
 
-    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive, List<Tag> tags) {
+    public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,7 +56,6 @@ public class GiftCertificate  {
         this.modificationDate = modificationDate;
         this.validDays = validDays;
         this.isActive = isActive;
-        this.tags = tags;
     }
 
     public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, Integer validDays, Boolean isActive) {
@@ -117,14 +132,6 @@ public class GiftCertificate  {
         isActive = active;
     }
 
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,5 +150,20 @@ public class GiftCertificate  {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, tags);
+    }
+
+    @Override
+    public String toString() {
+        return "GiftCertificate{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", creationDate=" + creationDate +
+                ", modificationDate=" + modificationDate +
+                ", validDays=" + validDays +
+                ", isActive=" + isActive +
+                ", tags=" + tags +
+                '}';
     }
 }

@@ -2,8 +2,6 @@ package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +15,6 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
-
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public List<User> getAllUsers() {
@@ -43,15 +34,14 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public Long createUser(User user) {
         entityManager.persist(user);
-        entityManager.flush();
-        entityManager.refresh(user);
+
         return user.getId();
     }
 
     @Override
     @Transactional
-    public boolean updateUser(Long id, User user) {
-        entityManager.merge(user);
-        return true;
+    public User updateUser(User user) {
+
+        return entityManager.merge(user);
     }
 }

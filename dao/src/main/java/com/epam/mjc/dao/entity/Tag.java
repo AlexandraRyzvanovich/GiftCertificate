@@ -1,8 +1,29 @@
 package com.epam.mjc.dao.entity;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "tag")
+@NamedQueries({
+        @NamedQuery(name = "Users.findAll", query = "select u from User u"),
+        @NamedQuery(name = "Users.findById", query = "select distinct u from User u where u.id = :id")
+})
 public class Tag implements Identifiable{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "tags")
+    private Set<GiftCertificate> certificates = new HashSet<>();
+
 
     public Tag() {
     }

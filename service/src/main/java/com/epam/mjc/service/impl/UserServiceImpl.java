@@ -55,9 +55,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, User user) {
-        if(!userDao.updateUser(id, user)) {
-            System.out.println("sdffg");
+        User persistedUser = userDao.getUserById(id);
+        User userToUpdate = userConverter(persistedUser, user);
+
+        return userDao.updateUser(userToUpdate);
+    }
+
+    private static User userConverter(User persistedUser, User updatedUser) {
+        String name = updatedUser.getName();
+        String surname = updatedUser.getSurname();
+        if (name != null) {
+            persistedUser.setName(name);
         }
-        return userDao.getUserById(id);
+        if (surname != null) {
+            updatedUser.setSurname(surname);
+        }
+        return persistedUser;
     }
 }
