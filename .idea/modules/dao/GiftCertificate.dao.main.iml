@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="GiftCertificate.dao.main" />
-          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="entityManagerFactory" value="777be900-e29d-4010-b3cb-59989596bd30" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

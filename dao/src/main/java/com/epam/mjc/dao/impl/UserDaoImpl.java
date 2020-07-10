@@ -19,7 +19,6 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     private final JdbcTemplate jdbcTemplate;
-    private static final String SQL_UPDATE_USER = "update USERS set name = ?, surname = ? where id = ?";
 
     @Autowired
     public UserDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -42,12 +41,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public Long createUser(User user ) {
+    public Long createUser(User user) {
         entityManager.persist(user);
+        entityManager.flush();
+        entityManager.refresh(user);
         return user.getId();
     }
 
     @Override
+    @Transactional
     public boolean updateUser(Long id, User user) {
         entityManager.merge(user);
         return true;

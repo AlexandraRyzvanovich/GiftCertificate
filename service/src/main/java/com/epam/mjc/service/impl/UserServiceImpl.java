@@ -55,6 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, User user) {
-        return null;
+        if(!userDao.updateUser(id, user)) {
+            System.out.println("sdffg");
+        }
+        return userDao.getUserById(id);
     }
 }
