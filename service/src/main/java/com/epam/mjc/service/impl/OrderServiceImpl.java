@@ -19,15 +19,15 @@ import java.util.List;
 @Service
 @EnableTransactionManagement
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private OrderDao orderDao;
-    @Autowired
-    private GiftCertificateDao certificateDao;
-    @Autowired
-    private UserDao userDao;
+    private final OrderDao orderDao;
+    private final GiftCertificateDao certificateDao;
+    private final UserDao userDao;
 
-    public OrderServiceImpl(OrderDao orderDao) {
+    @Autowired
+    public OrderServiceImpl(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao) {
         this.orderDao = orderDao;
+        this.certificateDao = certificateDao;
+        this.userDao = userDao;
     }
 
     @Override

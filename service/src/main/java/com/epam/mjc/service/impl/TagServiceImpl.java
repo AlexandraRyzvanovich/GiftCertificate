@@ -23,7 +23,7 @@ public class TagServiceImpl implements TagService {
     public Tag getTagById(Long id) {
         Tag tag = tagDao.getById(id);
         if(tag == null) {
-            throw new NotFoundException("No tag found with id" + id);
+            throw new NotFoundException("No tag found with id " + id);
         }
 
         return tag;
@@ -35,7 +35,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag createTag(Tag tag ) {
+    public Tag createTag(Tag tag) {
         Tag foundTag = tagDao.getByName(tag.getName());
         if(foundTag != null) {
             throw  new EntityAlreadyExistsException("Tag with name " + tag.getName() + " already exists");
@@ -48,14 +48,9 @@ public class TagServiceImpl implements TagService {
             return tagDao.getById(tagId);
 
     }
-
     @Override
     public String deleteTagById(Long id) throws NotFoundException {
-        boolean result = tagDao.deleteById(id);
-        if(!result) {
-            throw new NotFoundException("No tag found with id" + id + "Impossible to delete");
-        }
         return "Tag has been successfully deleted";
-
     }
+
 }

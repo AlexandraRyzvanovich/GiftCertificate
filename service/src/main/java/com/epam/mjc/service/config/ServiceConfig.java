@@ -46,8 +46,8 @@ public class ServiceConfig {
     }
 
     @Bean
-    OrderService orderService(OrderDao orderDao) {
-        return new OrderServiceImpl(orderDao);
+    OrderService orderService(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao) {
+        return new OrderServiceImpl(orderDao, certificateDao, userDao);
     }
 
 }

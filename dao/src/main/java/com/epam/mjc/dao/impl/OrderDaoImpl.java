@@ -2,28 +2,18 @@ package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.entity.Order;
-import com.epam.mjc.dao.mapper.OrderMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@EnableTransactionManagement
 public class OrderDaoImpl implements OrderDao {
-    private final JdbcTemplate jdbcTemplate;
-
-    private static final String SQL_GET_ORDER_BY_ID = "select * from ORDERS where id = ?";
-    private static final String SQL_GET_ORDER_BY_USER_ID = "select * from ORDERS where user_id = ?";
-    private static final String SQL_GET_ALL_ORDERS = "select * from ORDERS";
-    private static final String SQL_CREATE_ORDER = "insert into ORDERS(user_id, date, amount, certificate_id) values(?,?,?,?) RETURNING id";
-
-    @Autowired
-    public OrderDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Order> getAllOrders() {
@@ -32,28 +22,21 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order getOrderById(Long id) {
-        List<Order> query = jdbcTemplate.query(SQL_GET_ORDER_BY_ID,
-                new Object[]{id},
-                new OrderMapper());
+        List<Order> ordersList = entityManager.createNamedQuery("Orders.findById", Order.class).getResultList();
 
-        return DataAccessUtils.uniqueResult(query);
+        return ordersList.size() > 0 ? ordersList.get(0) : null;
     }
 
     @Override
     public Long createOrder(Order order) {
-        return jdbcTemplate.queryForObject(SQL_CREATE_ORDER, new Object[]{
-                order.getUserId(),
-                LocalDateTime.now(),
-                order.getAmount(),
-                order.getCertificateId()
-        }, Long.class);
+       entityManager.persist(order);
+       entityManager.detach(order);
+       return order.getId();
     }
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
 
-        return jdbcTemplate.query(SQL_GET_ORDER_BY_USER_ID,
-                new Object[]{userId},
-                new OrderMapper());
+        return entityManager.createNamedQuery("Orders.findAll", Order.class).getResultList();
     }
 }

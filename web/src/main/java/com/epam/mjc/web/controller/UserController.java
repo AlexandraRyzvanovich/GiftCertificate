@@ -1,7 +1,6 @@
 package com.epam.mjc.web.controller;
 
 import com.epam.mjc.dao.entity.User;
-import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,9 +16,9 @@ public class UserController {
     private UserService service;
 
     @GetMapping("/{id}")
-    public UserFullInfoModel getUserById(@PathVariable("id") long id) {
+    public User getUserById(@PathVariable("id") long id) {
 
-        return service.getUserFullInfoModelById(id);
+        return service.getById(id);
     }
 
     @GetMapping()

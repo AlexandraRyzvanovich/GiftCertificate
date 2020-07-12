@@ -5,28 +5,35 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "certificate")
 @NamedQueries({
         @NamedQuery(name = "Certificate.findById", query = "select c from GiftCertificate c where c.id = :id"),
-        @NamedQuery(name = "Certificate.findByName", query = "select distinct c from GiftCertificate c where c.name = :name")
+        @NamedQuery(name = "Certificate.findByName", query = "select c from GiftCertificate c where c.name = :name")
 })
 public class GiftCertificate  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "price")
     private BigDecimal price;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "creation_date")
     private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "modification_date")
     private LocalDateTime modificationDate;
+    @Column(name = "valid_days")
     private Integer validDays;
+    @Column(name = "is_active", insertable = false, columnDefinition = "boolean default false")
     private Boolean isActive;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -35,17 +42,16 @@ public class GiftCertificate  {
             joinColumns = {@JoinColumn(name = "certificate_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags;
 
     public GiftCertificate() {
     }
 
-    public GiftCertificate(String name, String description, BigDecimal price, Integer validDays, Boolean isActive) {
+    public GiftCertificate(String name, String description, BigDecimal price, Integer validDays) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.validDays = validDays;
-        this.isActive = isActive;
     }
 
     public GiftCertificate(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive) {
@@ -125,12 +131,20 @@ public class GiftCertificate  {
         this.validDays = validDays;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override

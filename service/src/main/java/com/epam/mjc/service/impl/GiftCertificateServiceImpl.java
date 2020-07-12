@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,14 +53,22 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificate createCertificate(GiftCertificate certificate) {
         GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
-        if (giftCertificate != null) {
+        if(giftCertificate != null) {
             throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
         }
-        Validator.validateCertificate(certificate);
-        Long createdId = certificateDao.create(certificate);
+        GiftCertificate certificateToBeCreated = new GiftCertificate(certificate.getName(),
+                certificate.getDescription(),
+                certificate.getPrice(),
+                certificate.getValidDays());
+        certificateToBeCreated.setCreationDate(LocalDateTime.now());
+        Validator.validateCertificate(certificateToBeCreated);
+        Long createdId = certificateDao.create(certificateToBeCreated);
         if (createdId == null) {
             throw new IncorrectParamsException("Exception occurred while executing create certificate query");
         }
+        List<Tag> tags = certificate.getTags();
+        saveTags(createdId, tags);
+
         return getCertificateById(createdId);
     }
 
@@ -77,6 +86,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             GiftCertificate certificateToUpdate = certificateConverter(persistedCertificate, updatedCertificate);
             Validator.validateCertificate(certificateToUpdate);
             certificate = certificateDao.update(certificateToUpdate);
+            List<Tag> updatedTags = updatedCertificate.getTags();
+            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
+            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
+            saveTags(id, finalTagList);
 
         }
         return certificate;
@@ -106,7 +119,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         persistedTags.stream().filter(tag -> updatedTags.stream()
                 .noneMatch(tag1 -> tag.getName().equalsIgnoreCase(tag1.getName())))
-                .forEach(persisted -> tagDao.deleteFromCertificateTag(id, persisted.getId()));
+                .forEach(persisted -> tagDao.deleteFromCertificateTagByIds(id, persisted.getId()));
 
         return updatedTags.stream()
                 .filter(tag -> persistedTags.stream()
@@ -124,9 +137,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                     if (createdTagId == null) {
                         throw new IncorrectParamsException("Exception failed while executing create tag query");
                     }
-                    //certificateDao.createCertificateTag(certificateId, createdTagId);
+                    certificateDao.createCertificateTag(certificateId, createdTagId);
                 } else {
-                    //certificateDao.createCertificateTag(certificateId, foundTag.getId());
+                    certificateDao.createCertificateTag(certificateId, foundTag.getId());
                 }
             }
         }

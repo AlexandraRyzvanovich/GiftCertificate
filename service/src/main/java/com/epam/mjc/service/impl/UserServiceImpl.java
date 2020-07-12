@@ -2,9 +2,7 @@ package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.Order;
 import com.epam.mjc.dao.entity.User;
-import com.epam.mjc.dao.entity.UserFullInfoModel;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.validator.Validator;
@@ -17,11 +15,10 @@ import java.util.List;
 @Service
 @EnableTransactionManagement
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private OrderDao orderDao;
+    private final UserDao userDao;
+    private final OrderDao orderDao;
 
+    @Autowired
     public UserServiceImpl(UserDao userDao, OrderDao orderDao) {
         this.userDao = userDao;
         this.orderDao = orderDao;
@@ -36,16 +33,12 @@ public class UserServiceImpl implements UserService {
         }
         return userDao.getUserById(id);
     }
-
     @Override
-    public UserFullInfoModel getUserFullInfoModelById(Long id) {
-        User user = userDao.getUserById(id);
-        List<Order> orders = orderDao.getAllByUserId(id);
-        UserFullInfoModel model = new UserFullInfoModel();
-        model.setUser(user);
-        model.setOrders(orders);
-        return model;
+    public User getById(Long id) {
+
+        return userDao.getUserById(id);
     }
+
 
     @Override
     public List<User> getAllUsers() {

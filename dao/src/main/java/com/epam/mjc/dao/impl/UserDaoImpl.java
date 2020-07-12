@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -23,9 +24,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = entityManager.createNamedQuery("Users.findAll", User.class).getResultList();
-
-        return users;
+    entityManager.find(User.class, LockModeType.READ);
+        return entityManager.createNamedQuery("Users.findAll", User.class).getResultList();
     }
 
     @Override
@@ -39,6 +39,7 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public Long createUser(User user) {
         entityManager.persist(user);
+        entityManager.detach(user);
 
         return user.getId();
     }
@@ -46,7 +47,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     @Transactional
     public User updateUser(User user) {
-
-        return entityManager.merge(user);
+        entityManager.merge(user);
+        entityManager.detach(user);
+        return user;
     }
 }

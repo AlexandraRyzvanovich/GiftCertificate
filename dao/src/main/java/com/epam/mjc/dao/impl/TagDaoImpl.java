@@ -1,84 +1,83 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.mapper.TagMapper;
 import com.epam.mjc.dao.entity.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@EnableTransactionManagement
 public class TagDaoImpl implements TagDao {
-    private JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    private static final String SQL_GET_TAG_BY_ID = "select * from tag where id = ?";
-    private static final String SQL_GET_TAG_BY_NAME = "select * from tag where name = ?";
-    private static final String SQL_DELETE_TAG = "delete from tag where id = ?";
-    private static final String SQL_GET_ALL_TAGS = "select * from tag";
-    private static final String SQL_CREATE_TAG = "insert into tag (name) values(?) RETURNING id";
-    private static final String SQL_DELETE_FROM_CERTIFICATE_TAG = "delete from certificate_tag where certificate_id = ? AND tag_id = ?";
+    private static final String SQL_DELETE_FROM_CERTIFICATE_TAG = "delete from certificate_tag where certificate_id = ? AND  tag_id = ?";
     private static final String SQL_SELECT_TAGS_BY_CERTIFICATE_ID = "SELECT \n" +
             "tag.id,\n" +
             "tag.name\n" +
             "FROM tag \n" +
             "JOIN certificate_tag ON certificate_tag.tag_id = tag.id\n" +
-            "where certificate_tag.certificate_id = ?";
+            "where certificate_tag.certificate_id = :id";
 
-    @Autowired
-    public TagDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    @Override
+    public Tag getById(Long id) {
+        List<Tag> tagList = entityManager.createNamedQuery("Tags.findById", Tag.class).setParameter("id", id).getResultList();
+        return tagList.size() > 0 ? tagList.get(0) : null;
     }
 
     @Override
-    public Tag getById(long id) {
-        List<Tag> query = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
-                new Object[]{id},
-                new TagMapper());
-        Tag tag = DataAccessUtils.uniqueResult(query);
+    public List<Tag> getAllTagsByCertificateId(Long id) {
 
-
-        return tag;
-    }
-
-    @Override
-    public List<Tag> getAllTagsByCertificateId(long id) {
-        return jdbcTemplate.query(SQL_SELECT_TAGS_BY_CERTIFICATE_ID,
-                new Object[]{id},
-                new TagMapper());
+        return entityManager.createNativeQuery(SQL_SELECT_TAGS_BY_CERTIFICATE_ID, Tag.class).setParameter("id", id).getResultList();
     }
 
     @Override
     public Tag getByName(String name) {
-
-    List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
-            new Object[]{name},
-            new TagMapper());
-
-    return DataAccessUtils.uniqueResult(query);
-}
+        List<Tag> tags = entityManager.createNamedQuery("Tags.getByName", Tag.class).setParameter("name", name).getResultList();
+        return tags.size() > 0 ? tags.get(0) : null;
+    }
 
     @Override
     public List<Tag> getAll() {
-        return jdbcTemplate.query(SQL_GET_ALL_TAGS, new TagMapper());
+        return entityManager.createNamedQuery("Tags.findAll", Tag.class).getResultList();
     }
 
     @Override
+    @Transactional
     public Long create(Tag tag) {
+        entityManager.persist(tag);
+        entityManager.detach(tag);
 
-        return jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
+        return tag.getId();
     }
 
     @Override
-    public boolean deleteById(long id) {
-
-        return jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
+    public void deleteById(Long id) {
+        entityManager.createNamedQuery("Tags.deleteById", Tag.class).setParameter("id", id).executeUpdate();
     }
 
     @Override
-    public boolean deleteFromCertificateTag(Long certificateId, Long tagId) {
-        return jdbcTemplate.update(SQL_DELETE_FROM_CERTIFICATE_TAG, certificateId, tagId) > 0;
+    public void deleteFromCertificateTagByIds(Long certificateId, Long tagId) {
+        entityManager.createQuery(SQL_DELETE_FROM_CERTIFICATE_TAG).setParameter("certificate_id", certificateId).setParameter("tag_id", tagId).executeUpdate();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

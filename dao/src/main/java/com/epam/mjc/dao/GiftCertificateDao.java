@@ -16,5 +16,7 @@ public interface GiftCertificateDao {
 
     Long create(GiftCertificate item);
 
+    void createCertificateTag(Long certificateId, Long tagId);
+
 //    boolean createCertificateTag(long certificateId, long tagId);
 }

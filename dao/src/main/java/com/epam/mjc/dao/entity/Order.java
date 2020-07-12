@@ -1,14 +1,28 @@
 package com.epam.mjc.dao.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(name = "Orders.findAll", query = "select o from Order o"),
+        @NamedQuery(name = "Orders.findById", query = "select distinct o from Order o where o.id = :id"),
+})
 public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
+    @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
+    @Column(name = "date")
     private LocalDateTime date;
+    @Column(name = "amount")
     private BigDecimal amount;
+    @Column(name = "certificate_id", insertable = false, updatable = false)
     private Long certificateId;
 
     public Order() {
@@ -61,6 +75,7 @@ public class Order {
     public void setCertificateId(Long certificateId) {
         this.certificateId = certificateId;
     }
+
 
     @Override
     public boolean equals(Object o) {

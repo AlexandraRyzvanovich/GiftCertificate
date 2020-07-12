@@ -1,10 +1,12 @@
 package com.epam.mjc.dao.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = "Users.findAll", query = "select u from User u"),
         @NamedQuery(name = "Users.findById", query = "select distinct u from User u where u.id = :id")
@@ -17,6 +19,9 @@ public class User {
     private String name;
     @Column(name = "surname")
     private String surname;
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "user_id", nullable = false)
+    private Set<Order> orders = new HashSet<>();
 
     public User() {
     }
@@ -51,6 +56,14 @@ public class User {
         this.surname = surname;
     }
 
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +71,13 @@ public class User {
         User user = (User) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname);
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(orders, user.orders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname);
+        return Objects.hash(id, name, surname, orders);
     }
 
     @Override
@@ -72,6 +86,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", orders=" + orders +
                 '}';
     }
 }
