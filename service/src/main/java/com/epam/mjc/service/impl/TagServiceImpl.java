@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class TagServiceImpl implements TagService {
-    private TagDao tagDao;
+    private final TagDao tagDao;
 
     public TagServiceImpl(TagDao tagDao) {
         this.tagDao = tagDao;
@@ -49,8 +49,7 @@ public class TagServiceImpl implements TagService {
 
     }
     @Override
-    public String deleteTagById(Long id) throws NotFoundException {
+    public String deleteTagById(Long id) {
         return "Tag has been successfully deleted";
     }
-
 }

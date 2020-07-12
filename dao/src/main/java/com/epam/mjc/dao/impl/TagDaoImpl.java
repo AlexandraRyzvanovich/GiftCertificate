@@ -31,7 +31,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public List<Tag> getAllTagsByCertificateId(Long id) {
+    public List getAllTagsByCertificateId(Long id) {
 
         return entityManager.createNativeQuery(SQL_SELECT_TAGS_BY_CERTIFICATE_ID, Tag.class).setParameter("id", id).getResultList();
     }

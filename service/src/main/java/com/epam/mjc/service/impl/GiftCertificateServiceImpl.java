@@ -24,11 +24,10 @@ import java.util.stream.Collectors;
 @Service
 @EnableTransactionManagement
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    @Autowired
-    private GiftCertificateDao certificateDao;
-    @Autowired
-    private TagDao tagDao;
+    private final GiftCertificateDao certificateDao;
+    private final TagDao tagDao;
 
+    @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;

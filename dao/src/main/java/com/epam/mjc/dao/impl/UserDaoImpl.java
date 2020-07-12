@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-    entityManager.find(User.class, LockModeType.READ);
         return entityManager.createNamedQuery("Users.findAll", User.class).getResultList();
     }
 
