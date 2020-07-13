@@ -1,10 +1,13 @@
 package com.epam.mjc.dao.entity;
 
+import com.epam.mjc.dao.AuditListener;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "users")
 @NamedQueries({

@@ -1,5 +1,6 @@
 package com.epam.mjc.dao.entity;
 
+import com.epam.mjc.dao.AuditListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "certificate")
 @NamedQueries({
