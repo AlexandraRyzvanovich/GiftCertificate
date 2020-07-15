@@ -49,7 +49,7 @@ public class ErrorAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
+    public ErrorMessage handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -57,16 +57,23 @@ public class ErrorAdvice {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return errors;
+        return new ErrorMessage(HttpStatus.BAD_REQUEST, "Invalid object", errors);
     }
 
     static class ErrorMessage {
         private final HttpStatus status;
         private final String message;
+        private Map<String, String> invalidFields;
 
-        public ErrorMessage(HttpStatus status, String message) {
+        public ErrorMessage(HttpStatus status, String message ) {
             this.status = status;
             this.message = message;
+        }
+
+        public ErrorMessage(HttpStatus status, String message, Map<String, String> invalidFields) {
+            this.status = status;
+            this.message = message;
+            this.invalidFields = invalidFields;
         }
 
         public HttpStatus getStatus() {
@@ -75,6 +82,10 @@ public class ErrorAdvice {
 
         public String getMessage() {
             return message;
+        }
+
+        public Map<String, String> getInvalidFields() {
+            return invalidFields;
         }
     }
 }
