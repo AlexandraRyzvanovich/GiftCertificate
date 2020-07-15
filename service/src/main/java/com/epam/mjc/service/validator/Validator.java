@@ -1,6 +1,6 @@
 package com.epam.mjc.service.validator;
 
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.Order;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.entity.User;
@@ -21,11 +21,11 @@ public class Validator {
     private static final int USER_NAME_MAX_LENGTH = 50;
     private static final int USER_SURNAME_MAX_LENGTH = 50;
 
-    public static void validateCertificate(GiftCertificate giftCertificate) {
-        String name =  giftCertificate.getName();
-        String description = giftCertificate.getDescription();
-        BigDecimal price = giftCertificate.getPrice();
-        Integer validDays = giftCertificate.getValidDays();
+    public static void validateCertificate(GiftCertificateEntity giftCertificateEntity) {
+        String name =  giftCertificateEntity.getName();
+        String description = giftCertificateEntity.getDescription();
+        BigDecimal price = giftCertificateEntity.getPrice();
+        Integer validDays = giftCertificateEntity.getValidDays();
 
         if(name == null || name.length() > CERTIFICATE_NAME_MAX_LENGTH || name.isEmpty()) {
             throw new ValidationException("Gift certificate name" + name + "is incorrect. Requirements: not empty, max length 50 characters");

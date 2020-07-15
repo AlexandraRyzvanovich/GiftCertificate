@@ -1,20 +1,20 @@
 package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 
 import java.util.List;
 
 public interface GiftCertificateDao {
-    GiftCertificate getById(long id);
+    GiftCertificateEntity getById(long id);
 
-    GiftCertificate getByName(String name);
+    GiftCertificateEntity getByName(String name);
 
-    List<GiftCertificate> getAll(SearchParams searchParams);
+    List<GiftCertificateEntity> getAll(SearchParams searchParams);
 
-    GiftCertificate update(GiftCertificate item);
+    GiftCertificateEntity update(GiftCertificateEntity item);
 
-    Long create(GiftCertificate item);
+    Long create(GiftCertificateEntity item);
 
     void createCertificateTag(Long certificateId, Long tagId);
 

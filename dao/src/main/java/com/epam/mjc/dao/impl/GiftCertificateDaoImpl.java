@@ -2,7 +2,7 @@ package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.builder.SqlStringBuilder;
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,42 +36,41 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public GiftCertificate getById(long id) {
-        List<GiftCertificate> giftCertificateList = entityManager.createNamedQuery("Certificate.findById", GiftCertificate.class)
+    public GiftCertificateEntity getById(long id) {
+        List<GiftCertificateEntity> giftCertificateEntityList = entityManager.createNamedQuery("Certificate.findById", GiftCertificateEntity.class)
                 .setParameter("id", id)
                 .getResultList();
-        return giftCertificateList.size() > 0 ? giftCertificateList.get(0) : null;
+        return giftCertificateEntityList.size() > 0 ? giftCertificateEntityList.get(0) : null;
     }
 
     @Override
-    public GiftCertificate getByName(String name) {
-        List<GiftCertificate> giftCertificateList = entityManager.createNamedQuery("Certificate.findByName", GiftCertificate.class)
+    public GiftCertificateEntity getByName(String name) {
+        List<GiftCertificateEntity> giftCertificateEntityList = entityManager.createNamedQuery("Certificate.findByName", GiftCertificateEntity.class)
                 .setParameter("name", name)
                 .getResultList();
-        return giftCertificateList.size() > 0 ? giftCertificateList.get(0) : null;
+        return giftCertificateEntityList.size() > 0 ? giftCertificateEntityList.get(0) : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GiftCertificate> getAll(SearchParams searchParams) {
+    public List<GiftCertificateEntity> getAll(SearchParams searchParams) {
         String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams);
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
-            return entityManager.createNativeQuery(SQL_SELECT_ALL.concat(sqlQueryPattern), GiftCertificate.class).getResultList();
+            return entityManager.createNativeQuery(SQL_SELECT_ALL.concat(sqlQueryPattern), GiftCertificateEntity.class).getResultList();
         }
-        return entityManager.createNativeQuery(SQL_SELECT_ALL, GiftCertificate.class).getResultList();
+        return entityManager.createNativeQuery(SQL_SELECT_ALL, GiftCertificateEntity.class).getResultList();
     }
 
     @Override
-    public GiftCertificate update(GiftCertificate certificate) {
+    public GiftCertificateEntity update(GiftCertificateEntity certificate) {
 
         return entityManager.merge(certificate);
     }
 
     @Override
     @Transactional
-    public Long create(GiftCertificate certificate) {
+    public Long create(GiftCertificateEntity certificate) {
         entityManager.persist(certificate);
-        entityManager.detach(certificate);
 
         return certificate.getId();
     }

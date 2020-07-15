@@ -1,6 +1,7 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateDto;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.service.GiftCertificateService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,27 +21,26 @@ public class CertificateController {
     private GiftCertificateService service;
 
     @GetMapping("/{id}")
-    public GiftCertificate getCertificateById(@PathVariable("id") long id) {
+    public GiftCertificateDto getCertificateById(@PathVariable("id") long id) {
 
         return service.getCertificateById(id);
     }
     @GetMapping()
-    public List<GiftCertificate> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
-                                                    @RequestParam(required = false, name = "text") String text,
-                                                    @Sort SortParams params) {
+    public List<GiftCertificateDto> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
+                                                          @RequestParam(required = false, name = "text") String text,
+                                                          @Sort SortParams params) {
         SearchParams searchParams = new SearchParams(tags, text, params);
 
         return service.getCertificates(searchParams);
     }
 
     @PostMapping()
-    public GiftCertificate createCertificate(@RequestBody GiftCertificate certificate) {
-
+    public GiftCertificateDto createCertificate(@RequestBody @Valid GiftCertificateDto certificate) {
         return service.createCertificate(certificate);
     }
 
     @PutMapping("/{id}")
-    public GiftCertificate updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificate certificate)  {
+    public GiftCertificateEntity updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificateEntity certificate)  {
 
         return  service.updateCertificate(id, certificate);
     }

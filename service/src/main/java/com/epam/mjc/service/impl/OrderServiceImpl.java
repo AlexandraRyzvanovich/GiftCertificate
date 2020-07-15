@@ -3,7 +3,7 @@ package com.epam.mjc.service.impl;
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.Order;
 import com.epam.mjc.dao.entity.User;
 import com.epam.mjc.service.OrderService;
@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(Order order) {
         Long certificateId = order.getCertificateId();
-        GiftCertificate certificate = certificateDao.getById(certificateId);
+        GiftCertificateEntity certificate = certificateDao.getById(certificateId);
         Long userId = order.getUserId();
         User user = userDao.getUserById(userId);
         if(certificate == null && user == null) {

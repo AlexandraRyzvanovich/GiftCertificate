@@ -2,13 +2,15 @@ package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.entity.GiftCertificateDto;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
+import com.epam.mjc.service.mapper.GiftCertificateMapper;
 import com.epam.mjc.service.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,75 +28,76 @@ import java.util.stream.Collectors;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao certificateDao;
     private final TagDao tagDao;
+    private final GiftCertificateMapper mapper;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao, GiftCertificateMapper mapper) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
+        this.mapper = mapper;
     }
 
     @Override
-    public GiftCertificate getCertificateById(Long id) {
-        GiftCertificate certificate = certificateDao.getById(id);
+    public GiftCertificateDto getCertificateById(Long id) {
+        GiftCertificateEntity certificate = certificateDao.getById(id);
         if (certificate == null) {
             throw new NotFoundException("Certificate with id " + id + " not found");
         }
-        return certificate;
+        return mapper.toDto(certificate);
     }
 
     @Override
-    public List<GiftCertificate> getCertificates(SearchParams searchParams) {
-
-        return certificateDao.getAll(searchParams);
+    public List<GiftCertificateDto> getCertificates(SearchParams searchParams) {
+        return (certificateDao.getAll(searchParams)).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public GiftCertificate createCertificate(GiftCertificate certificate) {
-        GiftCertificate giftCertificate = certificateDao.getByName(certificate.getName());
-        if(giftCertificate != null) {
+    public GiftCertificateDto createCertificate(GiftCertificateDto certificate) {
+        GiftCertificateEntity giftCertificateEntity = certificateDao.getByName(certificate.getName());
+        if(giftCertificateEntity != null) {
             throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
         }
-        GiftCertificate certificateToBeCreated = new GiftCertificate(certificate.getName(),
+        GiftCertificateEntity certificateToBeCreated = new GiftCertificateEntity(certificate.getName(),
                 certificate.getDescription(),
                 certificate.getPrice(),
                 certificate.getValidDays());
         certificateToBeCreated.setCreationDate(LocalDateTime.now());
-        Validator.validateCertificate(certificateToBeCreated);
+        if(certificate.getTags()!=null) {
+            certificateToBeCreated.setTags(tagsMapper(certificate.getTags()));
+        }
         Long createdId = certificateDao.create(certificateToBeCreated);
         if (createdId == null) {
             throw new IncorrectParamsException("Exception occurred while executing create certificate query");
         }
-        List<Tag> tags = certificate.getTags();
-        saveTags(createdId, tags);
 
         return getCertificateById(createdId);
     }
 
     @Override
     @Transactional
-    public GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate) {
-        GiftCertificate persistedCertificate = certificateDao.getById(id);
+    public GiftCertificateEntity updateCertificate(Long id, GiftCertificateEntity updatedCertificate) {
+        GiftCertificateEntity persistedCertificate = certificateDao.getById(id);
         if (persistedCertificate == null) {
             throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
         }
-        GiftCertificate certificate;
+        GiftCertificateEntity certificate;
         if (persistedCertificate.equals(updatedCertificate)) {
             return persistedCertificate;
         } else {
-            GiftCertificate certificateToUpdate = certificateConverter(persistedCertificate, updatedCertificate);
-            Validator.validateCertificate(certificateToUpdate);
-            certificate = certificateDao.update(certificateToUpdate);
-            List<Tag> updatedTags = updatedCertificate.getTags();
-            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
-            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
-            saveTags(id, finalTagList);
+            certificateConverter(persistedCertificate, updatedCertificate);
+            Validator.validateCertificate(persistedCertificate);
+            certificate = certificateDao.update(persistedCertificate);
+//            List<Tag> updatedTags = updatedCertificate.getTags();
+//            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
+//            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
+//            saveTags(id, finalTagList);
 
         }
         return certificate;
     }
 
-    private static GiftCertificate certificateConverter(GiftCertificate persistedCertificate, GiftCertificate updatedCertificate) {
+    private void certificateConverter(GiftCertificateEntity persistedCertificate, GiftCertificateEntity updatedCertificate) {
         String name = updatedCertificate.getName();
         String description = updatedCertificate.getDescription();
         BigDecimal price = updatedCertificate.getPrice();
@@ -111,7 +114,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (validDays != null) {
             persistedCertificate.setValidDays(validDays);
         }
-        return persistedCertificate;
+        if(!persistedCertificate.getTags().equals(updatedCertificate.getTags())) {
+            persistedCertificate.getTags().clear();
+
+            persistedCertificate.getTags().addAll(updatedCertificate.getTags());
+        }
+    }
+    private List<Tag> tagsMapper(List<Tag> tags) {
+        tags.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
+            return tags.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
     }
 
     private List<Tag> tagsConverter(Long id, List<Tag> persistedTags, List<Tag> updatedTags) {
