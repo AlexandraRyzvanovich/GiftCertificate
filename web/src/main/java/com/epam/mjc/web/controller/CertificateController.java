@@ -40,7 +40,7 @@ public class CertificateController {
     }
 
     @PutMapping("/{id}")
-    public GiftCertificateEntity updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificateEntity certificate)  {
+    public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate)  {
 
         return  service.updateCertificate(id, certificate);
     }

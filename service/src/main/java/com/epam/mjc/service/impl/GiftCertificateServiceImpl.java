@@ -74,19 +74,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     @Transactional
-    public GiftCertificateEntity updateCertificate(Long id, GiftCertificateEntity updatedCertificate) {
-        GiftCertificateEntity persistedCertificate = certificateDao.getById(id);
-        if (persistedCertificate == null) {
+    public GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate) {
+        GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id);
+        if (persistedCertificateEntity == null) {
             throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
         }
+        GiftCertificateEntity updatedCertificateEntity = mapper.toEntity(updatedCertificate);
         GiftCertificateEntity certificate;
-        if (persistedCertificate.equals(updatedCertificate)) {
-            return persistedCertificate;
+        if (persistedCertificateEntity.equals(updatedCertificateEntity)) {
+            return mapper.toDto(persistedCertificateEntity);
         } else {
-            certificateConverter(persistedCertificate, updatedCertificate);
-            certificate = certificateDao.update(persistedCertificate);
+            certificateConverter(persistedCertificateEntity, updatedCertificateEntity);
+            certificate = certificateDao.update(persistedCertificateEntity);
         }
-        return certificate;
+        return mapper.toDto(certificate);
     }
 
     private void certificateConverter(GiftCertificateEntity persistedCertificate, GiftCertificateEntity updatedCertificate) {
@@ -112,6 +113,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             persistedCertificate.getTags().addAll(tagsMapper(tags));
         }
     }
+
     private List<Tag> tagsMapper(List<Tag> tags) {
         tags.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
             return tags.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
