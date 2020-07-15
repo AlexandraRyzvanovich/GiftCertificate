@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "certificate")
 @NamedQueries({

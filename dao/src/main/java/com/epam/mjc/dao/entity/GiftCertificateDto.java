@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-@EntityListeners(AuditListener.class)
 public class GiftCertificateDto {
     @NotNull
     private Long id;
@@ -45,17 +44,6 @@ public class GiftCertificateDto {
     private List<Tag> tags;
 
     public GiftCertificateDto() {
-    }
-
-    public GiftCertificateDto(@NotNull Long id, @NotNull @Size(max = 50) String name, @NotNull @Size(max = 200, message = "Max size 200 characters") String description, @DecimalMin(value = "0", message = "Price min value = 0") @DecimalMax(value = "10000", message = "Price max value = 10000") BigDecimal price, @NotNull(message = "Creation date cannot be null.") @FutureOrPresent(message = "Creation date should be the date of now.") LocalDateTime creationDate, @FutureOrPresent(message = "Modification date should be the date of now.") LocalDateTime modificationDate, @NotNull(message = "Valid days cannot be null.") @DecimalMin(value = "1", message = "Min value = 1$") @DecimalMax(value = "365", message = "Max value = 365") Integer validDays, Boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.validDays = validDays;
-        this.isActive = isActive;
     }
 
     public Long getId() {

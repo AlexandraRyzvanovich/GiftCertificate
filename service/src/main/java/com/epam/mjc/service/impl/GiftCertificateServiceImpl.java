@@ -11,12 +11,10 @@ import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.GiftCertificateMapper;
-import com.epam.mjc.service.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -86,13 +84,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return persistedCertificate;
         } else {
             certificateConverter(persistedCertificate, updatedCertificate);
-            Validator.validateCertificate(persistedCertificate);
             certificate = certificateDao.update(persistedCertificate);
-//            List<Tag> updatedTags = updatedCertificate.getTags();
-//            List<Tag> persistedTags = tagDao.getAllTagsByCertificateId(id);
-//            List<Tag> finalTagList = tagsConverter(id, persistedTags, updatedTags);
-//            saveTags(id, finalTagList);
-
         }
         return certificate;
     }
@@ -102,6 +94,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         String description = updatedCertificate.getDescription();
         BigDecimal price = updatedCertificate.getPrice();
         Integer validDays = updatedCertificate.getValidDays();
+        List<Tag> tags = updatedCertificate.getTags();
         if (name != null) {
             persistedCertificate.setName(name);
         }
@@ -114,45 +107,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (validDays != null) {
             persistedCertificate.setValidDays(validDays);
         }
-        if(!persistedCertificate.getTags().equals(updatedCertificate.getTags())) {
+        if(tags != null) {
             persistedCertificate.getTags().clear();
-
-            persistedCertificate.getTags().addAll(updatedCertificate.getTags());
+            persistedCertificate.getTags().addAll(tagsMapper(tags));
         }
     }
     private List<Tag> tagsMapper(List<Tag> tags) {
         tags.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
             return tags.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
-    }
-
-    private List<Tag> tagsConverter(Long id, List<Tag> persistedTags, List<Tag> updatedTags) {
-
-        persistedTags.stream().filter(tag -> updatedTags.stream()
-                .noneMatch(tag1 -> tag.getName().equalsIgnoreCase(tag1.getName())))
-                .forEach(persisted -> tagDao.deleteFromCertificateTagByIds(id, persisted.getId()));
-
-        return updatedTags.stream()
-                .filter(tag -> persistedTags.stream()
-                        .noneMatch(pers -> pers.getName().equalsIgnoreCase(tag.getName())))
-                .collect(Collectors.toList());
-    }
-
-    private void saveTags(Long certificateId, List<Tag> tags) {
-        if (!CollectionUtils.isEmpty(tags)) {
-            for (Tag tag : tags) {
-                Tag foundTag = (tagDao.getByName(tag.getName()));
-                if (foundTag == null) {
-                    Validator.validateTag(tag);
-                    Long createdTagId = tagDao.create(tag);
-                    if (createdTagId == null) {
-                        throw new IncorrectParamsException("Exception failed while executing create tag query");
-                    }
-                    certificateDao.createCertificateTag(certificateId, createdTagId);
-                } else {
-                    certificateDao.createCertificateTag(certificateId, foundTag.getId());
-                }
-            }
-        }
     }
 }
 
