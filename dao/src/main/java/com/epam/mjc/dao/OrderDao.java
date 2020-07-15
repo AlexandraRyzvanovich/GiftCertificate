@@ -1,12 +1,12 @@
 package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 
 import java.util.List;
 
 public interface OrderDao {
-    List<Order> getAllOrders();
-    Order getOrderById(Long id);
-    Long createOrder(Order order);
-    List<Order> getAllByUserId(Long userId);
+    List<OrderEntity> getAllOrders();
+    OrderEntity getOrderById(Long id);
+    Long createOrder(OrderEntity orderEntity);
+    List<OrderEntity> getAllByUserId(Long userId);
 }

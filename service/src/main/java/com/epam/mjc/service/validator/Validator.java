@@ -1,7 +1,7 @@
 package com.epam.mjc.service.validator;
 
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 import com.epam.mjc.dao.entity.Tag;
 import com.epam.mjc.dao.entity.User;
 import com.epam.mjc.service.exception.ValidationException;
@@ -57,9 +57,9 @@ public class Validator {
             throw new ValidationException("User surname" + name + "is incorrect. Requirements: not empty, max length " +  USER_SURNAME_MAX_LENGTH + " characters");
         }
     }
-    public static void validateOrder(Order order) {
-        Long userId = order.getUserId();
-        Long certificateId = order.getCertificateId();
+    public static void validateOrder(OrderEntity orderEntity) {
+        Long userId = orderEntity.getUserId();
+        Long certificateId = orderEntity.getCertificateId();
         if (userId == null) {
             throw new ValidationException("UserId is required.");
         }

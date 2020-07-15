@@ -30,7 +30,7 @@ public class User {
     private UserRoleEnum userRole;
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", nullable = false)
-    private Set<Order> orders = new HashSet<>();
+    private Set<OrderEntity> orderEntities = new HashSet<>();
 
     public User() {
     }
@@ -89,12 +89,12 @@ public class User {
         this.userRole = userRole;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
+    public Set<OrderEntity> getOrderEntities() {
+        return orderEntities;
     }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setOrderEntities(Set<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
     }
 
     @Override
@@ -108,12 +108,12 @@ public class User {
                 Objects.equals(name, user.name) &&
                 Objects.equals(surname, user.surname) &&
                 userRole == user.userRole &&
-                Objects.equals(orders, user.orders);
+                Objects.equals(orderEntities, user.orderEntities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, surname, userRole, orders);
+        return Objects.hash(id, email, password, name, surname, userRole, orderEntities);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", userRole=" + userRole +
-                ", orders=" + orders +
+                ", orders=" + orderEntities +
                 '}';
     }
 }

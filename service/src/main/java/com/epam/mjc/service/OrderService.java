@@ -1,11 +1,11 @@
 package com.epam.mjc.service;
 
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 
 import java.util.List;
 
 public interface OrderService {
-    Order createOrder(Order order);
-    Order getOrderById(Long id);
-    List<Order> getOrders();
+    OrderEntity createOrder(OrderEntity orderEntity);
+    OrderEntity getOrderById(Long id);
+    List<OrderEntity> getOrders();
 }

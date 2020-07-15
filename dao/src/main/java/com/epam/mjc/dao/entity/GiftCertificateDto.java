@@ -1,9 +1,7 @@
 package com.epam.mjc.dao.entity;
 
-import com.epam.mjc.dao.AuditListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.EntityListeners;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,12 +23,9 @@ public class GiftCertificateDto {
     @DecimalMax(value = "10000", message = "Price max value = 10000")
     private BigDecimal price;
 
-    @NotNull(message = "Creation date cannot be null.")
-    @FutureOrPresent(message = "Creation date should be the date of now.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime creationDate;
 
-    @FutureOrPresent(message = "Modification date should be the date of now.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime modificationDate;
 

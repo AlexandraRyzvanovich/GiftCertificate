@@ -1,6 +1,6 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 import com.epam.mjc.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +14,20 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable("id") long id) {
+    public OrderEntity getOrderById(@PathVariable("id") long id) {
 
         return orderService.getOrderById(id);
     }
 
     @GetMapping()
-    public List<Order> getAllOrders() {
+    public List<OrderEntity> getAllOrders() {
 
         return orderService.getOrders();
     }
 
     @PostMapping()
-    public Order createOrder(@RequestBody Order order) {
+    public OrderEntity createOrder(@RequestBody OrderEntity orderEntity) {
 
-        return orderService.createOrder(order);
+        return orderService.createOrder(orderEntity);
     }
 }

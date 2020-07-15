@@ -11,10 +11,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "orders")
 @NamedQueries({
-        @NamedQuery(name = "Orders.findAll", query = "select o from Order o"),
-        @NamedQuery(name = "Orders.findById", query = "select distinct o from Order o where o.id = :id"),
+        @NamedQuery(name = "Orders.findAll", query = "select o from OrderEntity o"),
+        @NamedQuery(name = "Orders.findById", query = "select distinct o from OrderEntity o where o.id = :id"),
 })
-public class Order {
+public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
@@ -28,10 +28,10 @@ public class Order {
     @Column(name = "certificate_id", insertable = false, updatable = false)
     private Long certificateId;
 
-    public Order() {
+    public OrderEntity() {
     }
 
-    public Order(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
+    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
         this.id = id;
         this.userId = userId;
         this.date = date;
@@ -84,12 +84,12 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
-        return Objects.equals(id, order.id) &&
-                Objects.equals(userId, order.userId) &&
-                Objects.equals(date, order.date) &&
-                Objects.equals(amount, order.amount) &&
-                Objects.equals(certificateId, order.certificateId);
+        OrderEntity orderEntity = (OrderEntity) o;
+        return Objects.equals(id, orderEntity.id) &&
+                Objects.equals(userId, orderEntity.userId) &&
+                Objects.equals(date, orderEntity.date) &&
+                Objects.equals(amount, orderEntity.amount) &&
+                Objects.equals(certificateId, orderEntity.certificateId);
     }
 
     @Override

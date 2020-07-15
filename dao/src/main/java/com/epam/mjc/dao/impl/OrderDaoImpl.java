@@ -1,7 +1,7 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.OrderDao;
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -16,27 +16,27 @@ public class OrderDaoImpl implements OrderDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Order> getAllOrders() {
-        return null;
+    public List<OrderEntity> getAllOrders() {
+        return entityManager.createNamedQuery("Orders.findAll", OrderEntity.class).getResultList();
     }
 
     @Override
-    public Order getOrderById(Long id) {
-        List<Order> ordersList = entityManager.createNamedQuery("Orders.findById", Order.class).getResultList();
+    public OrderEntity getOrderById(Long id) {
+        List<OrderEntity> ordersList = entityManager.createNamedQuery("Orders.findById", OrderEntity.class).getResultList();
 
         return ordersList.size() > 0 ? ordersList.get(0) : null;
     }
 
     @Override
-    public Long createOrder(Order order) {
-       entityManager.persist(order);
-       entityManager.detach(order);
-       return order.getId();
+    public Long createOrder(OrderEntity orderEntity) {
+       entityManager.persist(orderEntity);
+       entityManager.detach(orderEntity);
+       return orderEntity.getId();
     }
 
     @Override
-    public List<Order> getAllByUserId(Long userId) {
+    public List<OrderEntity> getAllByUserId(Long userId) {
 
-        return entityManager.createNamedQuery("Orders.findAll", Order.class).getResultList();
+        return entityManager.createNamedQuery("Orders.findAll", OrderEntity.class).getResultList();
     }
 }

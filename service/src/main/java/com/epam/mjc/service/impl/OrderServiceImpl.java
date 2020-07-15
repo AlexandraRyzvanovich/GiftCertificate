@@ -4,7 +4,7 @@ import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
-import com.epam.mjc.dao.entity.Order;
+import com.epam.mjc.dao.entity.OrderEntity;
 import com.epam.mjc.dao.entity.User;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
@@ -31,28 +31,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order createOrder(Order order) {
-        Long certificateId = order.getCertificateId();
+    public OrderEntity createOrder(OrderEntity orderEntity) {
+        Long certificateId = orderEntity.getCertificateId();
         GiftCertificateEntity certificate = certificateDao.getById(certificateId);
-        Long userId = order.getUserId();
+        Long userId = orderEntity.getUserId();
         User user = userDao.getUserById(userId);
         if(certificate == null && user == null) {
             throw new IncorrectParamsException("Impossible to create order with given data. Certificate id or user id is incorrect");
         }
-        Validator.validateOrder(order);
+        Validator.validateOrder(orderEntity);
         BigDecimal certificatePrice = certificate.getPrice();
-        order.setAmount(certificatePrice);
-        Long id = orderDao.createOrder(order);
+        orderEntity.setAmount(certificatePrice);
+        Long id = orderDao.createOrder(orderEntity);
         return orderDao.getOrderById(id);
     }
 
     @Override
-    public Order getOrderById(Long id) {
+    public OrderEntity getOrderById(Long id) {
         return orderDao.getOrderById(id);
     }
 
     @Override
-    public List<Order> getOrders() {
+    public List<OrderEntity> getOrders() {
         return orderDao.getAllOrders();
     }
 }
