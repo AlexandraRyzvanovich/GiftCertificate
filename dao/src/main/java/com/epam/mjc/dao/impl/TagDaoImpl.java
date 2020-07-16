@@ -1,7 +1,7 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.dao.entity.TagEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,40 +25,40 @@ public class TagDaoImpl implements TagDao {
             "where certificate_tag.certificate_id = :id";
 
     @Override
-    public Tag getById(Long id) {
-        List<Tag> tagList = entityManager.createNamedQuery("Tags.findById", Tag.class).setParameter("id", id).getResultList();
-        return tagList.size() > 0 ? tagList.get(0) : null;
+    public TagEntity getById(Long id) {
+        List<TagEntity> tagEntityList = entityManager.createNamedQuery("Tags.findById", TagEntity.class).setParameter("id", id).getResultList();
+        return tagEntityList.size() > 0 ? tagEntityList.get(0) : null;
     }
 
     @Override
     public List getAllTagsByCertificateId(Long id) {
 
-        return entityManager.createNativeQuery(SQL_SELECT_TAGS_BY_CERTIFICATE_ID, Tag.class).setParameter("id", id).getResultList();
+        return entityManager.createNativeQuery(SQL_SELECT_TAGS_BY_CERTIFICATE_ID, TagEntity.class).setParameter("id", id).getResultList();
     }
 
     @Override
-    public Tag getByName(String name) {
-        List<Tag> tags = entityManager.createNamedQuery("Tags.getByName", Tag.class).setParameter("name", name).getResultList();
-        return tags.size() > 0 ? tags.get(0) : null;
+    public TagEntity getByName(String name) {
+        List<TagEntity> tagEntities = entityManager.createNamedQuery("Tags.getByName", TagEntity.class).setParameter("name", name).getResultList();
+        return tagEntities.size() > 0 ? tagEntities.get(0) : null;
     }
 
     @Override
-    public List<Tag> getAll() {
-        return entityManager.createNamedQuery("Tags.findAll", Tag.class).getResultList();
+    public List<TagEntity> getAll() {
+        return entityManager.createNamedQuery("Tags.findAll", TagEntity.class).getResultList();
     }
 
     @Override
     @Transactional
-    public Long create(Tag tag) {
-        entityManager.persist(tag);
-        entityManager.detach(tag);
+    public Long create(TagEntity tagEntity) {
+        entityManager.persist(tagEntity);
+        entityManager.detach(tagEntity);
 
-        return tag.getId();
+        return tagEntity.getId();
     }
 
     @Override
     public void deleteById(Long id) {
-        entityManager.createNamedQuery("Tags.deleteById", Tag.class).setParameter("id", id).executeUpdate();
+        entityManager.createNamedQuery("Tags.deleteById", TagEntity.class).setParameter("id", id).executeUpdate();
     }
 
     @Override

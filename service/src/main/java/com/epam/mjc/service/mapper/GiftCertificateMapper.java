@@ -1,6 +1,6 @@
 package com.epam.mjc.service.mapper;
 
-import com.epam.mjc.dao.entity.GiftCertificateDto;
+import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

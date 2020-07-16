@@ -1,5 +1,6 @@
-package com.epam.mjc.dao.entity;
+package com.epam.mjc.dao.dto;
 
+import com.epam.mjc.dao.entity.TagEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.*;
@@ -35,7 +36,7 @@ public class GiftCertificateDto {
 
     private Boolean isActive;
 
-    private List<Tag> tags;
+    private List<TagEntity> tagEntities;
 
     public GiftCertificateDto() {
     }
@@ -104,12 +105,12 @@ public class GiftCertificateDto {
         isActive = active;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public List<TagEntity> getTagEntities() {
+        return tagEntities;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTagEntities(List<TagEntity> tagEntities) {
+        this.tagEntities = tagEntities;
     }
 
     @Override
@@ -125,12 +126,12 @@ public class GiftCertificateDto {
                 Objects.equals(modificationDate, that.modificationDate) &&
                 Objects.equals(validDays, that.validDays) &&
                 Objects.equals(isActive, that.isActive) &&
-                Objects.equals(tags, that.tags);
+                Objects.equals(tagEntities, that.tagEntities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, isActive, tags);
+        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, isActive, tagEntities);
     }
 
     @Override
@@ -144,7 +145,7 @@ public class GiftCertificateDto {
                 ", modificationDate=" + modificationDate +
                 ", validDays=" + validDays +
                 ", isActive=" + isActive +
-                ", tags=" + tags +
+                ", tags=" + tagEntities +
                 '}';
     }
 }

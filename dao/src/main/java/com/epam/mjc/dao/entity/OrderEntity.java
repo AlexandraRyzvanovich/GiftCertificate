@@ -12,31 +12,41 @@ import java.util.Objects;
 @Table(name = "orders")
 @NamedQueries({
         @NamedQuery(name = "Orders.findAll", query = "select o from OrderEntity o"),
-        @NamedQuery(name = "Orders.findById", query = "select distinct o from OrderEntity o where o.id = :id"),
+        @NamedQuery(name = "Orders.findById", query = "select o from OrderEntity o where o.id = :id"),
+        @NamedQuery(name = "Orders.findByUserId", query = "select o from OrderEntity o where o.userId = :userId"),
 })
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
     private Long id;
+
     @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
+
     @Column(name = "date")
     private LocalDateTime date;
+
     @Column(name = "amount")
     private BigDecimal amount;
+
     @Column(name = "certificate_id", insertable = false, updatable = false)
     private Long certificateId;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "certificate_Id", nullable = false)
+    private GiftCertificateEntity certificate;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
+    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId, GiftCertificateEntity certificate) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.amount = amount;
         this.certificateId = certificateId;
+        this.certificate = certificate;
     }
 
     public Long getId() {
@@ -79,32 +89,41 @@ public class OrderEntity {
         this.certificateId = certificateId;
     }
 
+    public GiftCertificateEntity getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(GiftCertificateEntity certificate) {
+        this.certificate = certificate;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderEntity orderEntity = (OrderEntity) o;
-        return Objects.equals(id, orderEntity.id) &&
-                Objects.equals(userId, orderEntity.userId) &&
-                Objects.equals(date, orderEntity.date) &&
-                Objects.equals(amount, orderEntity.amount) &&
-                Objects.equals(certificateId, orderEntity.certificateId);
+        OrderEntity that = (OrderEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(certificateId, that.certificateId) &&
+                Objects.equals(certificate, that.certificate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificateId);
+        return Objects.hash(id, userId, date, amount, certificateId, certificate);
     }
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderEntity{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", date=" + date +
                 ", amount=" + amount +
                 ", certificateId=" + certificateId +
+                ", certificate=" + certificate +
                 '}';
     }
 }

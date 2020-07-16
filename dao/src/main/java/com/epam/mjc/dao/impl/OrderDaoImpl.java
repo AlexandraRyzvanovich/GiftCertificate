@@ -22,7 +22,10 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public OrderEntity getOrderById(Long id) {
-        List<OrderEntity> ordersList = entityManager.createNamedQuery("Orders.findById", OrderEntity.class).getResultList();
+        List<OrderEntity> ordersList = entityManager
+                .createNamedQuery("Orders.findById", OrderEntity.class)
+                .setParameter("id", id)
+                .getResultList();
 
         return ordersList.size() > 0 ? ordersList.get(0) : null;
     }
@@ -37,6 +40,6 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<OrderEntity> getAllByUserId(Long userId) {
 
-        return entityManager.createNamedQuery("Orders.findAll", OrderEntity.class).getResultList();
+        return entityManager.createNamedQuery("Orders.findByUserId", OrderEntity.class).getResultList();
     }
 }

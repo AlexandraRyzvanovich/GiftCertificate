@@ -48,7 +48,7 @@ public class GiftCertificateEntity {
             joinColumns = {@JoinColumn(name = "certificate_id")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
-    private List<Tag> tags;
+    private List<TagEntity> tagEntities;
 
     public GiftCertificateEntity() {
     }
@@ -60,7 +60,7 @@ public class GiftCertificateEntity {
         this.validDays = validDays;
     }
 
-    public GiftCertificateEntity(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive, List<Tag> tags) {
+    public GiftCertificateEntity(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, Integer validDays, Boolean isActive, List<TagEntity> tagEntities) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -69,7 +69,7 @@ public class GiftCertificateEntity {
         this.modificationDate = modificationDate;
         this.validDays = validDays;
         this.isActive = isActive;
-        this.tags = tags;
+        this.tagEntities = tagEntities;
     }
 
     public GiftCertificateEntity(Long id, String name, String description, BigDecimal price, LocalDateTime creationDate, Integer validDays, Boolean isActive) {
@@ -146,12 +146,12 @@ public class GiftCertificateEntity {
         isActive = active;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public List<TagEntity> getTagEntities() {
+        return tagEntities;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTagEntities(List<TagEntity> tagEntities) {
+        this.tagEntities = tagEntities;
     }
 
     @Override
@@ -166,12 +166,12 @@ public class GiftCertificateEntity {
                 Objects.equals(creationDate, that.creationDate) &&
                 Objects.equals(modificationDate, that.modificationDate) &&
                 Objects.equals(validDays, that.validDays) &&
-                Objects.equals(tags, that.tags);
+                Objects.equals(tagEntities, that.tagEntities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, tags);
+        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, tagEntities);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class GiftCertificateEntity {
                 ", modificationDate=" + modificationDate +
                 ", validDays=" + validDays +
                 ", isActive=" + isActive +
-                ", tags=" + tags +
+                ", tags=" + tagEntities +
                 '}';
     }
 

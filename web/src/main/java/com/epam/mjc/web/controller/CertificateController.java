@@ -1,7 +1,6 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.GiftCertificateDto;
-import com.epam.mjc.dao.entity.GiftCertificateEntity;
+import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.entity.SearchParams;
 import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.service.GiftCertificateService;

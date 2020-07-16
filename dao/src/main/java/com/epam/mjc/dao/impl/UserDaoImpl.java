@@ -1,7 +1,7 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -22,31 +22,31 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return entityManager.createNamedQuery("Users.findAll", User.class).getResultList();
+    public List<UserEntity> getAllUsers() {
+        return entityManager.createNamedQuery("Users.findAll", UserEntity.class).getResultList();
     }
 
     @Override
-    public User getUserById(Long id) {
+    public UserEntity getUserById(Long id) {
 
-        return entityManager.createNamedQuery("Users.findById", User.class)
+        return entityManager.createNamedQuery("Users.findById", UserEntity.class)
                 .setParameter("id", id).getSingleResult();
     }
 
     @Override
     @Transactional
-    public Long createUser(User user) {
-        entityManager.persist(user);
-        entityManager.detach(user);
+    public Long createUser(UserEntity userEntity) {
+        entityManager.persist(userEntity);
+        entityManager.detach(userEntity);
 
-        return user.getId();
+        return userEntity.getId();
     }
 
     @Override
     @Transactional
-    public User updateUser(User user) {
-        entityManager.merge(user);
-        entityManager.detach(user);
-        return user;
+    public UserEntity updateUser(UserEntity userEntity) {
+        entityManager.merge(userEntity);
+        entityManager.detach(userEntity);
+        return userEntity;
     }
 }

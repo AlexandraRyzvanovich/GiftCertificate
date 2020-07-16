@@ -2,67 +2,70 @@ package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.dto.UserDto;
+import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
-import com.epam.mjc.service.validator.Validator;
+import com.epam.mjc.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableTransactionManagement
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final OrderDao orderDao;
+    private final UserMapper mapper;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, OrderDao orderDao) {
+    public UserServiceImpl(UserDao userDao, OrderDao orderDao, UserMapper mapper) {
         this.userDao = userDao;
         this.orderDao = orderDao;
+        this.mapper = mapper;
     }
 
     @Override
-    public User createUser(User user) {
-        Validator.validateUser(user);
-        Long id = userDao.createUser(user);
+    public UserDto createUser(UserDto userDto) {
+        Long id = userDao.createUser(mapper.toEntity(userDto));
         if(id == null) {
             throw new IncorrectParamsException("Impossible to create user with given params");
         }
-        return userDao.getUserById(id);
+        return mapper.toDto(userDao.getUserById(id));
     }
     @Override
-    public User getById(Long id) {
+    public UserDto getById(Long id) {
 
-        return userDao.getUserById(id);
+        return mapper.toDto(userDao.getUserById(id));
     }
 
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
 
-        return userDao.getAllUsers();
+        return userDao.getAllUsers().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-        User persistedUser = userDao.getUserById(id);
-        User userToUpdate = userConverter(persistedUser, user);
+    public UserDto updateUser(Long id, UserDto userDto) {
+        UserEntity persistedUserEntity = userDao.getUserById(id);
+        UserEntity userEntityToUpdate = userConverter(persistedUserEntity, mapper.toEntity(userDto));
 
-        return userDao.updateUser(userToUpdate);
+        return mapper.toDto(userDao.updateUser(userEntityToUpdate));
     }
 
-    private static User userConverter(User persistedUser, User updatedUser) {
-        String name = updatedUser.getName();
-        String surname = updatedUser.getSurname();
+    private static UserEntity userConverter(UserEntity persistedUserEntity, UserEntity updatedUserEntity) {
+        String name = updatedUserEntity.getName();
+        String surname = updatedUserEntity.getSurname();
         if (name != null) {
-            persistedUser.setName(name);
+            persistedUserEntity.setName(name);
         }
         if (surname != null) {
-            updatedUser.setSurname(surname);
+            updatedUserEntity.setSurname(surname);
         }
-        return persistedUser;
+        return persistedUserEntity;
     }
 }

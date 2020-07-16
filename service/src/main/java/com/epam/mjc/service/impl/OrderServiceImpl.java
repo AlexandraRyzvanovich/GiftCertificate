@@ -4,17 +4,18 @@ import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
-import com.epam.mjc.dao.entity.OrderEntity;
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.dto.OrderDto;
+import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
-import com.epam.mjc.service.validator.Validator;
+import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableTransactionManagement
@@ -22,37 +23,43 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
     private final GiftCertificateDao certificateDao;
     private final UserDao userDao;
+    private final OrderMapper mapper;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao) {
+    public OrderServiceImpl(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper) {
         this.orderDao = orderDao;
         this.certificateDao = certificateDao;
         this.userDao = userDao;
+        this.mapper = mapper;
     }
 
     @Override
-    public OrderEntity createOrder(OrderEntity orderEntity) {
-        Long certificateId = orderEntity.getCertificateId();
+    public OrderDto createOrder(OrderDto orderDto) {
+        Long certificateId = orderDto.getCertificateId();
         GiftCertificateEntity certificate = certificateDao.getById(certificateId);
-        Long userId = orderEntity.getUserId();
-        User user = userDao.getUserById(userId);
-        if(certificate == null && user == null) {
-            throw new IncorrectParamsException("Impossible to create order with given data. Certificate id or user id is incorrect");
+        Long userId = orderDto.getUserId();
+        UserEntity userEntity = userDao.getUserById(userId);
+        if(userEntity == null) {
+            throw new IncorrectParamsException("User not found with given user id");
         }
-        Validator.validateOrder(orderEntity);
         BigDecimal certificatePrice = certificate.getPrice();
-        orderEntity.setAmount(certificatePrice);
-        Long id = orderDao.createOrder(orderEntity);
-        return orderDao.getOrderById(id);
+        orderDto.setAmount(certificatePrice);
+        Long id = orderDao.createOrder(mapper.toEntity(orderDto));
+        return mapper.toDto(orderDao.getOrderById(id));
     }
 
     @Override
-    public OrderEntity getOrderById(Long id) {
-        return orderDao.getOrderById(id);
+    public OrderDto getOrderById(Long id) {
+        return mapper.toDto(orderDao.getOrderById(id));
     }
 
     @Override
-    public List<OrderEntity> getOrders() {
-        return orderDao.getAllOrders();
+    public List<OrderDto> getOrders() {
+        return orderDao.getAllOrders().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDto> getOrdersByUserId(Long userId) {
+        return orderDao.getAllByUserId(userId).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 }

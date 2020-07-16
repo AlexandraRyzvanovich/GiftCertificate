@@ -13,6 +13,9 @@ import com.epam.mjc.service.impl.OrderServiceImpl;
 import com.epam.mjc.service.impl.TagServiceImpl;
 import com.epam.mjc.service.impl.UserServiceImpl;
 import com.epam.mjc.service.mapper.GiftCertificateMapper;
+import com.epam.mjc.service.mapper.OrderMapper;
+import com.epam.mjc.service.mapper.TagMapper;
+import com.epam.mjc.service.mapper.UserMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -31,8 +34,8 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 public class ServiceConfig {
 
     @Bean
-    TagService tagService(TagDao tagDao) {
-        return new TagServiceImpl(tagDao);
+    TagService tagService(TagDao tagDao, TagMapper mapper) {
+        return new TagServiceImpl(tagDao, mapper);
     }
 
     @Bean
@@ -46,13 +49,13 @@ public class ServiceConfig {
     }
 
     @Bean
-    UserService userService(UserDao userDao, OrderDao orderDao) {
-        return new UserServiceImpl(userDao, orderDao);
+    UserService userService(UserDao userDao, OrderDao orderDao, UserMapper mapper) {
+        return new UserServiceImpl(userDao, orderDao, mapper);
     }
 
     @Bean
-    OrderService orderService(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao) {
-        return new OrderServiceImpl(orderDao, certificateDao, userDao);
+    OrderService orderService(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper) {
+        return new OrderServiceImpl(orderDao, certificateDao, userDao, mapper);
     }
 
     @Bean

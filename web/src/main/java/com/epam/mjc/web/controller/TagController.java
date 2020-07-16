@@ -1,6 +1,6 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.dao.dto.TagDto;
 import com.epam.mjc.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,26 +17,26 @@ public class TagController {
     private TagService service;
 
     @GetMapping("/{id}")
-    public Tag getTagsById(@PathVariable("id") long id) {
+    public TagDto getTagsById(@PathVariable("id") long id) {
 
         return  service.getTagById(id);
     }
 
     @GetMapping()
-    public List<Tag> getAllTags() {
+    public List<TagDto> getAllTags() {
 
         return service.getAllTags();
     }
 
     @PostMapping()
-    public Tag createTag(@RequestBody Tag tag) {
+    public TagDto createTag(@RequestBody TagDto tagDto) {
 
-        return service.createTag(tag);
+        return service.createTag(tagDto);
     }
 
-//    @DeleteMapping("/{id}")
-//    public String deleteTagById(@PathVariable("id") Long id)  {
-//
-//        return service.deleteTagById(id);
-//    }
+    @DeleteMapping("/{id}")
+    public String deleteTagById(@PathVariable("id") Long id)  {
+
+        return service.deleteTagById(id);
+    }
 }

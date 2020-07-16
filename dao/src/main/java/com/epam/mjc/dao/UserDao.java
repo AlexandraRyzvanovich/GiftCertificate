@@ -1,12 +1,12 @@
 package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.entity.UserEntity;
 
 import java.util.List;
 
 public interface UserDao {
-    List<User> getAllUsers();
-    User getUserById(Long id);
-    Long createUser(User user);
-    User updateUser(User user);
+    List<UserEntity> getAllUsers();
+    UserEntity getUserById(Long id);
+    Long createUser(UserEntity userEntity);
+    UserEntity updateUser(UserEntity userEntity);
 }

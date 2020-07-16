@@ -2,10 +2,10 @@ package com.epam.mjc.service.impl;
 
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.entity.GiftCertificateDto;
+import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.entity.Tag;
+import com.epam.mjc.dao.entity.TagEntity;
 import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
@@ -61,8 +61,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 certificate.getPrice(),
                 certificate.getValidDays());
         certificateToBeCreated.setCreationDate(LocalDateTime.now());
-        if(certificate.getTags()!=null) {
-            certificateToBeCreated.setTags(tagsMapper(certificate.getTags()));
+        if(certificate.getTagEntities()!=null) {
+            certificateToBeCreated.setTagEntities(tagsMapper(certificate.getTagEntities()));
         }
         Long createdId = certificateDao.create(certificateToBeCreated);
         if (createdId == null) {
@@ -85,6 +85,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return mapper.toDto(persistedCertificateEntity);
         } else {
             certificateConverter(persistedCertificateEntity, updatedCertificateEntity);
+            persistedCertificateEntity.setModificationDate(LocalDateTime.now());
             certificate = certificateDao.update(persistedCertificateEntity);
         }
         return mapper.toDto(certificate);
@@ -95,7 +96,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         String description = updatedCertificate.getDescription();
         BigDecimal price = updatedCertificate.getPrice();
         Integer validDays = updatedCertificate.getValidDays();
-        List<Tag> tags = updatedCertificate.getTags();
+        List<TagEntity> tagEntities = updatedCertificate.getTagEntities();
         if (name != null) {
             persistedCertificate.setName(name);
         }
@@ -108,15 +109,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (validDays != null) {
             persistedCertificate.setValidDays(validDays);
         }
-        if(tags != null) {
-            persistedCertificate.getTags().clear();
-            persistedCertificate.getTags().addAll(tagsMapper(tags));
+        if(tagEntities != null) {
+            persistedCertificate.getTagEntities().clear();
+            persistedCertificate.getTagEntities().addAll(tagsMapper(tagEntities));
         }
     }
 
-    private List<Tag> tagsMapper(List<Tag> tags) {
-        tags.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
-            return tags.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
+    private List<TagEntity> tagsMapper(List<TagEntity> tagEntities) {
+        tagEntities.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
+            return tagEntities.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
     }
 }
 

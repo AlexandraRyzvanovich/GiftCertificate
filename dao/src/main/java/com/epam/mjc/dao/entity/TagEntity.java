@@ -9,12 +9,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "tag")
 @NamedQueries({
-        @NamedQuery(name = "Tags.findAll", query = "select t from Tag t"),
-        @NamedQuery(name = "Tags.findById", query = "select distinct t from Tag t where t.id = :id"),
-        @NamedQuery(name = "Tags.getByName", query = "select t from Tag t where t.name = :name"),
-        @NamedQuery(name = "Tags.deleteById", query = "delete from Tag where id = :id")
+        @NamedQuery(name = "Tags.findAll", query = "select t from TagEntity t"),
+        @NamedQuery(name = "Tags.findById", query = "select distinct t from TagEntity t where t.id = :id"),
+        @NamedQuery(name = "Tags.getByName", query = "select t from TagEntity t where t.name = :name"),
+        @NamedQuery(name = "Tags.deleteById", query = "delete from TagEntity where id = :id")
 })
-public class Tag implements Identifiable{
+public class TagEntity implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
@@ -22,15 +22,15 @@ public class Tag implements Identifiable{
     @Column(name = "name")
     private String name;
 
-    public Tag() {
+    public TagEntity() {
     }
 
-    public Tag(Long id, String name) {
+    public TagEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Tag(String name) {
+    public TagEntity(String name) {
         this.name = name;
     }
 
@@ -50,9 +50,9 @@ public class Tag implements Identifiable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tag tag = (Tag) o;
-        return Objects.equals(id, tag.id) &&
-                Objects.equals(name, tag.name);
+        TagEntity tagEntity = (TagEntity) o;
+        return Objects.equals(id, tagEntity.id) &&
+                Objects.equals(name, tagEntity.name);
     }
 
     @Override

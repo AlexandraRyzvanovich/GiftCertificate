@@ -3,18 +3,16 @@ package com.epam.mjc.dao.entity;
 import com.epam.mjc.dao.AuditListener;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "Users.findAll", query = "select u from User u"),
-        @NamedQuery(name = "Users.findById", query = "select distinct u from User u where u.id = :id")
+        @NamedQuery(name = "Users.findAll", query = "select u from UserEntity u"),
+        @NamedQuery(name = "Users.findById", query = "select distinct u from UserEntity u where u.id = :id")
 })
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,14 +26,11 @@ public class User {
     private String surname;
     @Column(name = "role")
     private UserRoleEnum userRole;
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "user_id", nullable = false)
-    private Set<OrderEntity> orderEntities = new HashSet<>();
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(Long id, String name, String surname) {
+    public UserEntity(Long id, String name, String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -89,31 +84,22 @@ public class User {
         this.userRole = userRole;
     }
 
-    public Set<OrderEntity> getOrderEntities() {
-        return orderEntities;
-    }
-
-    public void setOrderEntities(Set<OrderEntity> orderEntities) {
-        this.orderEntities = orderEntities;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                userRole == user.userRole &&
-                Objects.equals(orderEntities, user.orderEntities);
+        UserEntity userEntity = (UserEntity) o;
+        return Objects.equals(id, userEntity.id) &&
+                Objects.equals(email, userEntity.email) &&
+                Objects.equals(password, userEntity.password) &&
+                Objects.equals(name, userEntity.name) &&
+                Objects.equals(surname, userEntity.surname) &&
+                userRole == userEntity.userRole;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, surname, userRole, orderEntities);
+        return Objects.hash(id, email, password, name, surname, userRole);
     }
 
     @Override
@@ -124,7 +110,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", userRole=" + userRole +
-                ", orders=" + orderEntities +
                 '}';
     }
 }

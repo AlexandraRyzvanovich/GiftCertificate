@@ -1,6 +1,8 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.dto.OrderDto;
+import com.epam.mjc.dao.dto.UserDto;
+import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,30 +15,38 @@ import java.util.List;
 public class UserController {
     @Qualifier("userServiceImpl")
     @Autowired
-    private UserService service;
+    private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") long id) {
+    public UserDto getUserById(@PathVariable("id") long id) {
 
-        return service.getById(id);
+        return userService.getById(id);
     }
 
     @GetMapping()
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
 
-        return service.getAllUsers();
+        return userService.getAllUsers();
     }
 
     @PostMapping()
-    public User createUser(@RequestBody User user) {
+    public UserDto createUser(@RequestBody UserDto userDto) {
 
-        return service.createUser(user);
+        return userService.createUser(userDto);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
 
-        return service.updateUser(id, user);
+        return userService.updateUser(id, userDto);
+    }
+
+    @GetMapping("/orders/{userId}")
+    public List<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId) {
+
+        return orderService.getOrdersByUserId(userId);
     }
 }
 

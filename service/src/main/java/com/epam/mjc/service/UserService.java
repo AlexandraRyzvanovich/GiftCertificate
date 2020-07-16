@@ -1,14 +1,12 @@
 package com.epam.mjc.service;
 
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.dto.UserDto;
 
 import java.util.List;
 
 public interface UserService {
-    User createUser(User user);
-
-    User getById(Long id);
-
-    List<User> getAllUsers();
-    User updateUser(Long id, User user);
+    UserDto createUser(UserDto userEntity);
+    UserDto getById(Long id);
+    List<UserDto> getAllUsers();
+    UserDto updateUser(Long id, UserDto userDto);
 }
