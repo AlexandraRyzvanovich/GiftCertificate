@@ -40,6 +40,6 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<OrderEntity> getAllByUserId(Long userId) {
 
-        return entityManager.createNamedQuery("Orders.findByUserId", OrderEntity.class).getResultList();
+        return entityManager.createNamedQuery("Orders.findByUserId", OrderEntity.class).setParameter("userId", userId).getResultList();
     }
 }

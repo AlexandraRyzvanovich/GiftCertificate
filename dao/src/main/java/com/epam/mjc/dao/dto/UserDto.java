@@ -1,6 +1,6 @@
 package com.epam.mjc.dao.dto;
 
-import com.epam.mjc.dao.entity.UserRoleEnum;
+import com.epam.mjc.dao.entity.RoleEntity;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -14,6 +14,7 @@ public class UserDto {
     private String email;
     @NotNull(message = "Password should not be empty.")
     private String password;
+    private RoleDto roleEntity;
 
     @Size(max = 200)
     private String name;
@@ -21,7 +22,7 @@ public class UserDto {
     @Size(max = 200)
     private String surname;
 
-    private UserRoleEnum userRole;
+    private RoleEntity userRoleEntity;
 
     public UserDto() {
     }
@@ -66,12 +67,20 @@ public class UserDto {
         this.surname = surname;
     }
 
-    public UserRoleEnum getUserRole() {
-        return userRole;
+    public RoleEntity getUserRoleEntity() {
+        return userRoleEntity;
     }
 
-    public void setUserRole(UserRoleEnum userRole) {
-        this.userRole = userRole;
+    public void setUserRoleEntity(RoleEntity userRoleEntity) {
+        this.userRoleEntity = userRoleEntity;
+    }
+
+    public RoleDto getRoleEntity() {
+        return roleEntity;
+    }
+
+    public void setRoleEntity(RoleDto roleEntity) {
+        this.roleEntity = roleEntity;
     }
 
     @Override
@@ -82,14 +91,15 @@ public class UserDto {
         return Objects.equals(id, userDto.id) &&
                 Objects.equals(email, userDto.email) &&
                 Objects.equals(password, userDto.password) &&
+                Objects.equals(roleEntity, userDto.roleEntity) &&
                 Objects.equals(name, userDto.name) &&
                 Objects.equals(surname, userDto.surname) &&
-                userRole == userDto.userRole;
+                Objects.equals(userRoleEntity, userDto.userRoleEntity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, surname, userRole);
+        return Objects.hash(id, email, password, roleEntity, name, surname, userRoleEntity);
     }
 
     @Override
@@ -98,9 +108,10 @@ public class UserDto {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", roleEntity=" + roleEntity +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", userRole=" + userRole +
+                ", userRoleEntity=" + userRoleEntity +
                 '}';
     }
 }

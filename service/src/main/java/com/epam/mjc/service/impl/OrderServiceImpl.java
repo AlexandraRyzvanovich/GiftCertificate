@@ -12,8 +12,10 @@ import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
         Long certificateId = orderDto.getCertificateId();
         GiftCertificateEntity certificate = certificateDao.getById(certificateId);
@@ -44,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
         }
         BigDecimal certificatePrice = certificate.getPrice();
         orderDto.setAmount(certificatePrice);
+        orderDto.setDate(LocalDateTime.now());
         Long id = orderDao.createOrder(mapper.toEntity(orderDto));
         return mapper.toDto(orderDao.getOrderById(id));
     }

@@ -21,7 +21,7 @@ public class OrderEntity {
     @Column(name = "id", insertable = false, updatable = false)
     private Long id;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
+    @Column(name = "user_id", updatable = false)
     private Long userId;
 
     @Column(name = "date")
@@ -30,7 +30,7 @@ public class OrderEntity {
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "certificate_id", insertable = false, updatable = false)
+    @Column(name = "certificate_id", updatable = false)
     private Long certificateId;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})

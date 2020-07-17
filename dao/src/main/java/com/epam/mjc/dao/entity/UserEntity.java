@@ -24,8 +24,12 @@ public class UserEntity {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "role")
-    private UserRoleEnum userRole;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role")
+    private Long userRole;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id", nullable = false)
+    private RoleEntity roleEntity;
 
     public UserEntity() {
     }
@@ -76,40 +80,51 @@ public class UserEntity {
         this.password = password;
     }
 
-    public UserRoleEnum getUserRole() {
+    public Long getUserRole() {
         return userRole;
     }
 
-    public void setUserRole(UserRoleEnum userRole) {
+    public void setUserRole(Long userRole) {
         this.userRole = userRole;
+    }
+
+    public RoleEntity getRoleEntity() {
+        return roleEntity;
+    }
+
+    public void setRoleEntity(RoleEntity roleEntity) {
+        this.roleEntity = roleEntity;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) &&
-                Objects.equals(email, userEntity.email) &&
-                Objects.equals(password, userEntity.password) &&
-                Objects.equals(name, userEntity.name) &&
-                Objects.equals(surname, userEntity.surname) &&
-                userRole == userEntity.userRole;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(surname, that.surname) &&
+                Objects.equals(userRole, that.userRole) &&
+                Objects.equals(roleEntity, that.roleEntity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, surname, userRole);
+        return Objects.hash(id, email, password, name, surname, userRole, roleEntity);
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserEntity{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", userRole=" + userRole +
+                ", role=" + roleEntity +
                 '}';
     }
 }

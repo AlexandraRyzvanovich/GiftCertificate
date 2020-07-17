@@ -2,6 +2,10 @@ dependencies {
     implementation 'org.springframework:spring-jdbc'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.2'
     implementation project(':dao')
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-test'
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
 
 }
 
