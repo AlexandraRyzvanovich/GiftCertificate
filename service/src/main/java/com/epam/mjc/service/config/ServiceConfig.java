@@ -1,9 +1,6 @@
 package com.epam.mjc.service.config;
 
-import com.epam.mjc.dao.GiftCertificateDao;
-import com.epam.mjc.dao.OrderDao;
-import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.UserDao;
+import com.epam.mjc.dao.*;
 import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.TagService;
@@ -23,6 +20,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -47,10 +45,15 @@ public class ServiceConfig {
     PlatformTransactionManager transactionManagementConfigurer(HikariDataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder;
+    }
 
     @Bean
-    UserService userService(UserDao userDao, OrderDao orderDao, UserMapper mapper) {
-        return new UserServiceImpl(userDao, orderDao, mapper);
+    UserService userService(UserDao userDao, OrderDao orderDao, UserMapper mapper, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
+        return new UserServiceImpl(userDao, orderDao, mapper, roleDao, passwordEncoder);
     }
 
     @Bean

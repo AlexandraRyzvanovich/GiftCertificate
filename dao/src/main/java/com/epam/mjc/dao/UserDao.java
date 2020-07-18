@@ -9,4 +9,6 @@ public interface UserDao {
     UserEntity getUserById(Long id);
     Long createUser(UserEntity userEntity);
     UserEntity updateUser(UserEntity userEntity);
+
+    UserEntity findByEmail(String email);
 }

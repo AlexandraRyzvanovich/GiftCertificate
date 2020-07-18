@@ -9,4 +9,8 @@ public interface UserService {
     UserDto getById(Long id);
     List<UserDto> getAllUsers();
     UserDto updateUser(Long id, UserDto userDto);
+
+    UserDto findUserByEmail(String email);
+
+    UserDto register(UserDto user);
 }

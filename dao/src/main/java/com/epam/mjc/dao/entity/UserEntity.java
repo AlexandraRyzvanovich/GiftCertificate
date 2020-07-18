@@ -3,6 +3,8 @@ package com.epam.mjc.dao.entity;
 import com.epam.mjc.dao.AuditListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @EntityListeners(AuditListener.class)
@@ -10,34 +12,38 @@ import java.util.Objects;
 @Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = "Users.findAll", query = "select u from UserEntity u"),
-        @NamedQuery(name = "Users.findById", query = "select distinct u from UserEntity u where u.id = :id")
+        @NamedQuery(name = "Users.findById", query = "select distinct u from UserEntity u where u.id = :id"),
+        @NamedQuery(name = "Users.findByEmail", query = "select distinct u from UserEntity u where u.email = :email")
 })
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "password")
     private String password;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "surname")
     private String surname;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
-    private Long userRole;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "id", nullable = false)
-    private RoleEntity roleEntity;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "users_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    private List<RoleEntity> roles;
 
     public UserEntity() {
-    }
-
-    public UserEntity(Long id, String name, String surname) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
     }
 
     public Long getId() {
@@ -46,22 +52,6 @@ public class UserEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getEmail() {
@@ -80,20 +70,36 @@ public class UserEntity {
         this.password = password;
     }
 
-    public Long getUserRole() {
-        return userRole;
+    public String getName() {
+        return name;
     }
 
-    public void setUserRole(Long userRole) {
-        this.userRole = userRole;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public RoleEntity getRoleEntity() {
-        return roleEntity;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setRoleEntity(RoleEntity roleEntity) {
-        this.roleEntity = roleEntity;
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public List<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -106,13 +112,13 @@ public class UserEntity {
                 Objects.equals(password, that.password) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(surname, that.surname) &&
-                Objects.equals(userRole, that.userRole) &&
-                Objects.equals(roleEntity, that.roleEntity);
+                Objects.equals(createdDate, that.createdDate) &&
+                Objects.equals(roles, that.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, surname, userRole, roleEntity);
+        return Objects.hash(id, email, password, name, surname, createdDate, roles);
     }
 
     @Override
@@ -123,8 +129,8 @@ public class UserEntity {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", userRole=" + userRole +
-                ", role=" + roleEntity +
+                ", createdDate=" + createdDate +
+                ", roles=" + roles +
                 '}';
     }
 }

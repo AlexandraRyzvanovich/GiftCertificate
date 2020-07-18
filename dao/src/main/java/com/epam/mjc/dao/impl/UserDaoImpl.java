@@ -49,4 +49,10 @@ public class UserDaoImpl implements UserDao {
         entityManager.detach(userEntity);
         return userEntity;
     }
+
+    @Override
+    public UserEntity findByEmail(String email) {
+        return entityManager.createNamedQuery("Users.findByEmail", UserEntity.class).setParameter("email", email).getSingleResult();
+    }
+
 }

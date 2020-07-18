@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,7 @@ public final class JwtUserFactory {
                 user.getSurname(),
                 user.getEmail(),
                 user.getPassword(),
-                mapToGrantedAuthorities(new ArrayList<>((Collection<? extends RoleDto>) user.getUserRoleEntity())));
+                mapToGrantedAuthorities(new ArrayList<>(user.getRoles())));
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<RoleDto> userRoles) {

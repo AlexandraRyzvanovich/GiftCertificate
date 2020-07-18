@@ -23,7 +23,6 @@ public class JwtUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-
     }
 
     @JsonIgnore
@@ -52,18 +51,6 @@ public class JwtUser implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
-
-    public String getFirstname() {
-        return name;
-    }
-
-    public String getLastname() {
-        return surname;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @JsonIgnore

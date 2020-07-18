@@ -1,10 +1,12 @@
 package com.epam.mjc.dao.dto;
 
-import com.epam.mjc.dao.entity.RoleEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDto {
@@ -12,9 +14,10 @@ public class UserDto {
     @Email
     @NotNull(message = "Email should not be empty.")
     private String email;
+
+    @JsonIgnore
     @NotNull(message = "Password should not be empty.")
     private String password;
-    private RoleDto roleEntity;
 
     @Size(max = 200)
     private String name;
@@ -22,7 +25,8 @@ public class UserDto {
     @Size(max = 200)
     private String surname;
 
-    private RoleEntity userRoleEntity;
+    private LocalDateTime createdDate;
+    private List<RoleDto> roles;
 
     public UserDto() {
     }
@@ -67,20 +71,20 @@ public class UserDto {
         this.surname = surname;
     }
 
-    public RoleEntity getUserRoleEntity() {
-        return userRoleEntity;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setUserRoleEntity(RoleEntity userRoleEntity) {
-        this.userRoleEntity = userRoleEntity;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public RoleDto getRoleEntity() {
-        return roleEntity;
+    public List<RoleDto> getRoles() {
+        return roles;
     }
 
-    public void setRoleEntity(RoleDto roleEntity) {
-        this.roleEntity = roleEntity;
+    public void setRoles(List<RoleDto> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -91,15 +95,15 @@ public class UserDto {
         return Objects.equals(id, userDto.id) &&
                 Objects.equals(email, userDto.email) &&
                 Objects.equals(password, userDto.password) &&
-                Objects.equals(roleEntity, userDto.roleEntity) &&
                 Objects.equals(name, userDto.name) &&
                 Objects.equals(surname, userDto.surname) &&
-                Objects.equals(userRoleEntity, userDto.userRoleEntity);
+                Objects.equals(createdDate, userDto.createdDate) &&
+                Objects.equals(roles, userDto.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, roleEntity, name, surname, userRoleEntity);
+        return Objects.hash(id, email, password, name, surname, createdDate, roles);
     }
 
     @Override
@@ -108,10 +112,10 @@ public class UserDto {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roleEntity=" + roleEntity +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", userRoleEntity=" + userRoleEntity +
+                ", createdDate=" + createdDate +
+                ", roles=" + roles +
                 '}';
     }
 }

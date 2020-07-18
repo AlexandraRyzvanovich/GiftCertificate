@@ -1,11 +1,16 @@
 package com.epam.mjc.dao.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "role")
-public class RoleEntity {
+@NamedQueries({
+        @NamedQuery(name = "Roles.findByName", query = "select r from RoleEntity r where name = :name")
+})
+public class RoleEntity implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
@@ -52,5 +57,10 @@ public class RoleEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public String getAuthority() {
+        return getName();
     }
 }

@@ -1,4 +1,4 @@
-package com.epam.mjc.service.config;
+package com.epam.mjc.web.config;
 
 import com.epam.mjc.service.security.jwt.JwtConfigurer;
 import com.epam.mjc.service.security.jwt.JwtTokenProvider;
@@ -15,8 +15,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "/api/v1/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
+    private static final String ADMIN_ENDPOINT = "/admin/**";
+    private static final String LOGIN_ENDPOINT = "/auth/**";
 
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
