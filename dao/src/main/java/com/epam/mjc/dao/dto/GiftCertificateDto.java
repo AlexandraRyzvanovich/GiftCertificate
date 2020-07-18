@@ -16,7 +16,6 @@ public class GiftCertificateDto {
     @Size(min = 1, max = 50)
     private String name;
 
-    @NotNull
     @Size(min = 1,max = 200, message = "Max size 200 characters")
     private String description;
     @DecimalMin(value = "0", message = "Price min value = 0")
@@ -29,7 +28,6 @@ public class GiftCertificateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime modificationDate;
 
-    @NotNull(message = "Valid days cannot be null.")
     @DecimalMin(value = "1", message = "Min value = 1$")
     @DecimalMax(value = "365", message = "Max value = 365")
     private Integer validDays;

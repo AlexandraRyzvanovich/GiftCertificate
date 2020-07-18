@@ -35,7 +35,7 @@ public class UserEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "users_role",
             joinColumns = {@JoinColumn(name = "user_id")},

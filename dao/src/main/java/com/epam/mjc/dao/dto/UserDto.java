@@ -1,7 +1,5 @@
 package com.epam.mjc.dao.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,7 +13,6 @@ public class UserDto {
     @NotNull(message = "Email should not be empty.")
     private String email;
 
-    @JsonIgnore
     @NotNull(message = "Password should not be empty.")
     private String password;
 

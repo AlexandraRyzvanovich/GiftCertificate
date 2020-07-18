@@ -41,10 +41,10 @@ public class ErrorAdvice {
         return new ErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
-        return new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

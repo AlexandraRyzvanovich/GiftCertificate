@@ -46,7 +46,6 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public UserEntity updateUser(UserEntity userEntity) {
         entityManager.merge(userEntity);
-        entityManager.detach(userEntity);
         return userEntity;
     }
 

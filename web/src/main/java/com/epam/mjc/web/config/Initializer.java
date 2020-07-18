@@ -31,8 +31,4 @@ public class Initializer implements WebMvcConfigurer {
         Locale.setDefault(Locale.ENGLISH);
         return new LocalValidatorFactoryBean();
     }
-
-
-
-
 }
