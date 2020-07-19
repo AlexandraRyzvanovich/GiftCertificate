@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class TagDto {
-
     private Long id;
     @NotNull
     private String name;

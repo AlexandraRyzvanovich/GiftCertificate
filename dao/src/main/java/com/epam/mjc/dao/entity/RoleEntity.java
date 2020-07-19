@@ -1,14 +1,16 @@
 package com.epam.mjc.dao.entity;
 
+import com.epam.mjc.dao.AuditListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@EntityListeners(AuditListener.class)
 @Entity
 @Table(name = "role")
 @NamedQueries({
-        @NamedQuery(name = "Roles.findByName", query = "select r from RoleEntity r where name = :name")
+        @NamedQuery(name = "Roles.findByName", query = "select r from RoleEntity r where r.name = :name")
 })
 public class RoleEntity implements GrantedAuthority {
     @Id

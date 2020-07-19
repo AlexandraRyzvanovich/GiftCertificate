@@ -37,8 +37,8 @@ public class ServiceConfig {
     }
 
     @Bean
-    GiftCertificateService giftCertificateService(GiftCertificateDao giftCertificateDao, TagDao tagDao, GiftCertificateMapper mapper) {
-        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao, mapper);
+    GiftCertificateService giftCertificateService(GiftCertificateDao giftCertificateDao, TagDao tagDao, GiftCertificateMapper certificateMapper,TagMapper tagMapper) {
+        return new GiftCertificateServiceImpl(giftCertificateDao, tagDao, certificateMapper, tagMapper);
     }
 
     @Bean

@@ -1,7 +1,5 @@
 package com.epam.mjc.dao.dto;
 
-import com.epam.mjc.dao.entity.GiftCertificateEntity;
-
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +13,7 @@ public class OrderDto {
     private BigDecimal amount;
     @NotNull(message = "Certificate_id is required")
     private Long certificateId;
-    private GiftCertificateEntity certificate;
+    private GiftCertificateDto certificate;
 
     public OrderDto() {
     }
@@ -60,11 +58,11 @@ public class OrderDto {
         this.certificateId = certificateId;
     }
 
-    public GiftCertificateEntity getCertificate() {
+    public GiftCertificateDto getCertificate() {
         return certificate;
     }
 
-    public void setCertificate(GiftCertificateEntity certificate) {
+    public void setCertificate(GiftCertificateDto certificate) {
         this.certificate = certificate;
     }
 

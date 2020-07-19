@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDto register(UserDto user) {
-        RoleEntity roleUser = roleDao.getRoleByName("GUEST");
+        RoleEntity roleUser = roleDao.getRoleByName("USER");
         List<RoleEntity> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
         UserEntity userEntityToSave = mapper.toEntity(user);

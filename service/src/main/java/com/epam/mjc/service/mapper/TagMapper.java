@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-public class TagMapper {
+public class TagMapper  {
     @Autowired
     private ModelMapper mapper;
 

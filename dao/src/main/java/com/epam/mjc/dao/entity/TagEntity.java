@@ -14,7 +14,7 @@ import java.util.Objects;
         @NamedQuery(name = "Tags.getByName", query = "select t from TagEntity t where t.name = :name"),
         @NamedQuery(name = "Tags.deleteById", query = "delete from TagEntity where id = :id")
 })
-public class TagEntity implements Identifiable{
+public class TagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false)
@@ -44,6 +44,10 @@ public class TagEntity implements Identifiable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

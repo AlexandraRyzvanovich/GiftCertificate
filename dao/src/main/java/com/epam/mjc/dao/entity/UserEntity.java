@@ -18,6 +18,7 @@ import java.util.Objects;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
 
     @Column(name = "email")
@@ -35,7 +36,7 @@ public class UserEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "users_role",
             joinColumns = {@JoinColumn(name = "user_id")},

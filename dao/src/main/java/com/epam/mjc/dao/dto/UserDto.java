@@ -1,6 +1,7 @@
 package com.epam.mjc.dao.dto;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -22,7 +23,9 @@ public class UserDto {
     @Size(max = 200)
     private String surname;
 
+    @FutureOrPresent
     private LocalDateTime createdDate;
+
     private List<RoleDto> roles;
 
     public UserDto() {

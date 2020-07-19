@@ -5,6 +5,7 @@ import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public UserDto login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
 
             String username = requestDto.getUsername();
             authenticationManagerBean.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
@@ -44,7 +45,7 @@ public class AuthenticationController {
             response.put("username", username);
             response.put("token", token);
 
-            return user;
+            return ResponseEntity.ok(response);
     }
     @PostMapping("/signUp")
     public UserDto register(@RequestBody UserDto userDto) {

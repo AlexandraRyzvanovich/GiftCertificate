@@ -1,9 +1,11 @@
 package com.epam.mjc.dao.dto;
 
-import com.epam.mjc.dao.entity.TagEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,7 +36,7 @@ public class GiftCertificateDto {
 
     private Boolean isActive;
 
-    private List<TagEntity> tagEntities;
+    private List<TagDto> tags;
 
     public GiftCertificateDto() {
     }
@@ -103,12 +105,12 @@ public class GiftCertificateDto {
         isActive = active;
     }
 
-    public List<TagEntity> getTagEntities() {
-        return tagEntities;
+    public List<TagDto> getTags() {
+        return tags;
     }
 
-    public void setTagEntities(List<TagEntity> tagEntities) {
-        this.tagEntities = tagEntities;
+    public void setTags(List<TagDto> tagEntities) {
+        this.tags = tagEntities;
     }
 
     @Override
@@ -124,12 +126,12 @@ public class GiftCertificateDto {
                 Objects.equals(modificationDate, that.modificationDate) &&
                 Objects.equals(validDays, that.validDays) &&
                 Objects.equals(isActive, that.isActive) &&
-                Objects.equals(tagEntities, that.tagEntities);
+                Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, isActive, tagEntities);
+        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, isActive, tags);
     }
 
     @Override
@@ -143,7 +145,7 @@ public class GiftCertificateDto {
                 ", modificationDate=" + modificationDate +
                 ", validDays=" + validDays +
                 ", isActive=" + isActive +
-                ", tags=" + tagEntities +
+                ", tags=" + tags +
                 '}';
     }
 }
