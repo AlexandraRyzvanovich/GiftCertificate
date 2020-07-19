@@ -37,7 +37,6 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public Long createUser(UserEntity userEntity) {
         entityManager.persist(userEntity);
-        entityManager.detach(userEntity);
 
         return userEntity.getId();
     }

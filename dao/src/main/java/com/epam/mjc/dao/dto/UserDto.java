@@ -1,5 +1,7 @@
 package com.epam.mjc.dao.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,7 @@ public class UserDto {
     @NotNull(message = "Email should not be empty.")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Password should not be empty.")
     private String password;
 
