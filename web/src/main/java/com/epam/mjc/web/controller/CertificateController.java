@@ -6,6 +6,7 @@ import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class CertificateController {
     private GiftCertificateService service;
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public GiftCertificateDto getCertificateById(@PathVariable("id") long id) {
 
         return service.getCertificateById(id);
@@ -34,11 +36,13 @@ public class CertificateController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public GiftCertificateDto createCertificate(@RequestBody @Valid GiftCertificateDto certificate) {
         return service.createCertificate(certificate);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate)  {
 
         return  service.updateCertificate(id, certificate);
