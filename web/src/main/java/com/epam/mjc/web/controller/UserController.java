@@ -21,7 +21,7 @@ public class UserController {
     private OrderService orderService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public UserDto getUserById(@PathVariable("id") long id) {
 
         return userService.getById(id);

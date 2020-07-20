@@ -15,12 +15,12 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR','USER')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public OrderDto getOrderById(@PathVariable("id") long id) {
 
         return orderService.getOrderById(id);
     }
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public List<OrderDto> getAllOrders() {
 
