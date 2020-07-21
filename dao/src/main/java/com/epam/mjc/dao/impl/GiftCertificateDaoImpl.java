@@ -29,7 +29,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "FROM certificate c " +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id " +
             "LEFT  JOIN tag t ON t.id = c_t.tag_id ";
-    private static final String SQL_CREATE_CERTIFICATE_TAG = "insert into certificate_tag (certificate_id, tag_id) values (:certificate_id, :tag_id)";
 
     @Autowired
     public GiftCertificateDaoImpl() {
@@ -53,8 +52,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GiftCertificateEntity> getAll(SearchParams searchParams) {
-        String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams);
+    public List<GiftCertificateEntity> getAll(SearchParams searchParams, Integer size, Integer pageNumber) {
+        String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams, size, pageNumber);
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
             return entityManager.createNativeQuery(SQL_SELECT_ALL.concat(sqlQueryPattern), GiftCertificateEntity.class).getResultList();
         }
@@ -73,10 +72,5 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         entityManager.persist(certificate);
 
         return certificate.getId();
-    }
-
-    @Override
-    public void createCertificateTag(Long certificateId, Long tagId) {
-        entityManager.createNativeQuery(SQL_CREATE_CERTIFICATE_TAG).setParameter("certificate_id", certificateId).setParameter("tag_id", tagId).executeUpdate();
     }
 }

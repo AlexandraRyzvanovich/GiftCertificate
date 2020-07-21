@@ -33,7 +33,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Long createOrder(OrderEntity orderEntity) {
        entityManager.persist(orderEntity);
-       entityManager.detach(orderEntity);
+
        return orderEntity.getId();
     }
 

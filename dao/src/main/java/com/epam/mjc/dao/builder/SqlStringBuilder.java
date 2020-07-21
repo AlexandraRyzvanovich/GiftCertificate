@@ -12,12 +12,15 @@ public class SqlStringBuilder {
     private static final String QUERY_PART_WHERE = " WHERE ";
     private static final String QUERY_PART_AND = " AND ";
     private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
+    private static final String QUERY_PAGE = " LIMIT  ";
 
-    public static String buildQuery(SearchParams searchParams) {
+
+    public static String buildQuery(SearchParams searchParams, Integer size, Integer pageNumber) {
         List<String> tags = searchParams.getTags();
         String text = searchParams.getText();
         SortParams sortParams = searchParams.getSortParams();
         String tagQueryPattern = "";
+
         if(text != null) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + textBuilder(text));
         }
@@ -32,6 +35,10 @@ public class SqlStringBuilder {
         tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         if(sortParams != null) {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
+        }
+        if(size!= null && pageNumber!= null) {
+            Integer itemStartFrom  = size * (pageNumber - 1);
+            tagQueryPattern = tagQueryPattern.concat(" ORDER BY c.id Limit " + size + " OFFSET " + itemStartFrom);
         }
         return tagQueryPattern;
     }

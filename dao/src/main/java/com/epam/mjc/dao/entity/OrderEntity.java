@@ -33,7 +33,7 @@ public class OrderEntity {
     @Column(name = "certificate_id", insertable = false, updatable = false)
     private Long certificateId;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "certificate_Id", nullable = false)
     private GiftCertificateEntity certificate;
 

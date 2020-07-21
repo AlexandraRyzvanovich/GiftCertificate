@@ -48,8 +48,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDto> getCertificates(SearchParams searchParams) {
-        return (certificateDao.getAll(searchParams)).stream().map(certificateMapper::toDto).collect(Collectors.toList());
+    public List<GiftCertificateDto> getCertificates(SearchParams searchParams, Integer size, Integer pageNumber) {
+        return (certificateDao.getAll(searchParams, size, pageNumber)).stream().map(certificateMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

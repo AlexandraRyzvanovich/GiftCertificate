@@ -10,13 +10,10 @@ public interface GiftCertificateDao {
 
     GiftCertificateEntity getByName(String name);
 
-    List<GiftCertificateEntity> getAll(SearchParams searchParams);
+    List<GiftCertificateEntity> getAll(SearchParams searchParams, Integer size, Integer pageNumber);
 
     GiftCertificateEntity update(GiftCertificateEntity item);
 
     Long create(GiftCertificateEntity item);
 
-    void createCertificateTag(Long certificateId, Long tagId);
-
-//    boolean createCertificateTag(long certificateId, long tagId);
 }

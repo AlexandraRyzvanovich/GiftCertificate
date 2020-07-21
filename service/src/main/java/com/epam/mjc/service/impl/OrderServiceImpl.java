@@ -48,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal certificatePrice = certificate.getPrice();
         orderDto.setAmount(certificatePrice);
         orderDto.setDate(LocalDateTime.now());
+        //orderDto.setCertificateId(certificateId);
         Long id = orderDao.createOrder(mapper.toEntity(orderDto));
         return mapper.toDto(orderDao.getOrderById(id));
     }

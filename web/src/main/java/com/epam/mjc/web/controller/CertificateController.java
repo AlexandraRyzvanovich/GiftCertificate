@@ -26,13 +26,16 @@ public class CertificateController {
 
         return service.getCertificateById(id);
     }
+
     @GetMapping()
     public List<GiftCertificateDto> getAllCertificates(@RequestParam(required = false, name = "tags") List<String> tags,
-                                                          @RequestParam(required = false, name = "text") String text,
-                                                          @Sort SortParams params) {
+                                                       @RequestParam(required = false, name = "text") String text,
+                                                       @Sort SortParams params,
+                                                       @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                                       @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
         SearchParams searchParams = new SearchParams(tags, text, params);
 
-        return service.getCertificates(searchParams);
+        return service.getCertificates(searchParams, size, pageNumber);
     }
 
     @PostMapping()
@@ -43,8 +46,8 @@ public class CertificateController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate)  {
+    public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate) {
 
-        return  service.updateCertificate(id, certificate);
+        return service.updateCertificate(id, certificate);
     }
 }

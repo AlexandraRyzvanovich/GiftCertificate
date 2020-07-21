@@ -31,7 +31,6 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     public OrderDto createOrder(@RequestBody OrderDto order) {
 
-
         return orderService.createOrder(order);
     }
 }
