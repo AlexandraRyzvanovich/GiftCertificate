@@ -12,8 +12,7 @@ public class SqlStringBuilder {
     private static final String QUERY_PART_WHERE = " WHERE ";
     private static final String QUERY_PART_AND = " AND ";
     private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
-    private static final String QUERY_PAGE = " LIMIT  ";
-
+    private static final String QUERY_HAVING = " HAVING COUNT(c.id) >= ";
 
     public static String buildQuery(SearchParams searchParams, Integer size, Integer pageNumber) {
         List<String> tags = searchParams.getTags();
@@ -32,7 +31,14 @@ public class SqlStringBuilder {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
+
         tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
+
+        if(!CollectionUtils.isEmpty(tags)) {
+            int tagsSize = tags.size();
+            tagQueryPattern = tagQueryPattern.concat(QUERY_HAVING + tagsSize);
+        }
+
         if(sortParams != null) {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
