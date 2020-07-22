@@ -12,4 +12,5 @@ public interface TagDao {
     Long create(TagEntity item);
     void deleteById(Long id);
     void deleteFromCertificateTagByIds(Long certificateId, Long tagId);
+    List<TagEntity> getMostPopularAndExpensiveTag();
 }

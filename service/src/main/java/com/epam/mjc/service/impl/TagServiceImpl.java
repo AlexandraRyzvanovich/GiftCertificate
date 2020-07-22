@@ -55,4 +55,13 @@ public class TagServiceImpl implements TagService {
     public String deleteTagById(Long id) {
         return "Tag has been successfully deleted";
     }
+
+    @Override
+    public TagDto getMostPopularAndExpensiveTag() {
+        List<TagEntity> tag = tagDao.getMostPopularAndExpensiveTag();
+        if(tag != null) {
+            return mapper.toDto(tag.get(0));
+        }
+        return null;
+    }
 }

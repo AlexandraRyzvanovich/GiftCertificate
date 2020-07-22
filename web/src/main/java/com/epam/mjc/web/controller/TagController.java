@@ -43,4 +43,8 @@ public class TagController {
 
         return service.deleteTagById(id);
     }
+    @GetMapping("/popular")
+    public TagDto getMostPopularAndExpensiveTag() {
+        return service.getMostPopularAndExpensiveTag();
+    }
 }

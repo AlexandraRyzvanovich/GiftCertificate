@@ -23,6 +23,34 @@ public class TagDaoImpl implements TagDao {
             "FROM tag \n" +
             "JOIN certificate_tag ON certificate_tag.tag_id = tag.id\n" +
             "where certificate_tag.certificate_id = :id";
+    private static final String FIND_POPULAR_TAG = "SELECT id, name  FROM tag WHERE id in(\n" +
+            "          SELECT ct.tag_id from certificate_tag ct \n" +
+            "          join orders as oc on oc.certificate_id=ct.certificate_id \n" +
+            "           WHERE oc.user_id =\n" +
+            "          (SELECT u.id from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id \n" +
+            "          HAVING sum(o.amount) = \n" +
+            "          (SELECT max(s) FROM \n" +
+            "          (SELECT sum(o.amount) s from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id) as tp LIMIT(1))) \n" +
+            "          GROUP BY oc.user_id, ct.tag_id \n" +
+            "          HAVING count(ct.tag_id) = (\n" +
+            "          SELECT max(tag_count) FROM \n" +
+            "          (SELECT ct.tag_id, count(ct.tag_id) tag_count from certificate_tag ct \n" +
+            "          join orders as oc on oc.certificate_id=ct.certificate_id \n" +
+            "          WHERE oc.user_id = \n" +
+            "          (SELECT u.id from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id \n" +
+            "          HAVING sum(o.amount) = \n" +
+            "          (SELECT max(s) FROM \n" +
+            "          (SELECT sum(o.amount) s from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id) as tp LIMIT(1))) \n" +
+            "          GROUP BY ct.tag_id)\n" +
+            "          AS max_tag ))";
 
     @Override
     public TagEntity getById(Long id) {
@@ -64,6 +92,11 @@ public class TagDaoImpl implements TagDao {
     @Override
     public void deleteFromCertificateTagByIds(Long certificateId, Long tagId) {
         entityManager.createQuery(SQL_DELETE_FROM_CERTIFICATE_TAG).setParameter("certificate_id", certificateId).setParameter("tag_id", tagId).executeUpdate();
+    }
+
+    @Override
+    public List<TagEntity> getMostPopularAndExpensiveTag() {
+        return entityManager.createNativeQuery(FIND_POPULAR_TAG, TagEntity.class).getResultList();
     }
 }
 
