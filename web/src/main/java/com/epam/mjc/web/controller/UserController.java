@@ -3,6 +3,7 @@ package com.epam.mjc.web.controller;
 import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.service.UserService;
+import com.epam.mjc.web.linkbuilder.UserLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,12 +15,15 @@ public class UserController {
     @Qualifier("userServiceImpl")
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserLinkBuilder userLinkBuilder;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or authentication.principal.id == #id" )
     public UserDto getUserById(@PathVariable("id") long id) {
+        UserDto user = userLinkBuilder.addLinksToDto(userService.getById(id));
 
-        return userService.getById(id);
+        return user;
     }
 
     @GetMapping()

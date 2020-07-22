@@ -5,7 +5,7 @@ import com.epam.mjc.dao.entity.Identifiable;
 import java.math.BigInteger;
 import java.util.List;
 
-public class PageDto<T extends Identifiable> {
+public class PageDto<T extends Identifiable>  {
     List<T> items;
     BigInteger size;
 

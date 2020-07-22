@@ -1,11 +1,13 @@
 package com.epam.mjc.dao.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderDto {
+public class OrderDto extends RepresentationModel<OrderDto> {
     private Long id;
     @NotNull
     private Long userId;

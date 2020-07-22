@@ -2,6 +2,7 @@ package com.epam.mjc.dao.dto;
 
 import com.epam.mjc.dao.entity.Identifiable;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class GiftCertificateDto implements Identifiable {
+public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> implements Identifiable {
     private Long id;
 
     @NotNull
