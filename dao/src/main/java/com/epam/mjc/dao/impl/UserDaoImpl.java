@@ -1,6 +1,7 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.UserDao;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -16,6 +18,9 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
+    private static final String QUERY_FIND_ALL = "SELECT * FROM Users";
+    private static final String QUERY_COUNT_USERS = "SELECT COUNT(id)\n" +
+            "FROM users ";
 
 
     @Autowired
@@ -23,8 +28,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<UserEntity> getAllUsers() {
-        return entityManager.createNamedQuery("Users.findAll", UserEntity.class).getResultList();
+    public List<UserEntity> getAllUsers(Integer size, Integer pageNumber) {
+        String sqlQueryPattern = SqlStringBuilder.paginationBuilder(size, pageNumber);
+        return entityManager.createNativeQuery(QUERY_FIND_ALL.concat(sqlQueryPattern), UserEntity.class).getResultList();
+    }
+
+    @Override
+    public BigInteger usersTableSize() {
+
+        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_USERS).getSingleResult();
     }
 
     @Override

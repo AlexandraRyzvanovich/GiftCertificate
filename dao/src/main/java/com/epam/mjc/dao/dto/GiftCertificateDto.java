@@ -1,5 +1,6 @@
 package com.epam.mjc.dao.dto;
 
+import com.epam.mjc.dao.entity.Identifiable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.validation.constraints.DecimalMax;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class GiftCertificateDto {
+public class GiftCertificateDto implements Identifiable {
     private Long id;
 
     @NotNull
@@ -39,6 +40,18 @@ public class GiftCertificateDto {
     private List<TagDto> tags;
 
     public GiftCertificateDto() {
+    }
+
+    public GiftCertificateDto(Long id, @NotNull @Size(min = 1, max = 50) String name, @Size(min = 1, max = 200, message = "Max size 200 characters") String description, @DecimalMin(value = "0", message = "Price min value = 0") @DecimalMax(value = "10000", message = "Price max value = 10000") BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, @DecimalMin(value = "1", message = "Min value = 1$") @DecimalMax(value = "365", message = "Max value = 365") Integer validDays, Boolean isActive, List<TagDto> tags) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.validDays = validDays;
+        this.isActive = isActive;
+        this.tags = tags;
     }
 
     public Long getId() {

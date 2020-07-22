@@ -1,15 +1,12 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.dao.dto.OrderDto;
+import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.dao.dto.UserDto;
-import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -17,11 +14,9 @@ public class UserController {
     @Qualifier("userServiceImpl")
     @Autowired
     private UserService userService;
-    @Autowired
-    private OrderService orderService;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or authentication.principal.id == #id" )
     public UserDto getUserById(@PathVariable("id") long id) {
 
         return userService.getById(id);
@@ -29,23 +24,17 @@ public class UserController {
 
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDto> getAllUsers() {
+    public PageDto<UserDto> getAllUsers(@RequestParam(name = "size", defaultValue = "5") Integer size,
+                                        @RequestParam(name = "number", defaultValue = "1") Integer pageNumber ) {
 
-        return userService.getAllUsers();
+        return userService.getAllUsers(size, pageNumber);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("authentication.principal.id == #id")
     public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
 
         return userService.updateUser(id, userDto);
-    }
-
-    @GetMapping("/orders/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public List<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId) {
-
-        return orderService.getOrdersByUserId(userId);
     }
 }
 

@@ -13,7 +13,6 @@ public class OrderDto {
     private BigDecimal amount;
     @NotNull(message = "Certificate_id is required")
     private Long certificateId;
-    private GiftCertificateDto certificate;
 
     public OrderDto() {
     }
@@ -58,14 +57,6 @@ public class OrderDto {
         this.certificateId = certificateId;
     }
 
-    public GiftCertificateDto getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(GiftCertificateDto certificate) {
-        this.certificate = certificate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,13 +66,12 @@ public class OrderDto {
                 Objects.equals(userId, orderDto.userId) &&
                 Objects.equals(date, orderDto.date) &&
                 Objects.equals(amount, orderDto.amount) &&
-                Objects.equals(certificateId, orderDto.certificateId) &&
-                Objects.equals(certificate, orderDto.certificate);
+                Objects.equals(certificateId, orderDto.certificateId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificateId, certificate);
+        return Objects.hash(id, userId, date, amount, certificateId);
     }
 
     @Override
@@ -90,7 +80,6 @@ public class OrderDto {
                 "id=" + id +
                 ", date=" + date +
                 ", amount=" + amount +
-                ", certificate=" + certificate +
                 '}';
     }
 }

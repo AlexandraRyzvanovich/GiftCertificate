@@ -3,6 +3,7 @@ package com.epam.mjc.service.impl;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.RoleDao;
 import com.epam.mjc.dao.UserDao;
+import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.dao.entity.RoleEntity;
 import com.epam.mjc.dao.entity.UserEntity;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +56,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public PageDto<UserDto> getAllUsers(Integer size, Integer pageNumber) {
+        List<UserDto> users = userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
+        BigInteger tableSize = userDao.usersTableSize();
+        PageDto pageUserDto = new PageDto();
+        pageUserDto.setItems(users);
+        pageUserDto.setSize(tableSize);
 
-        return userDao.getAllUsers().stream().map(mapper::toDto).collect(Collectors.toList());
+        return pageUserDto;
     }
 
     @Override

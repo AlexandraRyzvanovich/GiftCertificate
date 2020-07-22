@@ -33,20 +33,15 @@ public class OrderEntity {
     @Column(name = "certificate_id", insertable = false, updatable = false)
     private Long certificateId;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "certificate_Id", nullable = false)
-    private GiftCertificateEntity certificate;
-
     public OrderEntity() {
     }
 
-    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId, GiftCertificateEntity certificate) {
+    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.amount = amount;
         this.certificateId = certificateId;
-        this.certificate = certificate;
     }
 
     public Long getId() {
@@ -89,13 +84,6 @@ public class OrderEntity {
         this.certificateId = certificateId;
     }
 
-    public GiftCertificateEntity getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(GiftCertificateEntity certificate) {
-        this.certificate = certificate;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,13 +94,12 @@ public class OrderEntity {
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(certificateId, that.certificateId) &&
-                Objects.equals(certificate, that.certificate);
+                Objects.equals(certificateId, that.certificateId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificateId, certificate);
+        return Objects.hash(id, userId, date, amount, certificateId);
     }
 
     @Override
@@ -123,7 +110,7 @@ public class OrderEntity {
                 ", date=" + date +
                 ", amount=" + amount +
                 ", certificateId=" + certificateId +
-                ", certificate=" + certificate +
+
                 '}';
     }
 }

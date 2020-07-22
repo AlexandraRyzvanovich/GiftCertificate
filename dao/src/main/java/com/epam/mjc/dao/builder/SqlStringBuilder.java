@@ -43,10 +43,14 @@ public class SqlStringBuilder {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
         if(size!= null && pageNumber!= null) {
-            Integer itemStartFrom  = size * (pageNumber - 1);
-            tagQueryPattern = tagQueryPattern.concat(" ORDER BY c.id Limit " + size + " OFFSET " + itemStartFrom);
+            tagQueryPattern = tagQueryPattern.concat("ORDER BY c.id " + paginationBuilder(size, pageNumber));
         }
         return tagQueryPattern;
+    }
+    public static String paginationBuilder(Integer size, Integer pageNumber) {
+        Integer itemStartFrom  = size * (pageNumber - 1);
+        String paginationQuery =" Limit " +  size +   " OFFSET " + itemStartFrom;
+        return paginationQuery ;
     }
 
     private static String tagsBuilder(List<String> tags) {

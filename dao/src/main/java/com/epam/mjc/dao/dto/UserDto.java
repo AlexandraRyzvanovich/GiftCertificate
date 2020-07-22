@@ -1,5 +1,6 @@
 package com.epam.mjc.dao.dto;
 
+import com.epam.mjc.dao.entity.Identifiable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class UserDto {
+public class UserDto implements Identifiable {
     private Long id;
     @Email
     @NotNull(message = "Email should not be empty.")
