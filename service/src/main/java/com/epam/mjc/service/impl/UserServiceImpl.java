@@ -11,6 +11,7 @@ import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> users = userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
         BigInteger tableSize = userDao.usersTableSize();
         PageDto pageUserDto = new PageDto();
-        pageUserDto.setItems(users);
+        pageUserDto.setItems(CollectionModel.of(users));
         pageUserDto.setSize(tableSize);
 
         return pageUserDto;
