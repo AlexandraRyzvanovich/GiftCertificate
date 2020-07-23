@@ -48,7 +48,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(response);
     }
-    @PostMapping("/signUp")
+    @PostMapping("/signup")
     public UserDto register(@RequestBody UserDto userDto) {
         return userService.register(userDto);
     }

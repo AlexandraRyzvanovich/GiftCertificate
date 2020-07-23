@@ -56,9 +56,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers(Integer size, Integer pageNumber) {
-        List<UserDto> users = userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
 
-        return users;
+        return userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDto register(UserDto user) {
-        RoleEntity roleUser = roleDao.getRoleByName("USER");
+        RoleEntity roleUser = roleDao.getRoleByName("ROLE_USER");
         List<RoleEntity> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
         UserEntity userEntityToSave = mapper.toEntity(user);

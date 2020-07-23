@@ -1,12 +1,11 @@
 package com.epam.mjc.dao.dto;
 
 import com.epam.mjc.dao.entity.Identifiable;
-import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-public class RoleDto extends RepresentationModel<RoleDto> implements Identifiable {
+public class RoleDto implements Identifiable {
     private Long id;
     @NotNull
     private String name;

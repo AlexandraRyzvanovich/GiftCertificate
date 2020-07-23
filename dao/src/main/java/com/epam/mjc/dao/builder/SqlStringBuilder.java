@@ -31,8 +31,9 @@ public class SqlStringBuilder {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
-
-        tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
+        if(size!= null && pageNumber!= null) {
+            tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
+        }
 
         if(!CollectionUtils.isEmpty(tags)) {
             int tagsSize = tags.size();
@@ -43,14 +44,13 @@ public class SqlStringBuilder {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
         if(size!= null && pageNumber!= null) {
-            tagQueryPattern = tagQueryPattern.concat("ORDER BY c.id " + paginationBuilder(size, pageNumber));
+            tagQueryPattern = tagQueryPattern.concat(" ORDER BY c.id " + paginationBuilder(size, pageNumber));
         }
         return tagQueryPattern;
     }
     public static String paginationBuilder(Integer size, Integer pageNumber) {
         Integer itemStartFrom  = size * (pageNumber - 1);
-        String paginationQuery =" Limit " +  size +   " OFFSET " + itemStartFrom;
-        return paginationQuery ;
+        return " Limit " +  size +   " OFFSET " + itemStartFrom;
     }
 
     private static String tagsBuilder(List<String> tags) {

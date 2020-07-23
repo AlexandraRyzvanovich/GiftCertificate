@@ -30,7 +30,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "FROM certificate c " +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id " +
             "LEFT  JOIN tag t ON t.id = c_t.tag_id ";
-    private static final String SQL_COUNT_CERTIFICATES = "Select COUNT(id) " +
+    private static final String SQL_COUNT_CERTIFICATES = "Select COUNT(c.id) " +
             "FROM certificate c " +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id " +
             "LEFT  JOIN tag t ON t.id = c_t.tag_id ";
@@ -83,8 +83,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public BigInteger countCertificates(SearchParams searchParams) {
         String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams, null, null);
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
-            return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES.concat(sqlQueryPattern), GiftCertificateEntity.class).getSingleResult();
+            return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES.concat(sqlQueryPattern)).getSingleResult();
         }
-        return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES, GiftCertificateEntity.class).getSingleResult();
+        return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES).getSingleResult();
     }
 }
