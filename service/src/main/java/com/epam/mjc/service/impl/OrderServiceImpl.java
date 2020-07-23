@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal certificatePrice = certificate.getPrice();
         orderDto.setAmount(certificatePrice);
         orderDto.setDate(LocalDateTime.now());
-        //orderDto.setCertificateId(certificateId);
+        orderDto.setCertificateId(certificateId);
         Long id = orderDao.createOrder(mapper.toEntity(orderDto));
         return mapper.toDto(orderDao.getOrderById(id));
     }
@@ -59,12 +60,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getOrders() {
-        return orderDao.getAllOrders().stream().map(mapper::toDto).collect(Collectors.toList());
+    public List<OrderDto> getOrdersByUserId(Long userId, Integer size, Integer pageNumber) {
+        return orderDao.getAllByUserId(userId, size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderDto> getOrdersByUserId(Long userId) {
-        return orderDao.getAllByUserId(userId).stream().map(mapper::toDto).collect(Collectors.toList());
+    public BigInteger countOrders(Long userId) {
+        return orderDao.ordersSize(userId);
     }
 }

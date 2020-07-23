@@ -24,16 +24,12 @@ public class UserLinkBuilder implements LinkBuilder<UserDto> {
 
     @Override
     public UserDto addLinksToDto(UserDto userDto) {
-        addSelfLink(userDto);
+        userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
         if(RoleIdentifier.isAdmin()) {
             userDto.add(linkTo(methodOn(UserController.class).getAllUsers(null, null)).withRel("getUsers"));
-            userDto.add(linkTo(methodOn(UserController.class).updateUser(userDto.getId(), userDto)).withRel("updateUser"));
-
         }
+        userDto.add(linkTo(methodOn(UserController.class).updateUser(userDto.getId(), userDto)).withRel("updateUser"));
 
         return userDto;
-    }
-    private void addSelfLink(UserDto userDto) {
-        userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
     }
 }

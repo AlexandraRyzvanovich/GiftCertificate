@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.math.BigInteger;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -31,11 +32,10 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public PageDto<UserDto> getAllUsers(@RequestParam(name = "size", defaultValue = "5") Integer size,
                                         @RequestParam(name = "number", defaultValue = "1") Integer pageNumber ) {
-        PageDto<UserDto> users = userService.getAllUsers(size, pageNumber);
+        List<UserDto> users = userService.getAllUsers(size, pageNumber);
+        BigInteger usersTableSize = userService.countUsers();
 
-        userLinkBuilder.addLinksToList(new ArrayList<>(users.getItems().getContent()));
-
-        return users;
+        return new PageDto<>(userLinkBuilder.addLinksToList(users), usersTableSize);
     }
 
     @PutMapping("/{id}")

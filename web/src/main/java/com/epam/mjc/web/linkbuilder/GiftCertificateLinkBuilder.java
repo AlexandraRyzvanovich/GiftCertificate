@@ -12,14 +12,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class GiftCertificateLinkBuilder implements LinkBuilder<GiftCertificateDto> {
-    @Override
-    public GiftCertificateDto addLinksToDto(GiftCertificateDto giftCertificateDto) {
-        addSelfLink(giftCertificateDto);
-        if (RoleIdentifier.isAdmin()) {
-            giftCertificateDto.add(linkTo(methodOn(CertificateController.class).updateCertificate(giftCertificateDto.getId(), giftCertificateDto)).withRel("updateCertificate"));
-        }
-        return giftCertificateDto;
-    }
+
 
     @Override
     public CollectionModel<GiftCertificateDto> addLinksToList(List<GiftCertificateDto> giftCertificateDtoList) {
@@ -29,11 +22,15 @@ public class GiftCertificateLinkBuilder implements LinkBuilder<GiftCertificateDt
         return CollectionModel.of(
                 giftCertificateDtoList,
                 linkTo(methodOn(CertificateController.class).getAllCertificates(null, null, null, null, null)).withRel("getCertificates"));
-
     }
 
-    private void addSelfLink(GiftCertificateDto giftCertificateDto) {
+    @Override
+    public GiftCertificateDto addLinksToDto(GiftCertificateDto giftCertificateDto) {
         giftCertificateDto.add(linkTo(methodOn(CertificateController.class).getCertificateById(giftCertificateDto.getId())).withSelfRel());
+        if (RoleIdentifier.isAdmin()) {
+            giftCertificateDto.add(linkTo(methodOn(CertificateController.class).updateCertificate(giftCertificateDto.getId(), giftCertificateDto)).withRel("updateCertificate"));
+            giftCertificateDto.add(linkTo(methodOn(CertificateController.class).createCertificate(giftCertificateDto)).withRel("createCertificate"));
+        }
+        return giftCertificateDto;
     }
-
 }

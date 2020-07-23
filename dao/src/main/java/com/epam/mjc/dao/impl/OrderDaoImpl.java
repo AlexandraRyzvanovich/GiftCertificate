@@ -1,12 +1,14 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.OrderDao;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.OrderEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -14,11 +16,11 @@ import java.util.List;
 public class OrderDaoImpl implements OrderDao {
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Override
-    public List<OrderEntity> getAllOrders() {
-        return entityManager.createNamedQuery("Orders.findAll", OrderEntity.class).getResultList();
-    }
+    private static final String QUERY_GET_ALL_BY_USER_ID = "Select * from orders " +
+            "Where userId = :userId";
+    private static final String QUERY_COUNT_ORDERS = "SELECT COUNT(id)\n" +
+            "FROM orders " +
+            "where id = :id";
 
     @Override
     public OrderEntity getOrderById(Long id) {
@@ -38,8 +40,14 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderEntity> getAllByUserId(Long userId) {
+    public BigInteger ordersSize(Long userId) {
+        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_ORDERS, BigInteger.class).setParameter("id", userId).getSingleResult();
+    }
 
-        return entityManager.createNamedQuery("Orders.findByUserId", OrderEntity.class).setParameter("userId", userId).getResultList();
+    @Override
+    public List<OrderEntity> getAllByUserId(Long userId, Integer size, Integer pageNumber) {
+        String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);
+
+        return entityManager.createNativeQuery(QUERY_GET_ALL_BY_USER_ID.concat(paginationQuery), OrderEntity.class).setParameter("userId", userId).getResultList();
     }
 }

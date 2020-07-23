@@ -1,12 +1,15 @@
 package com.epam.mjc.web.controller;
 
+import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.dao.dto.TagDto;
 import com.epam.mjc.service.TagService;
+import com.epam.mjc.web.linkbuilder.TagLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -16,18 +19,22 @@ public class TagController {
     @Qualifier("tagServiceImpl")
     @Autowired
     private TagService service;
+    @Autowired
+    private TagLinkBuilder tagLinkBuilder;
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public TagDto getTagsById(@PathVariable("id") long id) {
+    public TagDto getTagById(@PathVariable("id") long id) {
 
-        return  service.getTagById(id);
+        return  tagLinkBuilder.addLinksToDto(service.getTagById(id));
     }
 
     @GetMapping()
-    public List<TagDto> getAllTags() {
+    public PageDto<TagDto> getAllTags(@RequestParam(name = "size", defaultValue = "5") Integer size,
+                                      @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
+        List<TagDto> tags = service.getAllTags(size, pageNumber);
+        BigInteger tagsItemsSize = service.countTags();
 
-        return service.getAllTags();
+        return new PageDto<>(tagLinkBuilder.addLinksToList(tags), tagsItemsSize);
     }
 
     @PostMapping()
@@ -43,6 +50,7 @@ public class TagController {
 
         return service.deleteTagById(id);
     }
+
     @GetMapping("/popular")
     public TagDto getMostPopularAndExpensiveTag() {
         return service.getMostPopularAndExpensiveTag();

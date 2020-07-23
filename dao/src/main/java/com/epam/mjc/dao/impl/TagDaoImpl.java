@@ -1,6 +1,7 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.TagDao;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.TagEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -16,13 +18,8 @@ public class TagDaoImpl implements TagDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final String SQL_DELETE_FROM_CERTIFICATE_TAG = "delete from certificate_tag where certificate_id = ? AND  tag_id = ?";
-    private static final String SQL_SELECT_TAGS_BY_CERTIFICATE_ID = "SELECT \n" +
-            "tag.id,\n" +
-            "tag.name\n" +
-            "FROM tag \n" +
-            "JOIN certificate_tag ON certificate_tag.tag_id = tag.id\n" +
-            "where certificate_tag.certificate_id = :id";
+    private static final String SQL_SELECT_ALL_TAGS = "Select * from tag";
+    private static final String QUERY_COUNT_TAGS = "Select Count(id) from tag";
     private static final String FIND_POPULAR_TAG = "SELECT id, name  FROM tag WHERE id in(\n" +
             "          SELECT ct.tag_id from certificate_tag ct \n" +
             "          join orders as oc on oc.certificate_id=ct.certificate_id \n" +
@@ -59,20 +56,18 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public List getAllTagsByCertificateId(Long id) {
-
-        return entityManager.createNativeQuery(SQL_SELECT_TAGS_BY_CERTIFICATE_ID, TagEntity.class).setParameter("id", id).getResultList();
-    }
-
-    @Override
     public TagEntity getByName(String name) {
         List<TagEntity> tagEntities = entityManager.createNamedQuery("Tags.getByName", TagEntity.class).setParameter("name", name).getResultList();
         return tagEntities.size() > 0 ? tagEntities.get(0) : null;
     }
 
     @Override
-    public List<TagEntity> getAll() {
-        return entityManager.createNamedQuery("Tags.findAll", TagEntity.class).getResultList();
+    public List<TagEntity> getAll(Integer size, Integer pageNumber) {
+        String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);
+        if(!paginationQuery.isEmpty()) {
+            return entityManager.createNativeQuery(SQL_SELECT_ALL_TAGS.concat(paginationQuery), TagEntity.class).getResultList();
+        }
+        return entityManager.createNativeQuery(SQL_SELECT_ALL_TAGS, TagEntity.class).getResultList();
     }
 
     @Override
@@ -90,13 +85,13 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void deleteFromCertificateTagByIds(Long certificateId, Long tagId) {
-        entityManager.createQuery(SQL_DELETE_FROM_CERTIFICATE_TAG).setParameter("certificate_id", certificateId).setParameter("tag_id", tagId).executeUpdate();
+    public List<TagEntity> getMostPopularAndExpensiveTag() {
+        return entityManager.createNativeQuery(FIND_POPULAR_TAG, TagEntity.class).getResultList();
     }
 
     @Override
-    public List<TagEntity> getMostPopularAndExpensiveTag() {
-        return entityManager.createNativeQuery(FIND_POPULAR_TAG, TagEntity.class).getResultList();
+    public BigInteger countTags() {
+        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS, BigInteger.class).getSingleResult();
     }
 }
 

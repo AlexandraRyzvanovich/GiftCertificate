@@ -3,7 +3,6 @@ package com.epam.mjc.service.impl;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.RoleDao;
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.dao.entity.RoleEntity;
 import com.epam.mjc.dao.entity.UserEntity;
@@ -11,7 +10,6 @@ import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -57,14 +55,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public PageDto<UserDto> getAllUsers(Integer size, Integer pageNumber) {
+    public List<UserDto> getAllUsers(Integer size, Integer pageNumber) {
         List<UserDto> users = userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
-        BigInteger tableSize = userDao.usersTableSize();
-        PageDto pageUserDto = new PageDto();
-        pageUserDto.setItems(CollectionModel.of(users));
-        pageUserDto.setSize(tableSize);
 
-        return pageUserDto;
+        return users;
     }
 
     @Override
@@ -91,6 +85,10 @@ public class UserServiceImpl implements UserService {
         Long userId = userDao.createUser(userEntityToSave);
 
         return getById(userId);
+    }
+    @Override
+    public BigInteger countUsers() {
+        return userDao.usersTableSize();
     }
 
     private static UserEntity userConverter(UserEntity persistedUserEntity, UserEntity updatedUserEntity) {

@@ -1,5 +1,6 @@
 package com.epam.mjc.dao.dto;
 
+import com.epam.mjc.dao.entity.Identifiable;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderDto extends RepresentationModel<OrderDto> {
+public class OrderDto extends RepresentationModel<OrderDto> implements Identifiable {
     private Long id;
     @NotNull
     private Long userId;

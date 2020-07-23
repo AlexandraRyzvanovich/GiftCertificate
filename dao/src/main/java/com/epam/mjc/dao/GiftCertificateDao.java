@@ -3,6 +3,7 @@ package com.epam.mjc.dao;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface GiftCertificateDao {
@@ -16,4 +17,5 @@ public interface GiftCertificateDao {
 
     Long create(GiftCertificateEntity item);
 
+    BigInteger countCertificates(SearchParams searchParams);
 }

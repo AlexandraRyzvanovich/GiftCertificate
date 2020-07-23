@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,6 +94,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             certificate = certificateDao.update(persistedCertificateEntity);
         }
         return certificateMapper.toDto(certificate);
+    }
+
+    @Override
+    public BigInteger countOrders(SearchParams params) {
+        return certificateDao.countCertificates(params);
     }
 
     private void certificateConverter(GiftCertificateEntity persistedCertificate, GiftCertificateEntity updatedCertificate) {

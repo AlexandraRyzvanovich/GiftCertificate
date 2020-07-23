@@ -10,6 +10,7 @@ import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.TagMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDto> getAllTags() {
-        return tagDao.getAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    public List<TagDto> getAllTags(Integer size, Integer pageNumber) {
+        return tagDao.getAll(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -53,6 +54,7 @@ public class TagServiceImpl implements TagService {
     }
     @Override
     public String deleteTagById(Long id) {
+        tagDao.deleteById(id);
         return "Tag has been successfully deleted";
     }
 
@@ -63,5 +65,10 @@ public class TagServiceImpl implements TagService {
             return mapper.toDto(tag.get(0));
         }
         return null;
+    }
+
+    @Override
+    public BigInteger countTags() {
+        return tagDao.countTags();
     }
 }
