@@ -18,7 +18,6 @@ public class UserLinkBuilder implements LinkBuilder<UserDto> {
         for (UserDto user: userDtoList) {
             addLinksToDto(user);
         }
-
         return CollectionModel.of(
                 userDtoList);
     }
@@ -27,7 +26,8 @@ public class UserLinkBuilder implements LinkBuilder<UserDto> {
     public UserDto addLinksToDto(UserDto userDto) {
         addSelfLink(userDto);
         if(RoleIdentifier.isAdmin()) {
-            userDto.add(linkTo(methodOn(UserController.class).getAllUsers(null, null)).withRel("/users"));
+            userDto.add(linkTo(methodOn(UserController.class).getAllUsers(null, null)).withRel("getUsers"));
+            userDto.add(linkTo(methodOn(UserController.class).updateUser(userDto.getId(), userDto)).withRel("updateUser"));
 
         }
 
