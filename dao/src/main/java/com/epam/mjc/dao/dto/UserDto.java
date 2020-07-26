@@ -19,13 +19,13 @@ public class UserDto extends RepresentationModel<UserDto> implements Identifiabl
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull(message = "Password should not be empty.")
+    //@NotNull(message = "Password should not be empty.")
     private String password;
 
-    @Size(max = 200)
+    @Size(max = 200, message = "Size of name should be up to 200 characters.")
     private String name;
 
-    @Size(max = 200)
+    @Size(max = 200, message = "Size of surname should be up to 200 characters.")
     private String surname;
 
     @FutureOrPresent
@@ -91,6 +91,7 @@ public class UserDto extends RepresentationModel<UserDto> implements Identifiabl
     public void setRoles(List<RoleDto> roles) {
         this.roles = roles;
     }
+
     public UserDto getById(Long id) {
         return new UserDto();
     }

@@ -13,6 +13,10 @@ public class RoleDto implements Identifiable {
     public RoleDto() {
     }
 
+    public RoleDto(@NotNull String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

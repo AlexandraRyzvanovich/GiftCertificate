@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -33,13 +32,13 @@ public class UserController {
     public PageDto<UserDto> getAllUsers(@RequestParam(name = "size", defaultValue = "5") Integer size,
                                         @RequestParam(name = "number", defaultValue = "1") Integer pageNumber ) {
         List<UserDto> users = userService.getAllUsers(size, pageNumber);
-        BigInteger usersTableSize = userService.countUsers();
+        int usersTableSize = userService.countUsers();
 
         return new PageDto<>(userLinkBuilder.addLinksToList(users), usersTableSize);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("authentication.principal.id == #id")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and authentication.principal.id == #id)")
     public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
 
         return userLinkBuilder.addLinksToDto(userService.updateUser(id, userDto));

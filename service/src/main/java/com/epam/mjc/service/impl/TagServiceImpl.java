@@ -10,7 +10,6 @@ import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.TagMapper;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +67,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public BigInteger countTags() {
+    public int countTags() {
         return tagDao.countTags();
     }
 }

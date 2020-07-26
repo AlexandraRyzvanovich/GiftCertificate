@@ -30,7 +30,7 @@ public class OrderEntity {
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "certificate_id", insertable = false, updatable = false)
+    @Column(name = "certificate_id")
     private Long certificateId;
 
     public OrderEntity() {

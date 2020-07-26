@@ -5,7 +5,6 @@ import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.entity.SearchParams;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.List;
 
 public interface GiftCertificateService {
@@ -14,5 +13,5 @@ public interface GiftCertificateService {
     @Transactional
     GiftCertificateDto createCertificate(GiftCertificateDto certificate);
     GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate);
-    BigInteger countOrders(SearchParams params);
+    int countOrders(SearchParams params);
 }

@@ -61,6 +61,7 @@ public class TagDaoImpl implements TagDao {
         return tagEntities.size() > 0 ? tagEntities.get(0) : null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<TagEntity> getAll(Integer size, Integer pageNumber) {
         String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);
@@ -84,14 +85,16 @@ public class TagDaoImpl implements TagDao {
         entityManager.createNamedQuery("Tags.deleteById", TagEntity.class).setParameter("id", id).executeUpdate();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<TagEntity> getMostPopularAndExpensiveTag() {
         return entityManager.createNativeQuery(FIND_POPULAR_TAG, TagEntity.class).getResultList();
     }
 
     @Override
-    public BigInteger countTags() {
-        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS, BigInteger.class).getSingleResult();
+    public int countTags() {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS, BigInteger.class).getSingleResult();
+        return count.intValue();
     }
 }
 

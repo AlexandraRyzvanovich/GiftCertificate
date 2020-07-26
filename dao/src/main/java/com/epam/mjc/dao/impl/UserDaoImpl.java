@@ -27,6 +27,7 @@ public class UserDaoImpl implements UserDao {
     public UserDaoImpl() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<UserEntity> getAllUsers(Integer size, Integer pageNumber) {
         String sqlQueryPattern = SqlStringBuilder.paginationBuilder(size, pageNumber);
@@ -34,9 +35,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public BigInteger usersTableSize() {
-
-        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_USERS).getSingleResult();
+    public int usersTableSize() {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_USERS).getSingleResult();
+        return count.intValue();
     }
 
     @Override

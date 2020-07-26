@@ -2,7 +2,6 @@ package com.epam.mjc.dao;
 
 import com.epam.mjc.dao.entity.TagEntity;
 
-import java.math.BigInteger;
 import java.util.List;
 
 public interface TagDao {
@@ -12,5 +11,5 @@ public interface TagDao {
     Long create(TagEntity item);
     void deleteById(Long id);
     List<TagEntity> getMostPopularAndExpensiveTag();
-    BigInteger countTags();
+    int countTags();
 }

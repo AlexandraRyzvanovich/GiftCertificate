@@ -79,12 +79,16 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         return certificate.getId();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public BigInteger countCertificates(SearchParams searchParams) {
+    public int countCertificates(SearchParams searchParams) {
         String sqlQueryPattern = SqlStringBuilder.buildQuery(searchParams, null, null);
+        String query = SQL_COUNT_CERTIFICATES;
         if (!StringUtils.isEmpty(sqlQueryPattern)) {
-            return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES.concat(sqlQueryPattern)).getSingleResult();
+            query = query.concat(sqlQueryPattern);
         }
-        return (BigInteger) entityManager.createNativeQuery(SQL_COUNT_CERTIFICATES).getSingleResult();
+        List<BigInteger> result = entityManager.createNativeQuery(query).getResultList();
+
+        return result.size() == 0 ? 0 : result.get(0).intValue();
     }
 }

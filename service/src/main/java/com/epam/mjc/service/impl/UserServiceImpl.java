@@ -8,6 +8,7 @@ import com.epam.mjc.dao.entity.RoleEntity;
 import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
+import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,11 +43,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         Long id = userDao.createUser(mapper.toEntity(userDto));
-        if(id == null) {
+        if (id == null) {
             throw new IncorrectParamsException("Impossible to create user with given params");
         }
         return mapper.toDto(userDao.getUserById(id));
     }
+
     @Override
     public UserDto getById(Long id) {
 
@@ -63,15 +65,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
         UserEntity persistedUserEntity = userDao.getUserById(id);
+        if(persistedUserEntity == null) {
+            throw new NotFoundException("User with id " + userDto.getId() + " not found");
+        }
+        if (userDto.getPassword() != null) {
+            String password = passwordEncoder.encode(userDto.getPassword());
+            userDto.setPassword(password);
+        }
         UserEntity userEntityToUpdate = userConverter(persistedUserEntity, mapper.toEntity(userDto));
 
         return mapper.toDto(userDao.updateUser(userEntityToUpdate));
     }
+
     @Override
     public UserDto findUserByEmail(String email) {
         UserEntity userEntity = userDao.findByEmail(email);
         return mapper.toDto(userEntity);
     }
+
     @Override
     public UserDto register(UserDto user) {
         RoleEntity roleUser = roleDao.getRoleByName("ROLE_USER");
@@ -85,23 +96,29 @@ public class UserServiceImpl implements UserService {
 
         return getById(userId);
     }
+
     @Override
-    public BigInteger countUsers() {
+    public int countUsers() {
         return userDao.usersTableSize();
     }
 
     private static UserEntity userConverter(UserEntity persistedUserEntity, UserEntity updatedUserEntity) {
         String name = updatedUserEntity.getName();
         String surname = updatedUserEntity.getSurname();
+        String email = updatedUserEntity.getEmail();
+        String password = updatedUserEntity.getPassword();
         if (name != null) {
             persistedUserEntity.setName(name);
         }
         if (surname != null) {
             updatedUserEntity.setSurname(surname);
         }
+        if (email != null) {
+            persistedUserEntity.setEmail(email);
+        }
+        if (password != null) {
+            persistedUserEntity.setPassword(password);
+        }
         return persistedUserEntity;
     }
-
-
-
 }

@@ -4,11 +4,11 @@ import com.epam.mjc.dao.dto.OrderDto;
 import com.epam.mjc.dao.dto.PageDto;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.web.linkbuilder.OrderLinkBuilder;
+import com.epam.mjc.web.linkbuilder.RoleIdentifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -21,10 +21,12 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or authentication.principal.id == #userId")
-    public OrderDto getOrderById(@PathVariable("id") Long id) {
-
-        return orderLinkBuilder.addLinksToDto(orderService.getOrderById(id));
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and authentication.principal.id == #userId)")
+    public OrderDto getOrderById(@PathVariable("id") Long id, @PathVariable Long userId) {
+        if(RoleIdentifier.getRoles().contains("ROLE_ADMIN")) {
+            return orderLinkBuilder.addLinksToDto(orderService.getOrderById(id, null));
+        }
+        return orderLinkBuilder.addLinksToDto(orderService.getOrderById(id, userId));
     }
 
     @PostMapping()
@@ -36,12 +38,12 @@ public class OrderController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasAnyRole('ADMIN') or authentication.principal.id == #userId")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and authentication.principal.id == #userId)")
     public PageDto<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId,
                                               @RequestParam(name = "size", defaultValue = "5") Integer size,
                                               @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
         List<OrderDto> orders = orderService.getOrdersByUserId(userId, size, pageNumber);
-        BigInteger allOrdersSize = orderService.countOrders(userId);
+        int allOrdersSize = orderService.countOrders(userId);
 
         return new PageDto<>(orderLinkBuilder.addLinksToList(orders), allOrdersSize);
     }

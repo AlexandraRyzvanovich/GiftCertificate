@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class TagController {
     public PageDto<TagDto> getAllTags(@RequestParam(name = "size", defaultValue = "5") Integer size,
                                       @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
         List<TagDto> tags = service.getAllTags(size, pageNumber);
-        BigInteger tagsItemsSize = service.countTags();
+        int tagsItemsSize = service.countTags();
 
         return new PageDto<>(tagLinkBuilder.addLinksToList(tags), tagsItemsSize);
     }

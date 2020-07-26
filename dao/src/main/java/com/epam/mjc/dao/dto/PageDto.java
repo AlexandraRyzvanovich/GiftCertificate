@@ -3,13 +3,11 @@ package com.epam.mjc.dao.dto;
 import com.epam.mjc.dao.entity.Identifiable;
 import org.springframework.hateoas.CollectionModel;
 
-import java.math.BigInteger;
-
 public class PageDto<T extends Identifiable>  {
     CollectionModel<T> items;
-    BigInteger size;
+    int size;
 
-    public PageDto(CollectionModel<T> items, BigInteger size) {
+    public PageDto(CollectionModel<T> items, int size) {
         this.items = items;
         this.size = size;
     }
@@ -26,11 +24,11 @@ public class PageDto<T extends Identifiable>  {
         this.items = items;
     }
 
-    public BigInteger getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(BigInteger size) {
+    public void setSize(Integer size) {
         this.size = size;
     }
 }

@@ -2,7 +2,6 @@ package com.epam.mjc.service;
 
 import com.epam.mjc.dao.dto.UserDto;
 
-import java.math.BigInteger;
 import java.util.List;
 
 public interface UserService {
@@ -12,5 +11,5 @@ public interface UserService {
     UserDto updateUser(Long id, UserDto userDto);
     UserDto findUserByEmail(String email);
     UserDto register(UserDto user);
-    BigInteger countUsers();
+    int countUsers();
 }

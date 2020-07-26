@@ -3,8 +3,8 @@ package com.epam.mjc.service.impl;
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.dto.OrderDto;
+import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.exception.IncorrectParamsException;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,8 +54,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getOrderById(Long id) {
-        return mapper.toDto(orderDao.getOrderById(id));
+    public OrderDto getOrderById(Long id, Long userId) {
+        OrderDto order =  mapper.toDto(orderDao.getOrderById(id));
+        if(userId != null && !order.getUserId().equals(userId)) {
+            throw new IncorrectParamsException("Impossible to get order by id " + id);
+        }
+        return order;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigInteger countOrders(Long userId) {
+    public int countOrders(Long userId) {
         return orderDao.ordersSize(userId);
     }
 }

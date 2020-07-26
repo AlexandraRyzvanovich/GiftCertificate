@@ -17,10 +17,10 @@ public class OrderDaoImpl implements OrderDao {
     @PersistenceContext
     private EntityManager entityManager;
     private static final String QUERY_GET_ALL_BY_USER_ID = "Select * from orders " +
-            "Where userId = :userId";
+            "Where user_Id = :userId";
     private static final String QUERY_COUNT_ORDERS = "SELECT COUNT(id)\n" +
             "FROM orders " +
-            "where id = :id";
+            "where user_id = :user_id";
 
     @Override
     public OrderEntity getOrderById(Long id) {
@@ -40,10 +40,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public BigInteger ordersSize(Long userId) {
-        return (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_ORDERS, BigInteger.class).setParameter("id", userId).getSingleResult();
+    public int ordersSize(Long userId) {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_ORDERS).setParameter("user_id", userId).getSingleResult();
+        return count.intValue();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<OrderEntity> getAllByUserId(Long userId, Integer size, Integer pageNumber) {
         String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);

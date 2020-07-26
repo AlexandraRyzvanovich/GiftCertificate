@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -39,7 +38,7 @@ public class CertificateController {
                                       @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
         SearchParams searchParams = new SearchParams(tags, text, params);
         List<GiftCertificateDto> certificates = service.getCertificates(searchParams, size, pageNumber);
-        BigInteger ordersCount = service.countOrders(searchParams);
+        int ordersCount = service.countOrders(searchParams);
 
         return new PageDto<>(certificateLinkBuilder.addLinksToList(certificates), ordersCount);
     }

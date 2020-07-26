@@ -13,6 +13,7 @@ public class SqlStringBuilder {
     private static final String QUERY_PART_AND = " AND ";
     private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
     private static final String QUERY_HAVING = " HAVING COUNT(c.id) >= ";
+    private static final String QUERY_ORDER_BY_ID = " ORDER BY c.id";
 
     public static String buildQuery(SearchParams searchParams, Integer size, Integer pageNumber) {
         List<String> tags = searchParams.getTags();
@@ -31,7 +32,7 @@ public class SqlStringBuilder {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
-        if(size!= null && pageNumber!= null) {
+        if(sortParams!= null) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         }
 
@@ -44,7 +45,7 @@ public class SqlStringBuilder {
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
         if(size!= null && pageNumber!= null) {
-            tagQueryPattern = tagQueryPattern.concat(" ORDER BY c.id " + paginationBuilder(size, pageNumber));
+            tagQueryPattern = tagQueryPattern.concat(paginationBuilder(size, pageNumber));
         }
         return tagQueryPattern;
     }
@@ -72,10 +73,10 @@ public class SqlStringBuilder {
         if(fieldToSort != null) {
             switch (fieldToSort) {
                 case "date" :
-                    queryForSorting = queryForSorting.concat("ORDER BY c.creation_date ");
+                    queryForSorting = queryForSorting.concat(" ORDER BY c.creation_date ");
                     break;
                 case "name" :
-                    queryForSorting = queryForSorting.concat("ORDER BY c.name ");
+                    queryForSorting = queryForSorting.concat(" ORDER BY c.name ");
                     break;
                 default: return queryForSorting;
             }

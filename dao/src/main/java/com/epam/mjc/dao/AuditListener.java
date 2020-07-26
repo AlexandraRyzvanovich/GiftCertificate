@@ -15,8 +15,6 @@ import java.util.Set;
 
 
 public class AuditListener {
-    private static Validator validator;
-
     private static Logger logger = LoggerFactory.getLogger(AuditListener.class);
 
     @PrePersist
@@ -36,5 +34,4 @@ public class AuditListener {
     private void beforeAnyRemoveOperation(Object obj) {
         logger.debug("Pre remove operation");
     }
-
 }

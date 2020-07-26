@@ -1,5 +1,6 @@
 package com.epam.mjc.web.linkbuilder;
 
+import com.epam.mjc.dao.dto.RoleDto;
 import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.web.controller.UserController;
 import org.springframework.hateoas.CollectionModel;
@@ -21,11 +22,16 @@ public class UserLinkBuilder implements LinkBuilder<UserDto> {
         return CollectionModel.of(
                 userDtoList);
     }
-
     @Override
     public UserDto addLinksToDto(UserDto userDto) {
+
+        return addLinksToDto(userDto, RoleIdentifier.getRoles());
+    }
+
+    @Override
+    public UserDto addLinksToDto(UserDto userDto, List<RoleDto> listRoles ) {
         userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
-        if(RoleIdentifier.isAdmin()) {
+        if (listRoles.stream().anyMatch(a -> a.getName().equalsIgnoreCase("ROLE_ADMIN"))) {
             userDto.add(linkTo(methodOn(UserController.class).getAllUsers(null, null)).withRel("getUsers"));
         }
         userDto.add(linkTo(methodOn(UserController.class).updateUser(userDto.getId(), userDto)).withRel("updateUser"));
