@@ -35,7 +35,7 @@ public class CertificateController {
                                       @RequestParam(required = false, name = "text") String text,
                                       @Sort SortParams params,
                                       @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                      @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
+                                      @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
         SearchParams searchParams = new SearchParams(tags, text, params);
         List<GiftCertificateDto> certificates = service.getCertificates(searchParams, size, pageNumber);
         int ordersCount = service.countOrders(searchParams);

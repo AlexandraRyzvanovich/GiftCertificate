@@ -29,11 +29,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "            c.is_active " +
             "FROM certificate c " +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id " +
-            "LEFT  JOIN tag t ON t.id = c_t.tag_id ";
+            "LEFT  JOIN tag t ON t.id = c_t.tag_id " +
+            "WHERE c.is_active = true";
     private static final String SQL_COUNT_CERTIFICATES = "Select COUNT(c.id) " +
             "FROM certificate c " +
             "LEFT  JOIN certificate_tag c_t ON c.id = c_t.certificate_id " +
-            "LEFT  JOIN tag t ON t.id = c_t.tag_id ";
+            "LEFT  JOIN tag t ON t.id = c_t.tag_id " +
+            "WHERE c.is_active = true";
 
     @Autowired
     public GiftCertificateDaoImpl() {

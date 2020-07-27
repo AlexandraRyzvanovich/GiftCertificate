@@ -29,7 +29,7 @@ public class TagController {
 
     @GetMapping()
     public PageDto<TagDto> getAllTags(@RequestParam(name = "size", defaultValue = "5") Integer size,
-                                      @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
+                                      @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
         List<TagDto> tags = service.getAllTags(size, pageNumber);
         int tagsItemsSize = service.countTags();
 

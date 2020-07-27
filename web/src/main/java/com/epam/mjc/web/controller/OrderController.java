@@ -41,7 +41,7 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and authentication.principal.id == #userId)")
     public PageDto<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId,
                                               @RequestParam(name = "size", defaultValue = "5") Integer size,
-                                              @RequestParam(name = "number", defaultValue = "1") Integer pageNumber) {
+                                              @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
         List<OrderDto> orders = orderService.getOrdersByUserId(userId, size, pageNumber);
         int allOrdersSize = orderService.countOrders(userId);
 

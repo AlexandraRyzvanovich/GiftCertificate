@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
     public PageDto<UserDto> getAllUsers(@RequestParam(name = "size", defaultValue = "5") Integer size,
-                                        @RequestParam(name = "number", defaultValue = "1") Integer pageNumber ) {
+                                        @RequestParam(name = "page", defaultValue = "1") Integer pageNumber ) {
         List<UserDto> users = userService.getAllUsers(size, pageNumber);
         int usersTableSize = userService.countUsers();
 

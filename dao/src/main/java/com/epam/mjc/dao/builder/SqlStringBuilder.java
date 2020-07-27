@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SqlStringBuilder {
-    private static final String QUERY_PART_WHERE = " WHERE ";
+    private static final String QUERY_PART_WHERE = " AND WHERE ";
     private static final String QUERY_PART_AND = " AND ";
     private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
     private static final String QUERY_HAVING = " HAVING COUNT(c.id) >= ";
@@ -20,17 +20,13 @@ public class SqlStringBuilder {
         SortParams sortParams = searchParams.getSortParams();
         String tagQueryPattern = "";
         if(text != null) {
-            tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + textBuilder(text));
+            tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + textBuilder(text));
         }
         if(!CollectionUtils.isEmpty(tags)) {
-            if(text!= null) {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + tagsBuilder(tags));
-            } else {
-                tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
-            }
         }
 
-        if(sortParams!= null || searchParams!= null ) {
+        if(sortParams!= null ) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         }
 

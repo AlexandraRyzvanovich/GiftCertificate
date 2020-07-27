@@ -35,15 +35,12 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     @DecimalMin(value = "1", message = "Min value = 1$")
     @DecimalMax(value = "365", message = "Max value = 365")
     private Integer validDays;
-
-    private Boolean isActive;
-
     private List<TagDto> tags;
 
     public GiftCertificateDto() {
     }
 
-    public GiftCertificateDto(Long id, @NotNull @Size(min = 1, max = 50) String name, @Size(min = 1, max = 200, message = "Max size 200 characters") String description, @DecimalMin(value = "0", message = "Price min value = 0") @DecimalMax(value = "10000", message = "Price max value = 10000") BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, @DecimalMin(value = "1", message = "Min value = 1$") @DecimalMax(value = "365", message = "Max value = 365") Integer validDays, Boolean isActive, List<TagDto> tags) {
+    public GiftCertificateDto(Long id, @NotNull @Size(min = 1, max = 50) String name, @Size(min = 1, max = 200, message = "Max size 200 characters") String description, @DecimalMin(value = "0", message = "Price min value = 0") @DecimalMax(value = "10000", message = "Price max value = 10000") BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, @DecimalMin(value = "1", message = "Min value = 1$") @DecimalMax(value = "365", message = "Max value = 365") Integer validDays, List<TagDto> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,7 +48,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
         this.creationDate = creationDate;
         this.modificationDate = modificationDate;
         this.validDays = validDays;
-        this.isActive = isActive;
         this.tags = tags;
     }
 
@@ -111,14 +107,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
         this.validDays = validDays;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
     public List<TagDto> getTags() {
         return tags;
     }
@@ -139,13 +127,12 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
                 Objects.equals(creationDate, that.creationDate) &&
                 Objects.equals(modificationDate, that.modificationDate) &&
                 Objects.equals(validDays, that.validDays) &&
-                Objects.equals(isActive, that.isActive) &&
                 Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, isActive, tags);
+        return Objects.hash(id, name, description, price, creationDate, modificationDate, validDays, tags);
     }
 
     @Override
@@ -158,7 +145,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
                 ", creationDate=" + creationDate +
                 ", modificationDate=" + modificationDate +
                 ", validDays=" + validDays +
-                ", isActive=" + isActive +
                 ", tags=" + tags +
                 '}';
     }
