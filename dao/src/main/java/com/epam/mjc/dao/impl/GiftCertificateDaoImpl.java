@@ -89,6 +89,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         }
         List<BigInteger> result = entityManager.createNativeQuery(query).getResultList();
 
-        return result.size() == 0 ? 0 : result.get(0).intValue();
+        return result.size();
     }
 }

@@ -20,11 +20,9 @@ public class SqlStringBuilder {
         String text = searchParams.getText();
         SortParams sortParams = searchParams.getSortParams();
         String tagQueryPattern = "";
-
         if(text != null) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + textBuilder(text));
         }
-
         if(!CollectionUtils.isEmpty(tags)) {
             if(text!= null) {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + tagsBuilder(tags));
@@ -32,7 +30,8 @@ public class SqlStringBuilder {
                 tagQueryPattern = tagQueryPattern.concat(QUERY_PART_WHERE + tagsBuilder(tags));
             }
         }
-        if(sortParams!= null) {
+
+        if(sortParams!= null || searchParams!= null ) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         }
 
@@ -42,6 +41,9 @@ public class SqlStringBuilder {
         }
 
         if(sortParams != null) {
+            if(size == null && pageNumber == null) {
+                sortParams.setSortType(null);
+            }
             tagQueryPattern = tagQueryPattern.concat(sorterParamsBuilder(sortParams));
         }
         if(size!= null && pageNumber!= null) {
