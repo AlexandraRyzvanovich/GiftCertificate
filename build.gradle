@@ -14,11 +14,11 @@ subprojects  {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-        compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-        compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.5.Final'
+        implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+        implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.5.Final'
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.1.RELEASE'
-
+        testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.2.RELEASE'
 
     }
     configurations {
