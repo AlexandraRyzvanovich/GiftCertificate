@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableTransactionManagement
@@ -23,13 +24,13 @@ public class OrderDaoImpl implements OrderDao {
             "where user_id = :user_id";
 
     @Override
-    public OrderEntity getOrderById(Long id) {
+    public Optional<OrderEntity> getOrderById(Long id) {
         List<OrderEntity> ordersList = entityManager
                 .createNamedQuery("Orders.findById", OrderEntity.class)
                 .setParameter("id", id)
                 .getResultList();
 
-        return ordersList.size() > 0 ? ordersList.get(0) : null;
+        return ordersList.stream().findFirst();
     }
 
     @Override

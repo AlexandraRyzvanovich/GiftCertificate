@@ -13,7 +13,6 @@ public class SqlStringBuilder {
     private static final String QUERY_PART_AND = " AND ";
     private static final String QUERY_GROUP_BY = " GROUP BY c.id ";
     private static final String QUERY_HAVING = " HAVING COUNT(c.id) >= ";
-    private static final String QUERY_ORDER_BY_ID = " ORDER BY c.id";
 
     public static String buildQuery(SearchParams searchParams, Integer size, Integer pageNumber) {
         List<String> tags = searchParams.getTags();

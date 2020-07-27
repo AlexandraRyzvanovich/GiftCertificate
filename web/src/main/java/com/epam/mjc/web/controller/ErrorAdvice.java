@@ -1,10 +1,8 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.service.exception.EntityAlreadyExistsException;
-import com.epam.mjc.service.exception.IncorrectParamsException;
-import com.epam.mjc.service.exception.NotFoundException;
-import com.epam.mjc.service.exception.ValidationException;
+import com.epam.mjc.service.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,10 +39,26 @@ public class ErrorAdvice {
         return new ErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
         return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({BadCredentialsException.class})
+    public ErrorMessage handleUnauthorizedException(BadCredentialsException exception) {
+        return new ErrorMessage(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({JwtAuthenticationException.class})
+    public ErrorMessage handleException(JwtAuthenticationException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({DataAccessException.class})
+    public ErrorMessage handleDataAccessException(DataAccessException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -7,7 +7,9 @@ import com.epam.mjc.dao.dto.OrderDto;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.OrderService;
+import com.epam.mjc.service.exception.DataAccessException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
+import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,14 +52,14 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setDate(LocalDateTime.now());
         orderDto.setCertificateId(certificateId);
         Long id = orderDao.createOrder(mapper.toEntity(orderDto));
-        return mapper.toDto(orderDao.getOrderById(id));
+        return orderDao.getOrderById(id).map( mapper::toDto).orElse(null);
     }
 
     @Override
     public OrderDto getOrderById(Long id, Long userId) {
-        OrderDto order =  mapper.toDto(orderDao.getOrderById(id));
+        OrderDto order = orderDao.getOrderById(id).map( mapper::toDto).orElseThrow(() -> new NotFoundException("Order with such id not found"));
         if(userId != null && !order.getUserId().equals(userId)) {
-            throw new IncorrectParamsException("Impossible to get order by id " + id);
+            throw new DataAccessException("Impossible to get order by id " + id);
         }
         return order;
     }
