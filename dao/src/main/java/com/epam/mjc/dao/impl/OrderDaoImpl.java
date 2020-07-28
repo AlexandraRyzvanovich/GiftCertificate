@@ -35,9 +35,9 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Long createOrder(OrderEntity orderEntity) {
-       entityManager.persist(orderEntity);
+        entityManager.persist(orderEntity);
 
-       return orderEntity.getId();
+        return orderEntity.getId();
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableTransactionManagement
@@ -41,10 +42,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserEntity getUserById(Long id) {
-
-        return entityManager.createNamedQuery("Users.findById", UserEntity.class)
-                .setParameter("id", id).getSingleResult();
+    public Optional<UserEntity> getUserById(Long id) {
+        List<UserEntity> user = entityManager.createNamedQuery("Users.findById", UserEntity.class)
+                .setParameter("id", id).getResultList();
+        return user.stream().findFirst();
     }
 
     @Override
@@ -63,8 +64,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserEntity findByEmail(String email) {
-        return entityManager.createNamedQuery("Users.findByEmail", UserEntity.class).setParameter("email", email).getSingleResult();
+    public Optional<UserEntity> findByEmail(String email) {
+        List<UserEntity> user = entityManager.createNamedQuery("Users.findByEmail", UserEntity.class).setParameter("email", email).getResultList();
+        return user.stream().findFirst();
     }
 
 }

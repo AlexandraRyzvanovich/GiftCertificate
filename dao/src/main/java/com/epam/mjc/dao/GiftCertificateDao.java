@@ -4,11 +4,12 @@ import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GiftCertificateDao {
-    GiftCertificateEntity getById(long id);
+    Optional<GiftCertificateEntity> getById(long id);
 
-    GiftCertificateEntity getByName(String name);
+    Optional<GiftCertificateEntity> getByName(String name);
 
     List<GiftCertificateEntity> getAll(SearchParams searchParams, Integer size, Integer pageNumber);
 

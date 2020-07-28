@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableTransactionManagement
@@ -50,15 +51,15 @@ public class TagDaoImpl implements TagDao {
             "          AS max_tag ))";
 
     @Override
-    public TagEntity getById(Long id) {
+    public Optional<TagEntity> getById(Long id) {
         List<TagEntity> tagEntityList = entityManager.createNamedQuery("Tags.findById", TagEntity.class).setParameter("id", id).getResultList();
-        return tagEntityList.size() > 0 ? tagEntityList.get(0) : null;
+        return tagEntityList.stream().findFirst();
     }
 
     @Override
-    public TagEntity getByName(String name) {
+    public Optional<TagEntity> getByName(String name) {
         List<TagEntity> tagEntities = entityManager.createNamedQuery("Tags.getByName", TagEntity.class).setParameter("name", name).getResultList();
-        return tagEntities.size() > 0 ? tagEntities.get(0) : null;
+        return tagEntities.stream().findFirst();
     }
 
     @SuppressWarnings("unchecked")

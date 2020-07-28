@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @EnableTransactionManagement
@@ -42,19 +43,19 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public GiftCertificateEntity getById(long id) {
+    public Optional<GiftCertificateEntity> getById(long id) {
         List<GiftCertificateEntity> giftCertificateEntityList = entityManager.createNamedQuery("Certificate.findById", GiftCertificateEntity.class)
                 .setParameter("id", id)
                 .getResultList();
-        return giftCertificateEntityList.size() > 0 ? giftCertificateEntityList.get(0) : null;
+        return giftCertificateEntityList.stream().findFirst();
     }
 
     @Override
-    public GiftCertificateEntity getByName(String name) {
+    public Optional<GiftCertificateEntity> getByName(String name) {
         List<GiftCertificateEntity> giftCertificateEntityList = entityManager.createNamedQuery("Certificate.findByName", GiftCertificateEntity.class)
                 .setParameter("name", name)
                 .getResultList();
-        return giftCertificateEntityList.size() > 0 ? giftCertificateEntityList.get(0) : null;
+        return giftCertificateEntityList.stream().findFirst();
     }
 
     @SuppressWarnings("unchecked")
