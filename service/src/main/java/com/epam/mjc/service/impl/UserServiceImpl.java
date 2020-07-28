@@ -45,15 +45,14 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             throw new IncorrectParamsException("Impossible to create user with given params");
         }
-        return mapper.toDto(userDao.getUserById(id));
+        return userDao.getUserById(id).map(mapper::toDto).orElse(null);
     }
 
     @Override
     public UserDto getById(Long id) {
 
-        return mapper.toDto(userDao.getUserById(id));
+        return userDao.getUserById(id).map(mapper::toDto).orElseThrow(()-> new NotFoundException("User with id " + id + " not found"));
     }
-
 
     @Override
     public List<UserDto> getAllUsers(Integer size, Integer pageNumber) {
@@ -63,10 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
-        UserEntity persistedUserEntity = userDao.getUserById(id);
-        if(persistedUserEntity == null) {
-            throw new NotFoundException("User with id " + userDto.getId() + " not found");
-        }
+        UserEntity persistedUserEntity = userDao.getUserById(id).orElseThrow(() -> new NotFoundException("User with id " + userDto.getId() + " not found"));
         if (userDto.getPassword() != null) {
             String password = passwordEncoder.encode(userDto.getPassword());
             userDto.setPassword(password);
@@ -78,8 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserByEmail(String email) {
-        UserEntity userEntity = userDao.findByEmail(email);
-        return mapper.toDto(userEntity);
+        return userDao.findByEmail(email).map(mapper::toDto).orElseThrow(()-> new NotFoundException("User with email "+ email+" not found"));
     }
 
     @Override

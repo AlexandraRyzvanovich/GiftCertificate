@@ -5,10 +5,8 @@ import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.dto.OrderDto;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
-import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.exception.DataAccessException;
-import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +39,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
         Long certificateId = orderDto.getCertificateId();
-        GiftCertificateEntity certificate = certificateDao.getById(certificateId);
+        GiftCertificateEntity certificate = certificateDao.getById(certificateId)
+                .orElseThrow(()-> new NotFoundException("Certificate with id "+ certificateId + " not found"));
         Long userId = orderDto.getUserId();
-        UserEntity userEntity = userDao.getUserById(userId);
-        if(userEntity == null) {
-            throw new IncorrectParamsException("User not found with given user id");
-        }
+        userDao.getUserById(userId).orElseThrow(()-> new NotFoundException("User not found with given user id"));
         BigDecimal certificatePrice = certificate.getPrice();
         orderDto.setAmount(certificatePrice);
         orderDto.setDate(LocalDateTime.now());

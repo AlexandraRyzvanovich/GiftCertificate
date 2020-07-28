@@ -25,12 +25,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto getTagById(Long id) {
-        TagEntity tagEntity = tagDao.getById(id);
-        if(tagEntity == null) {
-            throw new NotFoundException("No tag found with id " + id);
-        }
 
-        return mapper.toDto(tagEntity);
+        return tagDao.getById(id).map(mapper::toDto).orElseThrow(() -> new NotFoundException("No tag found with id " + id));
     }
 
     @Override
@@ -40,17 +36,15 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto createTag(TagDto tagDto) {
-        TagEntity foundTagEntity = tagDao.getByName(tagDto.getName());
-        if(foundTagEntity != null) {
-            throw  new EntityAlreadyExistsException("Tag with name " + tagDto.getName() + " already exists");
+        tagDao.getByName(tagDto.getName()).orElseThrow(()->new EntityAlreadyExistsException("Tag with name " + tagDto.getName() + " already exists"));
+        Long tagId = tagDao.create(mapper.toEntity(tagDto));
+        if (tagId == null) {
+            throw new IncorrectParamsException("Impossible to create tag with given params");
         }
-            Long tagId = tagDao.create(mapper.toEntity(tagDto));
-            if(tagId == null) {
-                throw new IncorrectParamsException("Impossible to create tag with given params");
-            }
-            return mapper.toDto(tagDao.getById(tagId));
+        return tagDao.getById(tagId).map(mapper::toDto).orElse(null);
 
     }
+
     @Override
     public String deleteTagById(Long id) {
         tagDao.deleteById(id);
@@ -60,7 +54,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto getMostPopularAndExpensiveTag() {
         List<TagEntity> tag = tagDao.getMostPopularAndExpensiveTag();
-        if(tag != null) {
+        if (tag != null) {
             return mapper.toDto(tag.get(0));
         }
         return null;

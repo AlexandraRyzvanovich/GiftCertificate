@@ -40,11 +40,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificateDto getCertificateById(Long id) {
-        GiftCertificateEntity certificate = certificateDao.getById(id);
-        if (certificate == null) {
-            throw new NotFoundException("Certificate with id " + id + " not found");
-        }
-        return certificateMapper.toDto(certificate);
+        return certificateDao.getById(id).map(certificateMapper::toDto)
+                .orElseThrow(()-> new NotFoundException("Certificate with id " + id + " not found"));
     }
 
     @Override
@@ -55,10 +52,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDto createCertificate(GiftCertificateDto certificate) {
-        GiftCertificateEntity giftCertificateEntity = certificateDao.getByName(certificate.getName());
-        if(giftCertificateEntity != null) {
-            throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
-        }
+        certificateDao.getByName(certificate.getName())
+                .orElseThrow(()->new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists"));
         GiftCertificateEntity certificateToBeCreated = new GiftCertificateEntity(certificate.getName(),
                 certificate.getDescription(),
                 certificate.getPrice(),
@@ -79,10 +74,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate) {
-        GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id);
-        if (persistedCertificateEntity == null) {
-            throw new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists.");
-        }
+        GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id)
+                .orElseThrow(()->new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists."));
         GiftCertificateEntity updatedCertificateEntity = certificateMapper.toEntity(updatedCertificate);
         GiftCertificateEntity certificate;
         if (persistedCertificateEntity.equals(updatedCertificateEntity)) {
@@ -125,8 +118,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private List<TagEntity> tagsMapper(List<TagEntity> tagEntities) {
-        tagEntities.stream().filter(tag -> tagDao.getByName(tag.getName()) == null).forEach(tagDao::create);
-            return tagEntities.stream().map(tag -> tagDao.getByName(tag.getName())).collect(Collectors.toList());
+        tagEntities.stream().filter(tag -> !tagDao.getByName(tag.getName()).isPresent()).forEach(tagDao::create);
+            return tagEntities.stream().map(tag -> tagDao.getByName(tag.getName()).get()).collect(Collectors.toList());
     }
 }
 
