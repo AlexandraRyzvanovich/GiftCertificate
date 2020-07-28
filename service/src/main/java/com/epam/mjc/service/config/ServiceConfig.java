@@ -51,13 +51,13 @@ public class ServiceConfig {
     }
 
     @Bean
-    UserService userService(UserDao userDao, OrderDao orderDao, UserMapper mapper, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
-        return new UserServiceImpl(userDao, orderDao, mapper, roleDao, passwordEncoder);
+    UserService userService(UserDao userDao, UserMapper mapper, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
+        return new UserServiceImpl(userDao, mapper, roleDao, passwordEncoder);
     }
 
     @Bean
-    OrderService orderService(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper) {
-        return new OrderServiceImpl(orderDao, certificateDao, userDao, mapper);
+    OrderService orderService(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper, GiftCertificateMapper certificateMapper) {
+        return new OrderServiceImpl(orderDao, certificateDao, userDao, mapper, certificateMapper);
     }
 
     @Bean

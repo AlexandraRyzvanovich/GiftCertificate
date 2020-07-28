@@ -1,6 +1,5 @@
 package com.epam.mjc.service.impl;
 
-import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.RoleDao;
 import com.epam.mjc.dao.UserDao;
 import com.epam.mjc.dao.dto.UserDto;
@@ -24,16 +23,14 @@ import java.util.stream.Collectors;
 @EnableTransactionManagement
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
-    private final OrderDao orderDao;
     private final UserMapper mapper;
     private final RoleDao roleDao;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, OrderDao orderDao, UserMapper mapper, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, UserMapper mapper, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.orderDao = orderDao;
         this.mapper = mapper;
         this.roleDao = roleDao;
         this.passwordEncoder = passwordEncoder;

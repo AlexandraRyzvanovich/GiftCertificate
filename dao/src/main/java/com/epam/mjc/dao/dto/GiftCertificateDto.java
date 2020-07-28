@@ -1,7 +1,6 @@
 package com.epam.mjc.dao.dto;
 
 import com.epam.mjc.dao.entity.Identifiable;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.DecimalMax;
@@ -25,11 +24,7 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     @DecimalMin(value = "0", message = "Price min value = 0")
     @DecimalMax(value = "10000", message = "Price max value = 10000")
     private BigDecimal price;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime creationDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime modificationDate;
 
     @DecimalMin(value = "1", message = "Min value = 1$")
@@ -38,17 +33,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     private List<TagDto> tags;
 
     public GiftCertificateDto() {
-    }
-
-    public GiftCertificateDto(Long id, @NotNull @Size(min = 1, max = 50) String name, @Size(min = 1, max = 200, message = "Max size 200 characters") String description, @DecimalMin(value = "0", message = "Price min value = 0") @DecimalMax(value = "10000", message = "Price max value = 10000") BigDecimal price, LocalDateTime creationDate, LocalDateTime modificationDate, @DecimalMin(value = "1", message = "Min value = 1$") @DecimalMax(value = "365", message = "Max value = 365") Integer validDays, List<TagDto> tags) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.validDays = validDays;
-        this.tags = tags;
     }
 
     public Long getId() {

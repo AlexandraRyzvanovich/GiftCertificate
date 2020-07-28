@@ -11,6 +11,7 @@ import com.epam.mjc.service.mapper.TagMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +37,10 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto createTag(TagDto tagDto) {
-        tagDao.getByName(tagDto.getName()).orElseThrow(()->new EntityAlreadyExistsException("Tag with name " + tagDto.getName() + " already exists"));
+        Optional<TagEntity> tagEntity = tagDao.getByName(tagDto.getName());
+        if (tagEntity.isPresent()) {
+            throw new EntityAlreadyExistsException("Tag with name " + tagDto.getName() + " already exists");
+        }
         Long tagId = tagDao.create(mapper.toEntity(tagDto));
         if (tagId == null) {
             throw new IncorrectParamsException("Impossible to create tag with given params");
@@ -58,6 +62,17 @@ public class TagServiceImpl implements TagService {
             return mapper.toDto(tag.get(0));
         }
         return null;
+    }
+
+    @Override
+    public TagDto updateTag(Long id, TagDto updatedTagDto) {
+        TagDto persistedTag = tagDao.getById(id).map(mapper::toDto).orElseThrow(() -> new NotFoundException("Tag with id " + id + " not found"));
+        updatedTagDto.setId(id);
+        if(persistedTag.equals(updatedTagDto)) {
+            return persistedTag;
+        }
+        TagEntity tagEntity = mapper.toEntity(updatedTagDto);
+        return mapper.toDto(tagDao.updateTag(tagEntity));
     }
 
     @Override

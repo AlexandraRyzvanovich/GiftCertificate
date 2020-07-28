@@ -3,11 +3,13 @@ package com.epam.mjc.service.impl;
 import com.epam.mjc.dao.GiftCertificateDao;
 import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.UserDao;
+import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.dto.OrderDto;
 import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.service.OrderService;
 import com.epam.mjc.service.exception.DataAccessException;
 import com.epam.mjc.service.exception.NotFoundException;
+import com.epam.mjc.service.mapper.GiftCertificateMapper;
 import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +28,15 @@ public class OrderServiceImpl implements OrderService {
     private final GiftCertificateDao certificateDao;
     private final UserDao userDao;
     private final OrderMapper mapper;
+    private final GiftCertificateMapper certificateMapper;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper) {
+    public OrderServiceImpl(OrderDao orderDao, GiftCertificateDao certificateDao, UserDao userDao, OrderMapper mapper, GiftCertificateMapper certificateMapper) {
         this.orderDao = orderDao;
         this.certificateDao = certificateDao;
         this.userDao = userDao;
         this.mapper = mapper;
+        this.certificateMapper = certificateMapper;
     }
 
     @Override
@@ -57,6 +61,9 @@ public class OrderServiceImpl implements OrderService {
         if(userId != null && !order.getUserId().equals(userId)) {
             throw new DataAccessException("Impossible to get order by id " + id);
         }
+        GiftCertificateDto giftCertificateDto = certificateDao.getById(order.getCertificateId()).map(certificateMapper::toDto)
+                .orElseThrow(() -> new NotFoundException("Certificate for order not found"));
+        order.setCertificate(giftCertificateDto);
         return order;
     }
 

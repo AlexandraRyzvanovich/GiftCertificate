@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,8 +53,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     @Transactional
     public GiftCertificateDto createCertificate(GiftCertificateDto certificate) {
-        certificateDao.getByName(certificate.getName())
-                .orElseThrow(()->new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists"));
+        Optional<GiftCertificateEntity> certificateEntity = certificateDao.getByName(certificate.getName());
+        if(certificateEntity.isPresent()) {
+            throw new EntityAlreadyExistsException("Certificate with such name " + certificate.getName() + " already exists");
+        }
         GiftCertificateEntity certificateToBeCreated = new GiftCertificateEntity(certificate.getName(),
                 certificate.getDescription(),
                 certificate.getPrice(),
@@ -75,7 +78,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     public GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate) {
         GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id)
-                .orElseThrow(()->new NotFoundException("Impossible to update certificate with id = " + id + "Certificate doesn't exists."));
+                .orElseThrow(() -> new NotFoundException("Impossible to update certificate with id = " + id + " Certificate doesn't exists."));
         GiftCertificateEntity updatedCertificateEntity = certificateMapper.toEntity(updatedCertificate);
         GiftCertificateEntity certificate;
         if (persistedCertificateEntity.equals(updatedCertificateEntity)) {

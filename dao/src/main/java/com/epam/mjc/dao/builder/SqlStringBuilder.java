@@ -18,8 +18,8 @@ public class SqlStringBuilder {
     private static final String QUERY_ORDER_BY_NAME = " ORDER BY c.name ";
     private static final String QUERY_DESC = "DESC";
     private static final String QUERY_ASC = "ASC";
-    private static final String QUERY_LIMIT = " Limit ";
-    private static final String QUERY_OFFSET = " Limit ";
+    private static final String QUERY_LIMIT = " LIMIT ";
+    private static final String QUERY_OFFSET = " OFFSET ";
 
 
     public static String buildQuery(SearchParams searchParams, Integer size, Integer pageNumber) {

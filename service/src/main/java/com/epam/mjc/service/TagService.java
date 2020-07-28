@@ -10,5 +10,8 @@ public interface TagService {
     TagDto createTag(TagDto tagDto);
     String deleteTagById(Long id);
     TagDto getMostPopularAndExpensiveTag();
+
+    TagDto updateTag(Long id, TagDto tagDto);
+
     int countTags();
 }

@@ -25,7 +25,7 @@ public class GiftCertificateDaoTest {
 
     @Test
     public void getByIdValidTest() {
-        GiftCertificateEntity actual = giftCertificateDao.getById(2);
+        GiftCertificateEntity actual = giftCertificateDao.getById(2).get();
         assertEquals(actual.getId(), is(2L));
         assertEquals(actual.getName(),"Computer");
         assertEquals(actual.getDescription(), "Discount for Computer");

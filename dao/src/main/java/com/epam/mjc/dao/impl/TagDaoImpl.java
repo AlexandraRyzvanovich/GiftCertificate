@@ -82,8 +82,9 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        entityManager.createNamedQuery("Tags.deleteById", TagEntity.class).setParameter("id", id).executeUpdate();
+        entityManager.createNativeQuery("delete from Tag where id = :id").setParameter("id", id).executeUpdate();
     }
 
     @SuppressWarnings("unchecked")
@@ -94,22 +95,13 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public int countTags() {
-        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS, BigInteger.class).getSingleResult();
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS).getSingleResult();
         return count.intValue();
     }
+    @Override
+    public TagEntity updateTag(TagEntity tagEntity) {
+        return entityManager.merge(tagEntity);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

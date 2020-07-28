@@ -16,6 +16,7 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
     private BigDecimal amount;
     @NotNull(message = "Certificate_id is required")
     private Long certificateId;
+    private GiftCertificateDto certificate;
 
     public OrderDto() {
     }
@@ -60,29 +61,42 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
         this.certificateId = certificateId;
     }
 
+    public GiftCertificateDto getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(GiftCertificateDto certificate) {
+        this.certificate = certificate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         OrderDto orderDto = (OrderDto) o;
         return Objects.equals(id, orderDto.id) &&
                 Objects.equals(userId, orderDto.userId) &&
                 Objects.equals(date, orderDto.date) &&
                 Objects.equals(amount, orderDto.amount) &&
-                Objects.equals(certificateId, orderDto.certificateId);
+                Objects.equals(certificateId, orderDto.certificateId) &&
+                Objects.equals(certificate, orderDto.certificate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificateId);
+        return Objects.hash(super.hashCode(), id, userId, date, amount, certificateId, certificate);
     }
 
     @Override
     public String toString() {
         return "OrderDto{" +
                 "id=" + id +
+                ", userId=" + userId +
                 ", date=" + date +
                 ", amount=" + amount +
+                ", certificateId=" + certificateId +
+                ", certificate=" + certificate +
                 '}';
     }
 }

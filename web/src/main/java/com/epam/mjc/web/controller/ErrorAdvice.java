@@ -2,6 +2,7 @@ package com.epam.mjc.web.controller;
 
 import com.epam.mjc.service.exception.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,6 +43,7 @@ public class ErrorAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
+        exception.printStackTrace();
         return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -60,6 +62,13 @@ public class ErrorAdvice {
     public ErrorMessage handleDataAccessException(DataAccessException exception) {
         return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({AccessDeniedException.class})
+    public ErrorMessage handleAccessDeniedException(AccessDeniedException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

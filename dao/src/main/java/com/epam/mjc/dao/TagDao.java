@@ -13,4 +13,6 @@ public interface TagDao {
     void deleteById(Long id);
     List<TagEntity> getMostPopularAndExpensiveTag();
     int countTags();
+
+    TagEntity updateTag(TagEntity tagEntity);
 }

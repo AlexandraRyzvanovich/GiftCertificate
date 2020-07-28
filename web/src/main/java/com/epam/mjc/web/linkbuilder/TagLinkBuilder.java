@@ -33,7 +33,8 @@ public class TagLinkBuilder implements LinkBuilder<TagDto> {
         tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withRel("getTagById"));
         if (listRoles.stream().anyMatch(a -> a.getName().equalsIgnoreCase("ROLE_ADMIN"))) {
             tagDto.add(linkTo(methodOn(TagController.class).createTag(tagDto)).withRel("createTag"));
-            tagDto.add(linkTo(methodOn(TagController.class).deleteTagById(tagDto.getId())).withRel("deleteByTagId"));
+            tagDto.add(linkTo(methodOn(TagController.class).updateTag(tagDto.getId(), null)).withRel("UpdateTag"));
+            tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
         }
         return tagDto;
     }
