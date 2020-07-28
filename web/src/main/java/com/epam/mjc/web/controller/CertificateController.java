@@ -22,7 +22,7 @@ public class CertificateController {
     @Autowired
     private GiftCertificateService service;
     @Autowired
-    GiftCertificateLinkBuilder certificateLinkBuilder;
+    private GiftCertificateLinkBuilder certificateLinkBuilder;
 
     @GetMapping("/{id}")
     public GiftCertificateDto getCertificateById(@PathVariable("id") long id) {

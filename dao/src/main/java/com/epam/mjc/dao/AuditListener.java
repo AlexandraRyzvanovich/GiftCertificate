@@ -15,7 +15,7 @@ import java.util.Set;
 
 
 public class AuditListener {
-    private static Logger logger = LoggerFactory.getLogger(AuditListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuditListener.class);
 
     @PrePersist
     private void beforeAnyOperation(Object obj) {
