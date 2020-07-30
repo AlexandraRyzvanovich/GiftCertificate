@@ -82,6 +82,8 @@ public class GiftCertificateEntity {
         this.isActive = isActive;
     }
 
+
+
     public Long getId() {
         return id;
     }

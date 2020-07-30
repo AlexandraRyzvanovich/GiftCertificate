@@ -13,6 +13,7 @@ subprojects  {
     }
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        compile("org.springframework.boot:spring-boot-starter-actuator")
         implementation 'org.springframework.boot:spring-boot-starter-log4j2'
         implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
         implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.18.Final'
