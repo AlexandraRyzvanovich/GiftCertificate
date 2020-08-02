@@ -34,7 +34,7 @@ public class SqlStringBuilder {
             tagQueryPattern = tagQueryPattern.concat(QUERY_PART_AND + tagsBuilder(tags));
         }
 
-        if (sortParams != null) {
+        if (searchParams != null) {
             tagQueryPattern = tagQueryPattern.concat(QUERY_GROUP_BY);
         }
 

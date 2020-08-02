@@ -57,7 +57,6 @@ public class TagController {
     }
 
     @GetMapping("/popular")
-    @PreAuthorize("hasAnyRole('ADMIN','USER') or authentication.principal.id == null")
     public TagDto getMostPopularAndExpensiveTag() {
         return tagService.getMostPopularAndExpensiveTag();
     }
