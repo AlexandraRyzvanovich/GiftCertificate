@@ -6,6 +6,7 @@ import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.dao.entity.RoleEntity;
 import com.epam.mjc.dao.entity.UserEntity;
 import com.epam.mjc.service.UserService;
+import com.epam.mjc.service.exception.EntityAlreadyExistsException;
 import com.epam.mjc.service.exception.IncorrectParamsException;
 import com.epam.mjc.service.exception.NotFoundException;
 import com.epam.mjc.service.mapper.UserMapper;
@@ -77,6 +78,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto register(UserDto user) {
         RoleEntity roleUser = roleDao.getRoleByName("ROLE_USER");
+        if(userDao.findByEmail(user.getEmail()).isPresent()) {
+            throw new EntityAlreadyExistsException("User with email " + user.getEmail() + " already exists");
+        }
         List<RoleEntity> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
         UserEntity userEntityToSave = mapper.toEntity(user);

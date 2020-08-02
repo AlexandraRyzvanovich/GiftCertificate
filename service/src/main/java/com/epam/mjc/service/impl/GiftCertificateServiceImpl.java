@@ -92,7 +92,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public int countOrders(SearchParams params) {
+    public int countCertificates(SearchParams params) {
         return certificateDao.countCertificates(params);
     }
 

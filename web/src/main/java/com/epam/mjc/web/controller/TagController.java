@@ -29,10 +29,16 @@ public class TagController {
     @GetMapping()
     public PageDto<TagDto> getAllTags(@RequestParam(name = "size", defaultValue = "5") Integer size,
                                       @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
+        PageDto<TagDto> pageDto = new PageDto<>();
         List<TagDto> tags = tagService.getAllTags(size, pageNumber);
+        pageDto.setItems(tagLinkBuilder.addLinksToList(tags));
         int tagsItemsSize = tagService.countTags();
+        pageDto.setSize(tagsItemsSize);
+        int pageCount = pageDto.getPageCount(tagsItemsSize, size);
+        pageDto.setCurrentPage(pageNumber);
+        pageDto.setPageCount(pageCount);
 
-        return new PageDto<>(tagLinkBuilder.addLinksToList(tags), tagsItemsSize);
+        return pageDto;
     }
 
     @PostMapping()

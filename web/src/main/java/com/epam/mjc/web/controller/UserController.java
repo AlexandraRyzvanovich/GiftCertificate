@@ -31,10 +31,16 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public PageDto<UserDto> getAllUsers(@RequestParam(name = "size", defaultValue = "5") Integer size,
                                         @RequestParam(name = "page", defaultValue = "1") Integer pageNumber ) {
+        PageDto<UserDto> pageDto = new PageDto<>();
         List<UserDto> users = userService.getAllUsers(size, pageNumber);
+        pageDto.setItems(userLinkBuilder.addLinksToList(users));
         int usersTableSize = userService.countUsers();
+        pageDto.setSize(usersTableSize);
+        int pageCount = pageDto.getPageCount(usersTableSize, size);
+        pageDto.setCurrentPage(pageNumber);
+        pageDto.setPageCount(pageCount);
 
-        return new PageDto<>(userLinkBuilder.addLinksToList(users), usersTableSize);
+        return pageDto;
     }
 
     @PutMapping("/{id}")

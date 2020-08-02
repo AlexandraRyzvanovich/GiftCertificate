@@ -13,5 +13,5 @@ public interface GiftCertificateService {
     @Transactional
     GiftCertificateDto createCertificate(GiftCertificateDto certificate);
     GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate);
-    int countOrders(SearchParams params);
+    int countCertificates(SearchParams params);
 }

@@ -42,9 +42,15 @@ public class OrderController {
     public PageDto<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId,
                                               @RequestParam(name = "size", defaultValue = "5") Integer size,
                                               @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
+        PageDto<OrderDto> pageDto = new PageDto<>();
         List<OrderDto> orders = orderService.getOrdersByUserId(userId, size, pageNumber);
+        pageDto.setItems(orderLinkBuilder.addLinksToList(orders));
         int allOrdersSize = orderService.countOrders(userId);
+        pageDto.setCurrentPage(pageNumber);
+        pageDto.setSize(allOrdersSize);
+        int pageCount = pageDto.getPageCount(allOrdersSize, size);
+        pageDto.setPageCount(pageCount);
 
-        return new PageDto<>(orderLinkBuilder.addLinksToList(orders), allOrdersSize);
+        return pageDto;
     }
 }

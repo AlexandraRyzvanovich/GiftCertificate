@@ -36,11 +36,17 @@ public class CertificateController {
                                       @Sort SortParams params,
                                       @RequestParam(name = "size", defaultValue = "5") Integer size,
                                       @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
+        PageDto<GiftCertificateDto> pageDto = new PageDto<>();
         SearchParams searchParams = new SearchParams(tags, text, params);
         List<GiftCertificateDto> certificates = service.getCertificates(searchParams, size, pageNumber);
-        int ordersCount = service.countOrders(searchParams);
+        pageDto.setItems(certificateLinkBuilder.addLinksToList(certificates));
+        int certificatesCount = service.countCertificates(searchParams);
+        pageDto.setSize(certificatesCount);
+        int pageCount = pageDto.getPageCount(certificatesCount, size);
+        pageDto.setCurrentPage(pageNumber);
+        pageDto.setPageCount(pageCount);
 
-        return new PageDto<>(certificateLinkBuilder.addLinksToList(certificates), ordersCount);
+        return pageDto;
     }
 
     @PostMapping()
