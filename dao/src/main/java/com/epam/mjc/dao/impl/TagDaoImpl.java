@@ -1,84 +1,107 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.TagDao;
-import com.epam.mjc.dao.mapper.TagMapper;
-import com.epam.mjc.dao.entity.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
+import com.epam.mjc.dao.entity.TagEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@EnableTransactionManagement
 public class TagDaoImpl implements TagDao {
-    private JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    private static final String SQL_GET_TAG_BY_ID = "select * from tag where id = ?";
-    private static final String SQL_GET_TAG_BY_NAME = "select * from tag where name = ?";
-    private static final String SQL_DELETE_TAG = "delete from tag where id = ?";
-    private static final String SQL_GET_ALL_TAGS = "select * from tag";
-    private static final String SQL_CREATE_TAG = "insert into tag (name) values(?) RETURNING id";
-    private static final String SQL_DELETE_FROM_CERTIFICATE_TAG = "delete from certificate_tag where certificate_id = ? AND tag_id = ?";
-    private static final String SQL_SELECT_TAGS_BY_CERTIFICATE_ID = "SELECT \n" +
-            "tag.id,\n" +
-            "tag.name\n" +
-            "FROM tag \n" +
-            "JOIN certificate_tag ON certificate_tag.tag_id = tag.id\n" +
-            "where certificate_tag.certificate_id = ?";
+    private static final String SQL_SELECT_ALL_TAGS = "Select * from tag";
+    private static final String QUERY_COUNT_TAGS = "Select Count(id) from tag";
+    private static final String FIND_POPULAR_TAG = "SELECT id, name  FROM tag WHERE id in(\n" +
+            "          SELECT ct.tag_id from certificate_tag ct \n" +
+            "          join orders as oc on oc.certificate_id=ct.certificate_id \n" +
+            "           WHERE oc.user_id =\n" +
+            "          (SELECT u.id from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id \n" +
+            "          HAVING sum(o.amount) = \n" +
+            "          (SELECT max(s) FROM \n" +
+            "          (SELECT sum(o.amount) s from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id) as tp LIMIT(1))) \n" +
+            "          GROUP BY oc.user_id, ct.tag_id \n" +
+            "          HAVING count(ct.tag_id) = (\n" +
+            "          SELECT max(tag_count) FROM \n" +
+            "          (SELECT ct.tag_id, count(ct.tag_id) tag_count from certificate_tag ct \n" +
+            "          join orders as oc on oc.certificate_id=ct.certificate_id \n" +
+            "          WHERE oc.user_id = \n" +
+            "          (SELECT u.id from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id \n" +
+            "          HAVING sum(o.amount) = \n" +
+            "          (SELECT max(s) FROM \n" +
+            "          (SELECT sum(o.amount) s from users as u \n" +
+            "          join orders as o on u.id = o.user_id \n" +
+            "          group by u.id) as tp LIMIT(1))) \n" +
+            "          GROUP BY ct.tag_id)\n" +
+            "          AS max_tag ))";
 
-    @Autowired
-    public TagDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    @Override
+    public Optional<TagEntity> getById(Long id) {
+        List<TagEntity> tagEntityList = entityManager.createNamedQuery("Tags.findById", TagEntity.class).setParameter("id", id).getResultList();
+        return tagEntityList.stream().findFirst();
     }
 
     @Override
-    public Tag getById(long id) {
-        List<Tag> query = jdbcTemplate.query(SQL_GET_TAG_BY_ID,
-                new Object[]{id},
-                new TagMapper());
-        Tag tag = DataAccessUtils.uniqueResult(query);
+    public Optional<TagEntity> getByName(String name) {
+        List<TagEntity> tagEntities = entityManager.createNamedQuery("Tags.getByName", TagEntity.class).setParameter("name", name).getResultList();
+        return tagEntities.stream().findFirst();
+    }
 
-
-        return tag;
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<TagEntity> getAll(Integer size, Integer pageNumber) {
+        String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);
+        if(!paginationQuery.isEmpty()) {
+            return entityManager.createNativeQuery(SQL_SELECT_ALL_TAGS.concat(paginationQuery), TagEntity.class).getResultList();
+        }
+        return entityManager.createNativeQuery(SQL_SELECT_ALL_TAGS, TagEntity.class).getResultList();
     }
 
     @Override
-    public List<Tag> getAllTagsByCertificateId(long id) {
-        return jdbcTemplate.query(SQL_SELECT_TAGS_BY_CERTIFICATE_ID,
-                new Object[]{id},
-                new TagMapper());
+    @Transactional
+    public Long create(TagEntity tagEntity) {
+        entityManager.persist(tagEntity);
+        entityManager.detach(tagEntity);
+
+        return tagEntity.getId();
     }
 
     @Override
-    public Tag getByName(String name) {
+    @Transactional
+    public void deleteById(Long id) {
+        entityManager.createNativeQuery("delete from Tag where id = :id").setParameter("id", id).executeUpdate();
+    }
 
-    List<Tag> query =  jdbcTemplate.query(SQL_GET_TAG_BY_NAME,
-            new Object[]{name},
-            new TagMapper());
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<TagEntity> getMostPopularAndExpensiveTag() {
+        return entityManager.createNativeQuery(FIND_POPULAR_TAG, TagEntity.class).getResultList();
+    }
 
-    return DataAccessUtils.uniqueResult(query);
+    @Override
+    public int countTags() {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_TAGS).getSingleResult();
+        return count.intValue();
+    }
+    @Override
+    public TagEntity updateTag(TagEntity tagEntity) {
+        return entityManager.merge(tagEntity);
+    }
 }
 
-    @Override
-    public List<Tag> getAll() {
-        return jdbcTemplate.query(SQL_GET_ALL_TAGS, new TagMapper());
-    }
 
-    @Override
-    public Long create(Tag tag) {
-
-        return jdbcTemplate.queryForObject(SQL_CREATE_TAG, new Object[] {tag.getName()}, Long.class);
-    }
-
-    @Override
-    public boolean deleteById(long id) {
-
-        return jdbcTemplate.update(SQL_DELETE_TAG, id) > 0;
-    }
-
-    @Override
-    public boolean deleteFromCertificateTag(Long certificateId, Long tagId) {
-        return jdbcTemplate.update(SQL_DELETE_FROM_CERTIFICATE_TAG, certificateId, tagId) > 0;
-    }
-}

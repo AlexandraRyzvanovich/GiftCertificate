@@ -1,15 +1,17 @@
 package com.epam.mjc.service;
 
 
-import com.epam.mjc.dao.entity.GiftCertificate;
+import com.epam.mjc.dao.dto.GiftCertificateDto;
 import com.epam.mjc.dao.entity.SearchParams;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface GiftCertificateService {
-    GiftCertificate getCertificateById(Long id);
-    List<GiftCertificate> getCertificates(SearchParams searchParams);
-    GiftCertificate createCertificate(GiftCertificate certificate);
-    GiftCertificate updateCertificate(Long id, GiftCertificate updatedCertificate);
-    String deleteCertificateById(Long id);
+    GiftCertificateDto getCertificateById(Long id);
+    List<GiftCertificateDto> getCertificates(SearchParams searchParams, Integer size, Integer pageNumber);
+    @Transactional
+    GiftCertificateDto createCertificate(GiftCertificateDto certificate);
+    GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate);
+    int countCertificates(SearchParams params);
 }

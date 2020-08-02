@@ -1,12 +1,15 @@
 package com.epam.mjc.dao;
 
-import com.epam.mjc.dao.entity.User;
+import com.epam.mjc.dao.entity.UserEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
-    List<User> getAllUsers();
-    User getUserById(Long id);
-    Long createUser(User user);
-    boolean updateUser(Long id, User user);
+    List<UserEntity> getAllUsers(Integer size, Integer pageNumber);
+    int usersTableSize();
+    Optional<UserEntity> getUserById(Long id);
+    Long createUser(UserEntity userEntity);
+    UserEntity updateUser(UserEntity userEntity);
+    Optional<UserEntity> findByEmail(String email);
 }

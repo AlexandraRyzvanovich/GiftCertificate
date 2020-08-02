@@ -1,59 +1,56 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.OrderDao;
-import com.epam.mjc.dao.entity.Order;
-import com.epam.mjc.dao.mapper.OrderMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
+import com.epam.mjc.dao.entity.OrderEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@EnableTransactionManagement
 public class OrderDaoImpl implements OrderDao {
-    private final JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
+    private static final String QUERY_GET_ALL_BY_USER_ID = "Select * from orders " +
+            "Where user_Id = :userId";
+    private static final String QUERY_COUNT_ORDERS = "SELECT COUNT(id)\n" +
+            "FROM orders " +
+            "where user_id = :user_id";
 
-    private static final String SQL_GET_ORDER_BY_ID = "select * from ORDERS where id = ?";
-    private static final String SQL_GET_ORDER_BY_USER_ID = "select * from ORDERS where user_id = ?";
-    private static final String SQL_GET_ALL_ORDERS = "select * from ORDERS";
-    private static final String SQL_CREATE_ORDER = "insert into ORDERS(user_id, date, amount, certificate_id) values(?,?,?,?) RETURNING id";
+    @Override
+    public Optional<OrderEntity> getOrderById(Long id) {
+        List<OrderEntity> ordersList = entityManager
+                .createNamedQuery("Orders.findById", OrderEntity.class)
+                .setParameter("id", id)
+                .getResultList();
 
-    @Autowired
-    public OrderDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        return ordersList.stream().findFirst();
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        return null;
+    public Long createOrder(OrderEntity orderEntity) {
+        entityManager.persist(orderEntity);
+
+        return orderEntity.getId();
     }
 
     @Override
-    public Order getOrderById(Long id) {
-        List<Order> query = jdbcTemplate.query(SQL_GET_ORDER_BY_ID,
-                new Object[]{id},
-                new OrderMapper());
-
-        return DataAccessUtils.uniqueResult(query);
+    public int ordersSize(Long userId) {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_ORDERS).setParameter("user_id", userId).getSingleResult();
+        return count.intValue();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Long createOrder(Order order) {
-        return jdbcTemplate.queryForObject(SQL_CREATE_ORDER, new Object[]{
-                order.getUserId(),
-                LocalDateTime.now(),
-                order.getAmount(),
-                order.getCertificate().getId()
-        }, Long.class);
-    }
+    public List<OrderEntity> getAllByUserId(Long userId, Integer size, Integer pageNumber) {
+        String paginationQuery = SqlStringBuilder.paginationBuilder(size, pageNumber);
 
-    @Override
-    public List<Order> getAllByUserId(Long userId) {
-
-        return jdbcTemplate.query(SQL_GET_ORDER_BY_USER_ID,
-                new Object[]{userId},
-                new OrderMapper());
+        return entityManager.createNativeQuery(QUERY_GET_ALL_BY_USER_ID.concat(paginationQuery), OrderEntity.class).setParameter("userId", userId).getResultList();
     }
 }

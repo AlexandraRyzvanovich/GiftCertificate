@@ -1,17 +1,19 @@
 package com.epam.mjc.web.controller;
 
-import com.epam.mjc.service.exception.EntityAlreadyExistsException;
-import com.epam.mjc.service.exception.IncorrectParamsException;
-import com.epam.mjc.service.exception.NotFoundException;
-import com.epam.mjc.service.exception.ValidationException;
+import com.epam.mjc.service.exception.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestController
-@ControllerAdvice
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
 public class ErrorAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -25,30 +27,76 @@ public class ErrorAdvice {
     public ErrorMessage handleValidationException(ValidationException exception) {
         return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IncorrectParamsException.class})
     public ErrorMessage handleIncorrectParamsException(IncorrectParamsException exception) {
         return new ErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({EntityAlreadyExistsException.class})
     public ErrorMessage handleEntityAlreadyExistsException(EntityAlreadyExistsException exception) {
         return new ErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     public ErrorMessage handleException(Exception exception) {
-        return new ErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        exception.printStackTrace();
+        return new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({BadCredentialsException.class})
+    public ErrorMessage handleUnauthorizedException(BadCredentialsException exception) {
+        return new ErrorMessage(HttpStatus.UNAUTHORIZED, exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({JwtAuthenticationException.class})
+    public ErrorMessage handleException(JwtAuthenticationException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({DataAccessException.class})
+    public ErrorMessage handleDataAccessException(DataAccessException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler({AccessDeniedException.class})
+    public ErrorMessage handleAccessDeniedException(AccessDeniedException exception) {
+        return new ErrorMessage(HttpStatus.FORBIDDEN, exception.getMessage());
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorMessage handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return new ErrorMessage(HttpStatus.BAD_REQUEST, "Invalid object", errors);
     }
 
     static class ErrorMessage {
         private final HttpStatus status;
         private final String message;
+        private Map<String, String> invalidFields;
 
-        public ErrorMessage(HttpStatus status, String message) {
+        public ErrorMessage(HttpStatus status, String message ) {
             this.status = status;
             this.message = message;
+        }
+
+        public ErrorMessage(HttpStatus status, String message, Map<String, String> invalidFields) {
+            this.status = status;
+            this.message = message;
+            this.invalidFields = invalidFields;
         }
 
         public HttpStatus getStatus() {
@@ -57,6 +105,10 @@ public class ErrorAdvice {
 
         public String getMessage() {
             return message;
+        }
+
+        public Map<String, String> getInvalidFields() {
+            return invalidFields;
         }
     }
 }

@@ -1,55 +1,72 @@
 package com.epam.mjc.dao.impl;
 
 import com.epam.mjc.dao.UserDao;
-import com.epam.mjc.dao.entity.User;
-import com.epam.mjc.dao.mapper.UserMapper;
+import com.epam.mjc.dao.builder.SqlStringBuilder;
+import com.epam.mjc.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
+@EnableTransactionManagement
 public class UserDaoImpl implements UserDao {
-    private final JdbcTemplate jdbcTemplate;
-    private static final String SQL_GET_ALL_USERS = "select * from USERS";
-    private static final String SQL_FIND_USER_BY_ID = "select * from USERS where id = ?";
-    private static final String SQL_CREATE_USER = "insert into USERS(name, surname) values(?,?) RETURNING id";
-    private static final String SQL_UPDATE_USER = "update USERS set name = ?, surname = ? where id = ?";
+    @PersistenceContext
+    private EntityManager entityManager;
+    private static final String QUERY_FIND_ALL = "SELECT * FROM Users";
+    private static final String QUERY_COUNT_USERS = "SELECT COUNT(id)\n" +
+            "FROM users ";
+
 
     @Autowired
-    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public UserDaoImpl() {
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UserEntity> getAllUsers(Integer size, Integer pageNumber) {
+        String sqlQueryPattern = SqlStringBuilder.paginationBuilder(size, pageNumber);
+        return entityManager.createNativeQuery(QUERY_FIND_ALL.concat(sqlQueryPattern), UserEntity.class).getResultList();
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return jdbcTemplate.query(SQL_GET_ALL_USERS, new UserMapper());
+    public int usersTableSize() {
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(QUERY_COUNT_USERS).getSingleResult();
+        return count.intValue();
     }
 
     @Override
-    public User getUserById(Long id) {
-        List<User> query = jdbcTemplate.query(SQL_FIND_USER_BY_ID,
-                new Object[]{id},
-                new UserMapper());
-
-        return DataAccessUtils.uniqueResult(query);
+    public Optional<UserEntity> getUserById(Long id) {
+        List<UserEntity> user = entityManager.createNamedQuery("Users.findById", UserEntity.class)
+                .setParameter("id", id).getResultList();
+        return user.stream().findFirst();
     }
 
     @Override
-    public Long createUser(User user) {
-        return jdbcTemplate.queryForObject(SQL_CREATE_USER, new Object[]{
-                user.getName(),
-                user.getSurname()
-                }, Long.class);
+    @Transactional
+    public Long createUser(UserEntity userEntity) {
+        entityManager.persist(userEntity);
+
+        return userEntity.getId();
     }
 
     @Override
-    public boolean updateUser(Long id, User user) {
-        return jdbcTemplate.update(SQL_UPDATE_USER,
-                user.getName(),
-                user.getSurname(),
-                id) > 0;
+    @Transactional
+    public UserEntity updateUser(UserEntity userEntity) {
+        entityManager.merge(userEntity);
+        return userEntity;
     }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        List<UserEntity> user = entityManager.createNamedQuery("Users.findByEmail", UserEntity.class).setParameter("email", email).getResultList();
+        return user.stream().findFirst();
+    }
+
 }
