@@ -116,6 +116,4 @@ public class GiftCertificateServiceTest {
         GiftCertificateDto result = service.createCertificate(CERTIFICATE_DTO);
         Assert.assertEquals(CERTIFICATE_DTO, result);
     }
-
-
 }
