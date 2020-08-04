@@ -2,10 +2,7 @@ package com.epam.mjc.service;//package com.epam.mjc.service;
 
 
 import com.epam.mjc.dao.dto.GiftCertificateDto;
-import com.epam.mjc.dao.entity.GiftCertificateEntity;
-import com.epam.mjc.dao.entity.SearchParams;
-import com.epam.mjc.dao.entity.SortParams;
-import com.epam.mjc.dao.entity.SortType;
+import com.epam.mjc.dao.entity.*;
 import com.epam.mjc.dao.impl.GiftCertificateDaoImpl;
 import com.epam.mjc.dao.impl.TagDaoImpl;
 import com.epam.mjc.service.exception.NotFoundException;
@@ -66,11 +63,12 @@ public class GiftCertificateServiceTest {
 
     private static List<String> initializeTags() {
         tags.add("fun");
+        tags.add("sport");
         return tags;
     }
 
     @Before
-    public void setUp() {
+    public void setUp( ) {
         service = new GiftCertificateServiceImpl(giftCertificateDao, tagDao, certificateMapper, tagMapper);
     }
 
@@ -92,5 +90,32 @@ public class GiftCertificateServiceTest {
         verify(giftCertificateDao, times(1)).getById(longId);
         verify(service, times(1)).getCertificateById(longId);
     }
+
+    @Test
+    public void getCertificatesWithSearchParamsShouldReturnListCertificatesDtoTest() {
+        when(giftCertificateDao.getAll(SEARCH_PARAMS_WITH_DATA, 5, 1)).thenReturn(GIFT_CERTIFICATE_ENTITY_LIST);
+        GIFT_CERTIFICATE_ENTITY_LIST.add(CERTIFICATE_ENTITY);
+        GIFT_CERTIFICATE_DTO_LIST.add(CERTIFICATE_DTO);
+        when(certificateMapper.toDto(CERTIFICATE_ENTITY)).thenReturn(CERTIFICATE_DTO);
+        List<GiftCertificateDto> result = service.getCertificates(SEARCH_PARAMS_WITH_DATA, 5, 1);
+        verify(giftCertificateDao, times(1)).getAll(SEARCH_PARAMS_WITH_DATA, 5, 1);
+        verify(certificateMapper, times(1)).toDto(CERTIFICATE_ENTITY);
+        Assert.assertEquals(GIFT_CERTIFICATE_DTO_LIST, result);
+    }
+    @Test
+    public void createCertificateWithValidParamsShouldReturnCertificateObject() {
+        when(giftCertificateDao.getByName("Books")).thenReturn(Optional.empty());
+        when(tagDao.getByName("fun")).thenReturn(Optional.empty());
+        when(tagDao.getByName("sport")).thenReturn(Optional.empty());
+        when(tagDao.create(new TagEntity("fun"))).thenReturn(2L);
+        when(tagDao.create(new TagEntity("sport"))).thenReturn(3L);
+
+        when(certificateMapper.toDto(CERTIFICATE_ENTITY)).thenReturn(CERTIFICATE_DTO);
+        when(giftCertificateDao.create(CERTIFICATE_ENTITY)).thenReturn(2L);
+        when(giftCertificateDao.getById(2L)).thenReturn(Optional.of(CERTIFICATE_ENTITY));
+        GiftCertificateDto result = service.createCertificate(CERTIFICATE_DTO);
+        Assert.assertEquals(CERTIFICATE_DTO, result);
+    }
+
 
 }
