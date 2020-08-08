@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 public class GiftCertificateServiceTest {
     @Mock
@@ -35,7 +37,6 @@ public class GiftCertificateServiceTest {
     GiftCertificateMapper certificateMapper = mock(GiftCertificateMapper.class);
     @Mock
     TagMapper tagMapper = mock(TagMapper.class);
-
     @InjectMocks
     private GiftCertificateServiceImpl service;
 
