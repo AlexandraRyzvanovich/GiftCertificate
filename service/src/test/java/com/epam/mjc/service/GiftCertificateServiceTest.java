@@ -37,7 +37,6 @@ public class GiftCertificateServiceTest {
     GiftCertificateMapper certificateMapper = mock(GiftCertificateMapper.class);
     @Mock
     TagMapper tagMapper = mock(TagMapper.class);
-
     @InjectMocks
     private GiftCertificateServiceImpl service;
 
