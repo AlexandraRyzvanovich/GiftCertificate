@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-public class GiftCertificateServiceTest {
+public class GiftCertificateServiceImplTest {
     @Mock
     GiftCertificateDaoImpl giftCertificateDao = mock(GiftCertificateDaoImpl.class);
     @Mock
