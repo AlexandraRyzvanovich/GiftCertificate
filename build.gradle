@@ -1,6 +1,13 @@
 plugins {
     id 'war'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'jacoco'
+
+}
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'jacoco'
 }
 subprojects  {
     group = 'com.epam.mjc'
@@ -22,7 +29,6 @@ subprojects  {
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.1.RELEASE'
         testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.2.RELEASE'
-
     }
     configurations {
         all {
@@ -33,5 +39,23 @@ subprojects  {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.1.RELEASE")
         }
+    }
+    task codeCoverageReport(type: JacocoReport) {
+        executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+        subprojects.each {
+            sourceSets it.sourceSets.main
+        }
+
+        reports {
+            xml.enabled true
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
+            html.enabled false
+            csv.enabled false
+        }
+    }
+
+    codeCoverageReport.dependsOn {
+        subprojects*.test
     }
 }
