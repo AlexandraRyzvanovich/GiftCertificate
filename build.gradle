@@ -2,19 +2,25 @@ plugins {
     id 'war'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'jacoco'
+    id "org.sonarqube" version "3.0"
+
 
 }
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'jacoco'
-}
-subprojects  {
     group = 'com.epam.mjc'
     version = '1-SNAPSHOT'
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
+
+    sonarqube {
+        properties {
+            property "sonar.sourceEncoding", "UTF-8"
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -29,6 +35,8 @@ subprojects  {
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.1.RELEASE'
         testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.2.RELEASE'
+        implementation group: 'org.sonarsource.scanner.maven', name: 'sonar-maven-plugin', version: '3.7.0.1746'
+
     }
     configurations {
         all {
