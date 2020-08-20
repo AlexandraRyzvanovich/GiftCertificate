@@ -28,7 +28,7 @@ pipeline {
                         junit '**/target/*.xml'
                     }
                     failure {
-                        mail to: 'alexandraryzvanovich@gmail.com', subject: 'The Build failed :('
+                        mail bcc: '', body: 'Project build failed. See logs', cc: '', from: '', replyTo: '', subject: 'Project build failed', to: 'alexandraryzvanovich@gmail.com'
                     }
                 }
 }
