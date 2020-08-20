@@ -12,23 +12,24 @@ pipeline {
                     junit '**/target/*.xml'
                 }
                 failure {
-                    mail to: alexandraryzvanovich@gmail.com, subject: 'The Build failed :('
+                    mail to: 'alexandraryzvanovich@gmail.com', subject: 'The Build failed :('
                 }
             }
         stage('Test') {
             steps {
                 build 'tests'
-
             }
         }
+
         post {
                 always {
                     junit '**/target/*.xml'
                 }
                 failure {
-                    mail to: alexandraryzvanovich@gmail.com, subject: 'The Test failed :('
+                    mail to: 'alexandraryzvanovich@gmail.com', subject: 'The Test failed :('
                 }
             }
+
         stage('Sonar check') {
                     steps {
                         build 'Sonar Scanner'
@@ -39,7 +40,7 @@ pipeline {
                             junit '**/target/*.xml'
                         }
                         failure {
-                            mail to: alexandraryzvanovich@gmail.com, subject: 'The Sonar check failed :('
+                            mail to: 'alexandraryzvanovich@gmail.com', subject: 'The Sonar check failed :('
                         }
                     }
         stage('Final build') {
@@ -52,7 +53,7 @@ pipeline {
                     junit '**/target/*.xml'
                 }
                 failure {
-                    mail to: alexandraryzvanovich@gmail.com, subject: 'The Final build failed :('
+                    mail to: 'alexandraryzvanovich@gmail.com', subject: 'The Final build failed :('
                 }
             }
     }
