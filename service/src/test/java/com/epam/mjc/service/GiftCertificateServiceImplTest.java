@@ -103,18 +103,4 @@ public class GiftCertificateServiceImplTest {
         verify(certificateMapper, times(1)).toDto(CERTIFICATE_ENTITY);
         Assert.assertEquals(GIFT_CERTIFICATE_DTO_LIST, result);
     }
-//    @Test
-//    public void createCertificateWithValidParamsShouldReturnCertificateObject() {
-//        when(giftCertificateDao.getByName("Books")).thenReturn(Optional.empty());
-//        when(tagDao.getByName("fun")).thenReturn(Optional.empty());
-//        when(tagDao.getByName("sport")).thenReturn(Optional.empty());
-//        when(tagDao.create(new TagEntity("fun"))).thenReturn(2L);
-//        when(tagDao.create(new TagEntity("sport"))).thenReturn(3L);
-//
-//        when(certificateMapper.toDto(CERTIFICATE_ENTITY)).thenReturn(CERTIFICATE_DTO);
-//        when(giftCertificateDao.create(CERTIFICATE_ENTITY)).thenReturn(2L);
-//        when(giftCertificateDao.getById(2L)).thenReturn(Optional.of(CERTIFICATE_ENTITY));
-//        GiftCertificateDto result = service.createCertificate(CERTIFICATE_DTO);
-//        Assert.assertEquals(CERTIFICATE_DTO, result);
-//    }
 }
