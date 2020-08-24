@@ -73,10 +73,8 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    @Transactional
     public Long create(TagEntity tagEntity) {
         entityManager.persist(tagEntity);
-        entityManager.detach(tagEntity);
 
         return tagEntity.getId();
     }
