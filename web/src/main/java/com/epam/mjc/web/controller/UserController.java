@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    @Qualifier("userServiceImpl")
+
     @Autowired
     private UserService userService;
     @Autowired

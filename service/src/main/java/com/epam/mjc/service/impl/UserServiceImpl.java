@@ -13,7 +13,9 @@ import com.epam.mjc.service.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +23,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@EnableTransactionManagement
+@Transactional
 public class UserServiceImpl implements UserService {
+
     private final UserDao userDao;
     private final UserMapper mapper;
     private final RoleDao roleDao;
@@ -38,21 +41,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        Long id = userDao.createUser(mapper.toEntity(userDto));
-        if (id == null) {
-            throw new IncorrectParamsException("Impossible to create user with given params");
-        }
-        return userDao.getUserById(id).map(mapper::toDto).orElse(null);
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public UserDto getById(Long id) {
 
         return userDao.getUserById(id).map(mapper::toDto).orElseThrow(()-> new NotFoundException("User with id " + id + " not found"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> getAllUsers(Integer size, Integer pageNumber) {
 
         return userDao.getAllUsers(size, pageNumber).stream().map(mapper::toDto).collect(Collectors.toList());
@@ -71,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto findUserByEmail(String email) {
         return userDao.findByEmail(email).map(mapper::toDto).orElseThrow(()-> new NotFoundException("User with email "+ email+" not found"));
     }
@@ -93,6 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int countUsers() {
         return userDao.usersTableSize();
     }

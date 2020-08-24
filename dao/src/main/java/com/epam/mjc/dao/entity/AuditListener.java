@@ -1,4 +1,4 @@
-package com.epam.mjc.dao;
+package com.epam.mjc.dao.entity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

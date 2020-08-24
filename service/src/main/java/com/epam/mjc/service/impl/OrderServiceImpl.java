@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@EnableTransactionManagement
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
     private final GiftCertificateDao certificateDao;

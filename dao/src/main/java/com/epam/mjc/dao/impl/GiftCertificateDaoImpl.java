@@ -6,8 +6,6 @@ import com.epam.mjc.dao.entity.GiftCertificateEntity;
 import com.epam.mjc.dao.entity.SearchParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -17,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@EnableTransactionManagement
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @PersistenceContext
     private EntityManager entityManager;
@@ -75,7 +72,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    @Transactional
     public Long create(GiftCertificateEntity certificate) {
         entityManager.persist(certificate);
 

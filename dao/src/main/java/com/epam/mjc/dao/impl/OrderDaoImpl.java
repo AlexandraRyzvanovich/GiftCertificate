@@ -4,7 +4,6 @@ import com.epam.mjc.dao.OrderDao;
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.OrderEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@EnableTransactionManagement
 public class OrderDaoImpl implements OrderDao {
     @PersistenceContext
     private EntityManager entityManager;

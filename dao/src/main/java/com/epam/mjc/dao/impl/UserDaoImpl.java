@@ -5,8 +5,6 @@ import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,20 +13,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@EnableTransactionManagement
 public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
     private static final String QUERY_FIND_ALL = "SELECT * FROM Users";
-    private static final String QUERY_COUNT_USERS = "SELECT COUNT(id)\n" +
-            "FROM users ";
+    private static final String QUERY_COUNT_USERS = "SELECT COUNT(id) FROM users";
 
 
     @Autowired
     public UserDaoImpl() {
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<UserEntity> getAllUsers(Integer size, Integer pageNumber) {
         String sqlQueryPattern = SqlStringBuilder.paginationBuilder(size, pageNumber);
@@ -49,7 +44,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public Long createUser(UserEntity userEntity) {
         entityManager.persist(userEntity);
 
@@ -57,7 +51,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    @Transactional
     public UserEntity updateUser(UserEntity userEntity) {
         entityManager.merge(userEntity);
         return userEntity;

@@ -1,7 +1,5 @@
 package com.epam.mjc.dao.entity;
 
-import com.epam.mjc.dao.AuditListener;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

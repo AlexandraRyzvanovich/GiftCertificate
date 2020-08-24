@@ -5,4 +5,14 @@ dependencies {
     compile group: 'com.zaxxer', name: 'HikariCP', version: '3.4.5'
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+
+    testCompile group: 'ru.yandex.qatools.embed', name: 'postgresql-embedded', version: '2.5'
+
+    compile group: 'org.flywaydb', name: 'flyway-core', version: '5.1.4'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+    testCompile group: 'com.opentable.components', name: 'otj-pg-embedded', version: '0.12.0'
+
+
+
+
 }

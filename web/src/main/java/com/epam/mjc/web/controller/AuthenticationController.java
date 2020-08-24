@@ -5,9 +5,13 @@ import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +23,14 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
+
     private final AuthenticationManager authenticationManagerBean;
 
     private final JwtTokenProvider jwtTokenProvider;
 
     private final UserService userService;
+    @Autowired
+    private PlatformTransactionManager txManager;
 
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
@@ -48,6 +55,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(response);
     }
+
     @PostMapping("/signup")
     public UserDto register(@RequestBody UserDto userDto) {
         return userService.register(userDto);

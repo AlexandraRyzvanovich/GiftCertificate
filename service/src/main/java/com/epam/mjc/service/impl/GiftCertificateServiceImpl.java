@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@EnableTransactionManagement
+@Transactional
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao certificateDao;
     private final TagDao tagDao;
@@ -51,7 +51,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional
     public GiftCertificateDto createCertificate(GiftCertificateDto certificate) {
         Optional<GiftCertificateEntity> certificateEntity = certificateDao.getByName(certificate.getName());
         if(certificateEntity.isPresent()) {
@@ -75,7 +74,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional
     public GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate) {
         GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id)
                 .orElseThrow(() -> new NotFoundException("Impossible to update certificate with id = " + id + " Certificate doesn't exists."));

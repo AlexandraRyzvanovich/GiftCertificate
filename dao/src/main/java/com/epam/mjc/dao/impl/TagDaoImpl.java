@@ -4,8 +4,6 @@ import com.epam.mjc.dao.TagDao;
 import com.epam.mjc.dao.builder.SqlStringBuilder;
 import com.epam.mjc.dao.entity.TagEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@EnableTransactionManagement
 public class TagDaoImpl implements TagDao {
     @PersistenceContext
     private EntityManager entityManager;
@@ -80,8 +77,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    @Transactional
-    public void deleteById(Long id) {
+     public void deleteById(Long id) {
         entityManager.createNativeQuery("delete from Tag where id = :id").setParameter("id", id).executeUpdate();
     }
 

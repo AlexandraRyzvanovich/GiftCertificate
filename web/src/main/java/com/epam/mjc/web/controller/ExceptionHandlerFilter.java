@@ -1,4 +1,4 @@
-package com.epam.mjc.web;
+package com.epam.mjc.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

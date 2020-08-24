@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/certificates")
 public class CertificateController {
 
-    @Qualifier("giftCertificateServiceImpl")
     @Autowired
     private GiftCertificateService service;
     @Autowired
