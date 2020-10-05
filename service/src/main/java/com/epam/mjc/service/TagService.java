@@ -9,7 +9,7 @@ public interface TagService {
     List<TagDto> getAllTags(Integer size, Integer pageNumber);
     TagDto createTag(TagDto tagDto);
     String deleteTagById(Long id);
-    TagDto getMostPopularAndExpensiveTag();
+    List<TagDto> getMostPopularAndExpensiveTag();
 
     TagDto updateTag(Long id, TagDto tagDto);
 

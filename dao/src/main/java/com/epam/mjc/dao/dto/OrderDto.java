@@ -6,6 +6,7 @@ import org.springframework.hateoas.RepresentationModel;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class OrderDto extends RepresentationModel<OrderDto> implements Identifiable {
@@ -14,9 +15,7 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
     private Long userId;
     private LocalDateTime date;
     private BigDecimal amount;
-    @NotNull(message = "Certificate_id is required")
-    private Long certificateId;
-    private GiftCertificateDto certificate;
+    private List<GiftCertificateDto> certificates;
 
     public OrderDto() {
     }
@@ -53,20 +52,12 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
         this.amount = amount;
     }
 
-    public Long getCertificateId() {
-        return certificateId;
+    public List<GiftCertificateDto> getCertificates() {
+        return certificates;
     }
 
-    public void setCertificateId(Long certificateId) {
-        this.certificateId = certificateId;
-    }
-
-    public GiftCertificateDto getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(GiftCertificateDto certificate) {
-        this.certificate = certificate;
+    public void setCertificates(List<GiftCertificateDto> certificates) {
+        this.certificates = certificates;
     }
 
     @Override
@@ -79,13 +70,12 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
                 Objects.equals(userId, orderDto.userId) &&
                 Objects.equals(date, orderDto.date) &&
                 Objects.equals(amount, orderDto.amount) &&
-                Objects.equals(certificateId, orderDto.certificateId) &&
-                Objects.equals(certificate, orderDto.certificate);
+                Objects.equals(certificates, orderDto.certificates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, userId, date, amount, certificateId, certificate);
+        return Objects.hash(super.hashCode(), id, userId, date, amount, certificates);
     }
 
     @Override
@@ -95,8 +85,7 @@ public class OrderDto extends RepresentationModel<OrderDto> implements Identifia
                 ", userId=" + userId +
                 ", date=" + date +
                 ", amount=" + amount +
-                ", certificateId=" + certificateId +
-                ", certificate=" + certificate +
+                ", certificates=" + certificates +
                 '}';
     }
 }

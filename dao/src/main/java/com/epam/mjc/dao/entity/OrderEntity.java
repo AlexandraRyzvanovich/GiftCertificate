@@ -3,6 +3,7 @@ package com.epam.mjc.dao.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @EntityListeners(AuditListener.class)
@@ -28,18 +29,22 @@ public class OrderEntity {
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @Column(name = "certificate_id")
-    private Long certificateId;
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "order_certificates",
+            joinColumns = {@JoinColumn(name = "order_id")},
+            inverseJoinColumns = {@JoinColumn(name = "certificate_id")}
+    )
+    private List<GiftCertificateEntity> certificates;
     public OrderEntity() {
     }
 
-    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, Long certificateId) {
+    public OrderEntity(Long id, Long userId, LocalDateTime date, BigDecimal amount, List<GiftCertificateEntity> certificates) {
         this.id = id;
         this.userId = userId;
         this.date = date;
         this.amount = amount;
-        this.certificateId = certificateId;
+        this.certificates = certificates;
     }
 
     public Long getId() {
@@ -74,14 +79,13 @@ public class OrderEntity {
         this.amount = amount;
     }
 
-    public Long getCertificateId() {
-        return certificateId;
+    public List<GiftCertificateEntity> getCertificates() {
+        return certificates;
     }
 
-    public void setCertificateId(Long certificateId) {
-        this.certificateId = certificateId;
+    public void setCertificates(List<GiftCertificateEntity> certificates) {
+        this.certificates = certificates;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -92,12 +96,12 @@ public class OrderEntity {
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(date, that.date) &&
                 Objects.equals(amount, that.amount) &&
-                Objects.equals(certificateId, that.certificateId);
+                Objects.equals(certificates, that.certificates);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, date, amount, certificateId);
+        return Objects.hash(id, userId, date, amount, certificates);
     }
 
     @Override
@@ -107,8 +111,7 @@ public class OrderEntity {
                 ", userId=" + userId +
                 ", date=" + date +
                 ", amount=" + amount +
-                ", certificateId=" + certificateId +
-
+                ", certificates=" + certificates +
                 '}';
     }
 }

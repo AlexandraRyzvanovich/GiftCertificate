@@ -58,19 +58,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto getMostPopularAndExpensiveTag() {
-        List<TagEntity> tag = tagDao.getMostPopularAndExpensiveTag();
-        if (tag != null) {
-            return mapper.toDto(tag.get(0));
-        }
-        return null;
+    public List<TagDto> getMostPopularAndExpensiveTag() {
+
+        return tagDao.getMostPopularAndExpensiveTag().stream().map(mapper::toDto).collect(Collectors.toList());
+
+
     }
 
     @Override
     public TagDto updateTag(Long id, TagDto updatedTagDto) {
         TagDto persistedTag = tagDao.getById(id).map(mapper::toDto).orElseThrow(() -> new NotFoundException("Tag with id " + id + " not found"));
         updatedTagDto.setId(id);
-        if(persistedTag.equals(updatedTagDto)) {
+        if (persistedTag.equals(updatedTagDto)) {
             return persistedTag;
         }
         TagEntity tagEntity = mapper.toEntity(updatedTagDto);

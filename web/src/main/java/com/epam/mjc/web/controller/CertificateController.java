@@ -7,7 +7,6 @@ import com.epam.mjc.dao.entity.SortParams;
 import com.epam.mjc.service.GiftCertificateService;
 import com.epam.mjc.web.linkbuilder.GiftCertificateLinkBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +53,7 @@ public class CertificateController {
         return certificateLinkBuilder.addLinksToDto(service.createCertificate(certificate));
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate) {
 

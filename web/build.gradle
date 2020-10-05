@@ -6,7 +6,7 @@ dependencies {
     testCompile project(':dao').sourceSets.test.output
     testCompile group: 'ru.yandex.qatools.embed', name: 'postgresql-embedded', version: '2.5'
 
-    compile group: 'org.flywaydb', name: 'flyway-core', version: '5.1.4'
+    compile group: 'org.flywaydb', name: 'flyway-core'
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
     testCompile group: 'com.opentable.components', name: 'otj-pg-embedded', version: '0.12.0'
 }

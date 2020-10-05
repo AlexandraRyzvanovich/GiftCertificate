@@ -63,7 +63,10 @@ public class TagController {
     }
 
     @GetMapping("/popular")
-    public TagDto getMostPopularAndExpensiveTag() {
-        return tagService.getMostPopularAndExpensiveTag();
+    public PageDto<TagDto> getMostPopularAndExpensiveTag() {
+        PageDto<TagDto> pageDto = new PageDto<>();
+        List<TagDto> tags = tagService.getMostPopularAndExpensiveTag();
+        pageDto.setItems(tagLinkBuilder.addLinksToList(tags));
+        return pageDto;
     }
 }

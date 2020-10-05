@@ -13,7 +13,6 @@ import com.epam.mjc.service.mapper.GiftCertificateMapper;
 import com.epam.mjc.service.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -42,15 +41,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) {
-        Long certificateId = orderDto.getCertificateId();
-        GiftCertificateEntity certificate = certificateDao.getById(certificateId)
-                .orElseThrow(()-> new NotFoundException("Certificate with id "+ certificateId + " not found"));
+        List<GiftCertificateDto> certificates = orderDto.getCertificates();
+        BigDecimal amount = BigDecimal.valueOf(0);
+        for (GiftCertificateDto certificateDto: certificates) {
+            Long certificateId = certificateDto.getId();
+            GiftCertificateEntity certificate = certificateDao.getById(certificateId)
+                    .orElseThrow(()-> new NotFoundException("Certificate with id "+ certificateId + " not found"));
+            amount = amount.add(certificate.getPrice());
+        }
+        orderDto.setDate(LocalDateTime.now());
+        orderDto.setAmount(amount);
         Long userId = orderDto.getUserId();
         userDao.getUserById(userId).orElseThrow(()-> new NotFoundException("User not found with given user id"));
-        BigDecimal certificatePrice = certificate.getPrice();
-        orderDto.setAmount(certificatePrice);
-        orderDto.setDate(LocalDateTime.now());
-        orderDto.setCertificateId(certificateId);
         Long id = orderDao.createOrder(mapper.toEntity(orderDto));
         return orderDao.getOrderById(id).map( mapper::toDto).orElse(null);
     }
@@ -61,9 +63,6 @@ public class OrderServiceImpl implements OrderService {
         if(userId != null && !order.getUserId().equals(userId)) {
             throw new DataAccessException("Impossible to get order by id " + id);
         }
-        GiftCertificateDto giftCertificateDto = certificateDao.getById(order.getCertificateId()).map(certificateMapper::toDto)
-                .orElseThrow(() -> new NotFoundException("Certificate for order not found"));
-        order.setCertificate(giftCertificateDto);
         return order;
     }
 

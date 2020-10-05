@@ -5,13 +5,10 @@ import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.service.UserService;
 import com.epam.mjc.service.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +49,7 @@ public class AuthenticationController {
             response.put("username", username);
             response.put("token", token);
             response.put("roles", user.getRoles());
+            response.put("id", user.getId());
 
             return ResponseEntity.ok(response);
     }
