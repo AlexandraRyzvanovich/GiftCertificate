@@ -16,15 +16,22 @@ public class UserDto extends RepresentationModel<UserDto> implements Identifiabl
     private Long id;
     @Email
     @NotNull(message = "Email should not be empty.")
+    @Email
+    @Size(max = 50, message = "Size of name should be up to 200 characters.")
+    @Size(min = 5, message = "Size of name should be 2 characters minimum.")
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(max = 50, message = "Size of name should be up to 200 characters.")
+    @Size(min = 6, message = "Size of name should be 2 characters minimum.")
     private String password;
 
-    @Size(max = 200, message = "Size of name should be up to 200 characters.")
+    @Size(max = 50, message = "Size of name should be up to 200 characters.")
+    @Size(min = 2, message = "Size of name should be 2 characters minimum.")
     private String name;
 
-    @Size(max = 200, message = "Size of surname should be up to 200 characters.")
+    @Size(max = 50, message = "Size of surname should be up to 200 characters.")
+    @Size(min = 2, message = "Size of name should be 2 characters minimum.")
     private String surname;
 
     @FutureOrPresent
