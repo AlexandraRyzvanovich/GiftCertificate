@@ -14,20 +14,19 @@ import java.util.Objects;
 
 public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> implements Identifiable {
     private Long id;
-
     @NotNull
     @Size(min = 1, max = 50)
     private String name;
 
     @Size(min = 1,max = 200, message = "Max size 200 characters")
     private String description;
-    @DecimalMin(value = "0", message = "Price min value = 0")
+    @DecimalMin(value = "1", message = "Price min value = 0")
     @DecimalMax(value = "10000", message = "Price max value = 10000")
     private BigDecimal price;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
 
-    @DecimalMin(value = "1", message = "Min value = 1$")
+    @DecimalMin(value = "1", message = "Min value = 1")
     @DecimalMax(value = "365", message = "Max value = 365")
     private Integer validDays;
     private List<TagDto> tags;

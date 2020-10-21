@@ -55,7 +55,7 @@ public class CertificateController {
 
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody @Valid GiftCertificateDto certificate) {
+    public GiftCertificateDto updateCertificate(@PathVariable("id") Long id, @RequestBody GiftCertificateDto certificate) {
 
         return certificateLinkBuilder.addLinksToDto(service.updateCertificate(id, certificate));
     }

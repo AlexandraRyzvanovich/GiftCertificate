@@ -6,11 +6,15 @@ dependencies {
     testCompile project(':dao').sourceSets.test.output
     testCompile group: 'ru.yandex.qatools.embed', name: 'postgresql-embedded', version: '2.5'
 
-    compile group: 'org.flywaydb', name: 'flyway-core'
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+    implementation group: 'org.flywaydb', name: 'flyway-core'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.4'
+    implementation group: 'org.springframework', name: 'spring-tx', version: '5.2.9.RELEASE'
     testCompile group: 'com.opentable.components', name: 'otj-pg-embedded', version: '0.12.0'
 }
 test {
     useJUnitPlatform()
+}
+jar {
+    enabled = true
 }
 

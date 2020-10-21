@@ -16,7 +16,6 @@ public class UserDto extends RepresentationModel<UserDto> implements Identifiabl
     private Long id;
     @Email
     @NotNull(message = "Email should not be empty.")
-    @Email
     @Size(max = 50, message = "Size of name should be up to 200 characters.")
     @Size(min = 5, message = "Size of name should be 2 characters minimum.")
     private String email;

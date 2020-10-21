@@ -3,8 +3,15 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.2'
     implementation project(':dao')
     implementation 'org.springframework.security:spring-security-test'
-    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 
+}
+
+jar {
+    enabled = true
+}
+bootJar {
+    enabled = false
 }
 

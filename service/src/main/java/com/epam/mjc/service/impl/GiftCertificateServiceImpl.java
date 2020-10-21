@@ -14,7 +14,6 @@ import com.epam.mjc.service.mapper.GiftCertificateMapper;
 import com.epam.mjc.service.mapper.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -77,6 +76,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto updateCertificate(Long id, GiftCertificateDto updatedCertificate) {
         GiftCertificateEntity persistedCertificateEntity = certificateDao.getById(id)
                 .orElseThrow(() -> new NotFoundException("Impossible to update certificate with id = " + id + " Certificate doesn't exists."));
+        
         GiftCertificateEntity updatedCertificateEntity = certificateMapper.toEntity(updatedCertificate);
         GiftCertificateEntity certificate;
         if (persistedCertificateEntity.equals(updatedCertificateEntity)) {
@@ -100,10 +100,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         BigDecimal price = updatedCertificate.getPrice();
         Integer validDays = updatedCertificate.getValidDays();
         List<TagEntity> tagEntities = updatedCertificate.getTagEntities();
-        if (name != null) {
+        if (name != null && name != "") {
             persistedCertificate.setName(name);
         }
-        if (description != null) {
+        if (description != null && description != "") {
             persistedCertificate.setDescription(description);
         }
         if (price != null) {

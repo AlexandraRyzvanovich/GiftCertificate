@@ -1,33 +1,46 @@
-plugins {
-    id 'war'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'jacoco'
-    id "org.sonarqube" version "3.0"
-
-
-}
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'jacoco'
-    group = 'com.epam.mjc'
-    version = '1-SNAPSHOT'
-    apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'java-library'
-
-    sonarqube {
-        properties {
-            property "sonar.sourceEncoding", "UTF-8"
-        }
+buildscript {
+    ext {
+        springBootVersion = "2.3.2.RELEASE" as Object
     }
-
     repositories {
         mavenCentral()
     }
     dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    }
+}
+
+plugins {
+    id 'war'
+    id 'jacoco'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "org.sonarqube" version "3.0"
+}
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    ext {
+        springVersion = '5.2.7.RELEASE'
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    group = 'com.epam.mjc'
+    version = '1-SNAPSHOT'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+
+
+    dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        compile("org.springframework.boot:spring-boot-starter-actuator")
+        implementation "org.springframework.boot:spring-boot-starter-actuator"
         implementation 'org.springframework.boot:spring-boot-starter-log4j2'
         implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
         implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.18.Final'
@@ -36,13 +49,17 @@ allprojects {
         implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.3.1.RELEASE'
         testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.2.RELEASE'
         implementation group: 'org.sonarsource.scanner.maven', name: 'sonar-maven-plugin', version: '3.7.0.1746'
-        // https://mvnrepository.com/artifact/commons-io/commons-io
-        compile group: 'commons-io', name: 'commons-io', version: '2.7'
-
+        implementation group: 'commons-io', name: 'commons-io', version: '2.7'
     }
     configurations {
         all {
             exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.sourceEncoding", "UTF-8"
         }
     }
     dependencyManagement {
@@ -50,6 +67,7 @@ allprojects {
             mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.1.RELEASE")
         }
     }
+
     jacocoTestReport {
         reports {
             html.enabled = true
@@ -58,3 +76,4 @@ allprojects {
         }
     }
 }
+

@@ -2,10 +2,10 @@ package com.epam.mjc.service.security.jwt;
 
 import com.epam.mjc.dao.dto.UserDto;
 import com.epam.mjc.service.UserService;
+import com.epam.mjc.service.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +20,13 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDto user = userService.findUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User with username: " + email + " not found");
+    public UserDetails loadUserByUsername(String email) {
+        UserDto user;
+        try {
+            user = userService.findUserByEmail(email);
+
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         }
 
         return JwtUserFactory.create(user);

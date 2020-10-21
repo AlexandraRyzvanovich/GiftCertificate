@@ -40,7 +40,7 @@ public class OrderController {
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and authentication.principal.id == #userId)")
     public PageDto<OrderDto> getAllUserOrders(@PathVariable("userId") Long userId,
-                                              @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                              @RequestParam(name = "size", defaultValue = "10000") Integer size,
                                               @RequestParam(name = "page", defaultValue = "1") Integer pageNumber) {
         PageDto<OrderDto> pageDto = new PageDto<>();
         List<OrderDto> orders = orderService.getOrdersByUserId(userId, size, pageNumber);

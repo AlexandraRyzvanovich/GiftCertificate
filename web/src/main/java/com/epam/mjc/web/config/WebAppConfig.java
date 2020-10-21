@@ -18,11 +18,9 @@ public class WebAppConfig implements WebMvcConfigurer {
         resolvers.add(new SortResolver());
     }
 
-
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean(){
         Locale.setDefault(Locale.ENGLISH);
         return new LocalValidatorFactoryBean();
     }
-
 }
